@@ -1,12 +1,12 @@
 **Icicle is a PHP library for writing *asynchronous* code using *synchronous* coding techniques.**
 
-Icicle uses [Coroutines](#coroutines) built with [Promises](#promises) to facilitate writing asynchronous code using techniques normally used to write synchronous code, such as returning values and throwing exceptions, instead of using nested callbacks typically found in asynchronous code.
+Icicle uses [Coroutines] built with [Promises] to facilitate writing asynchronous code using techniques normally used to write synchronous code, such as returning values and throwing exceptions, instead of using nested callbacks typically found in asynchronous code.
 
 ## Library Components
 
-- [Coroutines](#coroutines): Interruptible functions for building asynchronous code using synchronous coding patterns and error handling.
-- [Promises](#promises): Placeholders for future values of asynchronous operations. Callbacks registered with promises may return values and throw exceptions.
-- [Loop (event loop)](#loop): Used to schedule functions, run timers, handle signals, and poll sockets for pending data or await for space to write.
+- [Coroutines]: Interruptible functions for building asynchronous code using synchronous coding patterns and error handling.
+- [Promises]: Placeholders for future values of asynchronous operations. Callbacks registered with promises may return values and throw exceptions.
+- [Loop (event loop)][loop]: Used to schedule functions, run timers, handle signals, and poll sockets for pending data or await for space to write.
 
 ## Available Components
 
@@ -102,3 +102,9 @@ To document the expected prototype of a callback function used as method argumen
 ```php
 callable<(ArgumentType $arg): ReturnType>
 ```
+
+
+[loop]:         manual/loop.md
+[promises]:     manual/promises.md
+[coroutines]:   manual/coroutines.md
+[dns]:          api/dns.md

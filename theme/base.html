@@ -40,7 +40,22 @@
 
 
     <body class="pane" role="document">
-        <a id="nav-toggle" class="fa fa-bars"></a>
+        <aside class="pane title-pane">
+            <a id="nav-toggle" class="fa fa-bars"></a>
+
+            <nav role="navigation" aria-label="top navigation">
+                <a href="{{ homepage_url }}">{{ site_name }}</a>
+            </nav>
+
+            <div class="pagination-nav" role="navigation" aria-label="related navigation">
+                {% if previous_page %}
+                    <a href="{{ previous_page.url }}" class="btn btn-neutral" title="{{ previous_page.title }}"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+                {% endif %}
+                {% if next_page %}
+                    <a href="{{ next_page.url }}" class="btn btn-neutral float-right" title="{{ next_page.title }}"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+                {% endif %}
+            </div>
+        </aside>
 
         <aside id="nav-pane" class="pane nav-pane">
             <div class="home-logo container">
@@ -70,10 +85,6 @@
 
         <div class="pane content-pane">
             <div class="content-container">
-                <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-                    <a href="{{ homepage_url }}">{{ site_name }}</a>
-                </nav>
-
                 {% include "breadcrumbs.html" %}
 
                 <div role="main">
@@ -87,7 +98,15 @@
                 </div>
 
             	{%- block footer %}
-                    {% include "footer.html" %}
+                <footer>
+                    <div role="contentinfo">
+                        {% if copyright %}
+                          <p>{{ copyright }}</p>
+                        {% endif %}
+                    </div>
+
+                    Built with <a href="http://www.mkdocs.org">MkDocs</a>.
+                </footer>
                 {% endblock %}
             </div>
         </div>

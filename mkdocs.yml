@@ -1,15 +1,15 @@
-site_name: Icicle
-site_description: "Write asynchronous code using synchronous coding techniques in PHP"
-site_author: "Aaron Piotrowski"
-copyright: "&copy; Icicle contributors"
+site_name: 'Icicle documentation'
+site_description: 'Write asynchronous code using synchronous coding techniques in PHP'
+site_author: 'Aaron Piotrowski'
+copyright: '&copy; Icicle contributors'
 theme_dir: theme
 strict: true
 pages:
 - Introduction: 'index.md'
 - Manual:
-    - The Event Loop: 'guide/loop.md'
-    - Promises: 'guide/promises.md'
-    - Coroutines: 'guide/coroutines.md'
+    - The Event Loop: 'manual/loop.md'
+    - Promises: 'manual/promises.md'
+    - Coroutines: 'manual/coroutines.md'
 - API:
     - Loop: 'api/loop.md'
     - Promises: 'api/promises.md'

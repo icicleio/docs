@@ -1,4 +1,4 @@
-**[Loop API documentation](api/loop.md)**
+**[Loop API documentation](../api/loop.md)**
 
 The event loop schedules functions, runs timers, handles signals, and polls sockets for pending reads and available writes. There are several event loop implementations available depending on what PHP extensions are available. The `Icicle\Loop\SelectLoop` class uses only core PHP functions, so it will work on any PHP installation, but is not as performant as some of the other available implementations. All event loops implement `Icicle\Loop\LoopInterface` and provide the same features.
 

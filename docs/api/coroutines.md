@@ -1,10 +1,10 @@
 Coroutines are interruptible functions implemented using [Generators](http://www.php.net/manual/en/language.generators.overview.php). A `Generator` usually uses the `yield` keyword to yield a value from a set to implement an iterator. Coroutines use the `yield` keyword to define interruption points. When a coroutine yields a value, execution of the coroutine is temporarily interrupted, allowing other tasks to be run, such as I/O, timers, or other coroutines.
 
-When a coroutine yields a [promise](https://github.com/icicleio/Icicle/wiki/Promises), execution of the coroutine is interrupted until the promise is resolved. If the promise is fulfilled with a value, the yield statement that yielded the promise will take on the resolved value. For example, `$value = (yield Icicle\Promise\resolve(2.718));` will set `$value` to `2.718` when execution of the coroutine is resumed. If the promise is rejected, the exception used to reject the promise will be thrown into the function at the yield statement. For example, `yield Icicle\Promise\reject(new Exception());` would behave identically to replacing the yield statement with `throw new Exception();`.
+When a coroutine yields a [promise](promises.md), execution of the coroutine is interrupted until the promise is resolved. If the promise is fulfilled with a value, the yield statement that yielded the promise will take on the resolved value. For example, `$value = (yield Icicle\Promise\resolve(2.718));` will set `$value` to `2.718` when execution of the coroutine is resumed. If the promise is rejected, the exception used to reject the promise will be thrown into the function at the yield statement. For example, `yield Icicle\Promise\reject(new Exception());` would behave identically to replacing the yield statement with `throw new Exception();`.
 
 Note that **no callbacks need to be registered** with the promises yielded in a coroutine and **errors are reported using thrown exceptions**, which will bubble up to the calling context if uncaught in the same way exceptions bubble up in synchronous code.
 
-**`Icicle\Coroutine\Coroutine` instances are also [promises](https://github.com/icicleio/Icicle/wiki/Promises), implementing `Icicle\Promise\PromiseInterface`.** The coroutine is fulfilled with the last value yielded from the generator (or fulfillment value of the last yielded promise) or rejected if an exception is thrown from the generator. A coroutine may then yield other coroutines, suspending execution until the yielded coroutine has resolved. If a coroutine yields a `Generator`, it will automatically be converted to a `Coroutine` and handled in the same way as a yielded coroutine.
+**`Icicle\Coroutine\Coroutine` instances are also [promises](promises.md), implementing `Icicle\Promise\PromiseInterface`.** The coroutine is fulfilled with the last value yielded from the generator (or fulfillment value of the last yielded promise) or rejected if an exception is thrown from the generator. A coroutine may then yield other coroutines, suspending execution until the yielded coroutine has resolved. If a coroutine yields a `Generator`, it will automatically be converted to a `Coroutine` and handled in the same way as a yielded coroutine.
 
 ## Writing Generators as Coroutines
 
@@ -87,7 +87,7 @@ Loop\run();
 
 ### Interrupting Coroutines with Promises
 
-**When a coroutine yields a [promise](https://github.com/icicleio/Icicle/wiki/Promises), execution of the coroutine is interrupted until the promise is resolved.**
+**When a coroutine yields a [promise](promises.md), execution of the coroutine is interrupted until the promise is resolved.**
 
 Resolution of a yielded promise results in one of two actions within the coroutine:
 1. If the promise is fulfilled, the statement that yielded the promise will take on the fulfillment value. For example, `$value = (yield Icicle\Promise\resolve(3.14159));` will set `$value` to `3.14159` when execution of the coroutine is resumed.
@@ -194,7 +194,7 @@ Loop\run();
 
 `Icicle\Coroutine\Coroutine` implements `Icicle\Coroutine\CoroutineInterface`, which extends `Icicle\Promise\PromiseInterface`. **Any methods available on promises are also available on coroutines and a coroutine can be treated just like any other promise.**
 
-See the [Promise API documentation](https://github.com/icicleio/Icicle/wiki/Promises) for the complete list of the methods available in `Icicle\Promise\PromiseInterface` and the other methods available for working with promises.
+See the [Promise API documentation](promises.md) for the complete list of the methods available in `Icicle\Promise\PromiseInterface` and the other methods available for working with promises.
 
 ## Creating Coroutines
 

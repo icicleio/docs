@@ -1,4 +1,4 @@
-This library is a component for [Icicle](https://github.com/icicleio/icicle), providing an asynchronous stream socket server, client, connector, and datagram. Like other Icicle components, this library uses [Promises](https://github.com/icicleio/icicle/wiki/Promises) and [Generators](http://www.php.net/manual/en/language.generators.overview.php) for asynchronous operations that may be used to build [Coroutines](https://github.com/icicleio/icicle/wiki/Coroutines) to make writing asynchronous code more like writing synchronous code.
+This library is a component for Icicle, providing an asynchronous stream socket server, client, connector, and datagram.
 
 [![Build Status](https://img.shields.io/travis/icicleio/socket/v1.x.svg?style=flat-square)](https://travis-ci.org/icicleio/socket)
 [![Coverage Status](https://img.shields.io/coveralls/icicleio/socket/v1.x.svg?style=flat-square)](https://coveralls.io/r/icicleio/socket)
@@ -37,7 +37,7 @@ You can also manually edit `composer.json` to add this library as a project requ
 
 The socket component implements network sockets as coroutine-based streams, server, and datagram. Creating a server and accepting connections is very simple, requiring only a few lines of code.
 
-The example below implements a simple HTTP server listening on 127.0.0.1:8080 that responds to any request with the contents of the client request as the body of the response. This example is implemented using coroutines (see the [Coroutine API documentation](https://github.com/icicleio/icicle/wiki/Coroutines)) and the basic sockets provided by this package.
+The example below implements a simple HTTP server listening on 127.0.0.1:8080 that responds to any request with the contents of the client request as the body of the response. This example is implemented using coroutines (see the [Coroutine API documentation](coroutines.md)) and the basic sockets provided by this package.
 
 ```php
 use Icicle\Coroutine\Coroutine;
@@ -86,50 +86,6 @@ $coroutine = new Coroutine($generator($server));
 $coroutine->done();
 
 Loop\run();
-```
-
-## Documentation
-
-- [SocketInterface](#socketinterface)
-    - [isOpen()](#isopen) - Determines if the socket is open.
-    - [close()](#close) - Closes the socket.
-- [Server](#server)
-    - [Server Constructor](#server-constructor) - Creates a server from a stream socket server resource.
-    - [accept()](#accept) - A coroutine that is resolved when a client connects.
-    - [getAddress()](#getaddress) - Returns the address of the server.
-    - [getPort()](#getport) - Returns the port of the server.
-- [ServerFactory](#serverfactory)
-    - [create()](#create) - Creates a `Server` on a given host and port.
-- [ReadableStream](#readablestream)
-    - [ReadableStream Constructor](#readablestream-constructor) - Creates a readable stream from a stream socket resource.
-- [WritableStream](#writablestream)
-    - [WritableStream Constructor](#writablestream-constructor) - Creates a writable stream from a stream socket resource.
-- [DuplexStream](#readablestream)
-    - [DuplexStream Constructor](#duplexstream-constructor) - Creates a duplex stream from a stream socket resource.
-- [Client](#client)
-    - [Client Constructor](#client-constructor) - Creates a client from a stream socket resource.
-    - [enableCrypto()](#enablecrypto) - Enables crypto on the client.
-    - [getLocalAddress()](#getlocaladdress) - Returns the local address of the client.
-    - [getLocalPort()](#getlocalport) - Returns the local port of the client.
-    - [getRemoteAddress()](#getremoteaddress) - Returns the remote address of the client.
-    - [getRemotePort()](#getremoteport) - Returns the remote port of the client.
-- [Connector](#connector)
-    - [connect()](#connect) - A coroutine resolved with a `Client` object when a connection is established.
-- [Datagram](#datagram) - UDP socket listener
-    - [Datagram Constructor](#datagram-constructor)
-    - [receive()](#receive) - Receives data from the datagram.
-    - [send()](#send) - Sends data to a address and port.
-    - [getAddress()](#getaddress1) - Returns the address of the datagram.
-    - [getPort()](#getport1) - Returns the port of the datagram.
-- [DatagramFactory](#datagramfactory)
-    - [create()](#create1) - Creates a `Datagram` on a given host and port.
-
-#### Function prototypes
-
-Prototypes for object instance methods are described below using the following syntax:
-
-```php
-ClassOrInterfaceName::methodName(ArgumentType $arg): ReturnType
 ```
 
 ## SocketInterface
@@ -230,7 +186,7 @@ Option | Type | Description
 
 `Icicle\Socket\Stream\ReadableStream` implements `Icicle\Stream\ReadableStreamInterface`, so it is interoperable with any other class implementing one of the stream interfaces.
 
-See the [ReadableStreamInterface API documentation](https://github.com/icicleio/stream#readablestreaminterface) for more information on how readable streams are used.
+See the [ReadableStreamInterface API documentation](stream.md#readablestreaminterface) for more information on how readable streams are used.
 
 When the other end of the connection is closed and a read is pending, that read will be fulfilled with an empty string. Subsequent reads will then reject with an instance of `Icicle\Stream\Exception\UnreadableException` and `isReadable()` will return `false`.
 
@@ -246,7 +202,7 @@ Creates a readable stream from the given stream socket resource.
 
 `Icicle\Socket\Stream\WritableStream` implements `Icicle\Stream\WritableStreamInterface`, so it is interoperable with any other class implementing one of the stream interfaces.
 
-See the [WritableStreaminterface API documentation](https://github.com/icicleio/stream#writablestreaminterface) for more information on how writable streams are used.
+See the [WritableStreaminterface API documentation](stream.md#writablestreaminterface) for more information on how writable streams are used.
 
 #### WritableStream Constructor
 
@@ -337,7 +293,7 @@ Returns the remote port.
 
 ## Connector
 
-The `Icicle\Socket\Client\Connector` class (implements `Icicle\Socket\Client\ConnectorInterface`) asynchronously connects to a remote server, returning a coroutine that is fulfilled with an instance of `Icicle\Socket\Client\Client` when the connection is successfully established. Note that the *host should be given as an IP address*, as DNS lookups performed by PHP are synchronous (blocking). If you wish to use domain names instead of IPs, see `Icicle\Dns\Connector\Connector` in the [DNS component](https://github.com/icicleio/dns).
+The `Icicle\Socket\Client\Connector` class (implements `Icicle\Socket\Client\ConnectorInterface`) asynchronously connects to a remote server, returning a coroutine that is fulfilled with an instance of `Icicle\Socket\Client\Client` when the connection is successfully established. Note that the *host should be given as an IP address*, as DNS lookups performed by PHP are synchronous (blocking). If you wish to use domain names instead of IPs, see `Icicle\Dns\Connector\Connector` in the [DNS component](dns.md).
 
 #### connect()
 

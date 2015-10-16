@@ -52,7 +52,7 @@ pre {
 
 
 /**
- * Pane layout and styling.
+ * General layout and styling.
  */
 .container {
     padding: 1rem;
@@ -71,7 +71,37 @@ pre {
     transition: left 0.4s ease-in, box-shadow 0.3s;
 }
 
+
+/**
+ * Title navigation strip.
+ */
+.title-pane {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 2.5rem;
+    padding: 0 0.5rem;
+    z-index: 3;
+    background-color: #368aff;
+}
+
+.title-pane a {
+    color: white;
+}
+
+#nav-toggle {
+   display: none;
+}
+
+.pagination-nav {
+}
+
+
+/**
+ * Navigation and table of contents.
+ */
 .nav-pane {
+    top: 2.5rem;
     width: 20rem;
     overflow-x: hidden;
     overflow-y: auto;
@@ -79,107 +109,10 @@ pre {
     border-right: 1px solid #d6dee8;
 }
 
-.content-pane {
-    left: 20rem;
-    overflow-x: hidden;
-    overflow-y: auto;
-    z-index: 1;
-}
-
-.content-container {
-    max-width: 48rem;
-    padding: 2rem 3rem;
-    background-color: #ffffff;
-}
-
 .home-logo {
     text-align: center;
 }
 
-
-/**
- * Mobile and intermediate responsive styles for the navigation pane.
- */
-#nav-toggle {
-    display: none;
-}
-
-@media (min-width: 88rem) {
-    .content-pane > .container {
-        border-right: 1px solid #d6dee8;
-    }
-}
-
-@media (max-width: 88rem) {
-    .container {
-        margin: 0 auto;
-    }
-
-    .content-pane {
-        background-color: #ffffff;
-        border-right: none;
-    }
-}
-
-@media (max-width: 52rem) {
-    .nav-pane {
-        left: -20rem;
-        width: auto;
-        max-width: 20rem;
-        box-shadow: 0 0 0 100vw rgba(0, 0, 0, 0);
-    }
-
-    .nav-pane.visible {
-        left: 0;
-        box-shadow: 0 0 0 100vw rgba(0, 0, 0, 0.25);
-        -webkit-transition-timing-function: ease-out;
-        transition-timing-function: ease-out;
-    }
-
-    .content-pane {
-        left: 0;
-    }
-
-    #nav-toggle {
-        display: block;
-        position: absolute;
-        top: 0.25rem;
-        left: 0.25rem;
-        z-index: 3;
-        font-size: 1.5em;
-        padding: 0.25rem 0.4rem;
-        border: 1px solid transparent;
-        border-radius: 0.25rem;
-        cursor: pointer;
-    }
-
-    #nav-toggle:hover {
-        border-color: lightgray;
-    }
-}
-
-
-/**
- * Search box and search results.
- */
-.search-box {
-    display: block;
-    padding: 0.25em 0.5em;
-    border-radius: 1em;
-    background-color: #ffffff;
-}
-
-.search-box > input {
-    padding: 0.25em;
-    width: 100%;
-    border: none;
-    outline: none;
-}
-
-
-/**
- * Navigation and table of contents.
- */
 .page-nav ul {
     margin: 0;
     padding: 0;
@@ -207,4 +140,98 @@ pre {
 
 .toctree-l3 {
     padding-left: 2.5rem;
+}
+
+
+/**
+ * Content body.
+ */
+.content-pane {
+    top: 2.5rem;
+    left: 20rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.content-container {
+    max-width: 48rem;
+    padding: 1rem 3rem;
+    background-color: #ffffff;
+}
+
+@media (min-width: 88rem) {
+    .content-pane > .content-container {
+        border-right: 1px solid #d6dee8;
+    }
+}
+
+@media (max-width: 88rem) {
+    .content-container {
+        margin: 0 auto;
+    }
+
+    .content-pane {
+        background-color: #ffffff;
+    }
+}
+
+
+/**
+ * Search box and search results.
+ */
+.search-box {
+    display: block;
+    padding: 0.25em 0.5em;
+    border-radius: 0.25em;
+    background-color: #ffffff;
+}
+
+.search-box > input {
+    padding: 0.25em;
+    width: 100%;
+    border: none;
+    outline: none;
+}
+
+
+/**
+ * Mobile and intermediate responsive styles for the navigation pane.
+ */
+@media (max-width: 52rem) {
+    .nav-pane {
+        left: -20rem;
+        width: auto;
+        max-width: 20rem;
+        box-shadow: 0 0 0 100vw rgba(0, 0, 0, 0);
+    }
+
+    .nav-pane.visible {
+        left: 0;
+        box-shadow: 0 0 0 100vw rgba(0, 0, 0, 0.25);
+        -webkit-transition-timing-function: ease-out;
+        transition-timing-function: ease-out;
+    }
+
+    .content-pane {
+        left: 0;
+    }
+
+    .content-container {
+        padding: 1rem;
+    }
+
+    #nav-toggle {
+        display: inline-block;
+        font-size: 1.5em;
+        padding: 0.1em 0.2em;
+        border: 1px solid transparent;
+        border-radius: 0.15em;
+        cursor: pointer;
+    }
+
+    #nav-toggle:hover {
+        border-color: rgba(0, 0, 0, 0.15);
+        background-color: rgba(0, 0, 0, 0.1);
+    }
 }

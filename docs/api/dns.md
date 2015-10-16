@@ -1,4 +1,4 @@
-This library is a component for [Icicle](https://github.com/icicleio/Icicle), providing an asynchronous DNS query executor, resolver, and client connector. An asynchronous DNS server is currently under development and will be added to this component in the future. Like other Icicle components, this library uses [Promises](https://github.com/icicleio/Icicle/wiki/Promises) and [Generators](http://www.php.net/manual/en/language.generators.overview.php) for asynchronous operations that may be used to build [Coroutines](//github.com/icicleio/Icicle/wiki/Coroutines) to make writing asynchronous code more like writing synchronous code.
+This library is a component for Icicle, providing an asynchronous DNS query executor, resolver, and client connector. An asynchronous DNS server is currently under development and will be added to this component in the future.
 
 [![Build Status](https://img.shields.io/travis/icicleio/dns/v1.x.svg?style=flat-square)](https://travis-ci.org/icicleio/dns)
 [![Coverage Status](https://img.shields.io/coveralls/icicleio/dns/v1.x.svg?style=flat-square)](https://coveralls.io/r/icicleio/dns)
@@ -60,17 +60,9 @@ $coroutine->done();
 Loop\run();
 ```
 
-Methods returning a `Generator` can be used to create a [Coroutine](https://github.com/icicleio/icicle/wiki/Coroutines) (e.g., `new Coroutine($executor->execute(...))`) or yielded within another Coroutine (use `yield from` in PHP 7 for better performance).
+Methods returning a `Generator` can be used to create a [Coroutine](../manual/coroutines.md) (e.g., `new Coroutine($executor->execute(...))`) or yielded within another Coroutine (use `yield from` in PHP 7 for better performance).
 
 This library uses [LibDNS](//github.com/DaveRandom/LibDNS) to create and parse DNS messages. Unfortunately the documentation for this library is currently limited to DocComments in the source code. If only using resolvers and connectors in this library, there is no need to worry about how LibDNS works. Executors returns coroutines that are resolved with `LibDNS\Messages\Message` instances, representing the response from the DNS server. Using these objects is simple and will be described in the executor section below.
-
-#### Function prototypes
-
-Prototypes for object instance methods are described below using the following syntax:
-
-```php
-ClassOrInterfaceName::methodName(ArgumentType $arg): ReturnType
-```
 
 ## Executors
 
@@ -264,7 +256,7 @@ Option | Type | Description
 `timeout` | `float` | Timeout until query fails. Default is 2 seconds.
 `retries` | `int` | Number of times to attempt the query before failing. Default is 5 times.
 
-Additionally, all the [other options available](https://github.com/icicleio/socket#connect) to `Icicle\Socket\Client\Connector::connect()` may also be used.
+Additionally, all the [other options available](socket.md#connect) to `Icicle\Socket\Client\Connector::connect()` may also be used.
 
 Resolution | Type | Description
 :-: | :-- | :--

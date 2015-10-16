@@ -1,4 +1,4 @@
-**[Promise API documentation](api/promises.md)**
+**[Promise API documentation](../api/promises.md)**
 
 Icicle implements promises based on the [Promises/A+](http://promisesaplus.com) specification, adding support for cancellation.
 
@@ -12,7 +12,7 @@ The `Icicle\Promise\PromiseInterface::then(callable $onFulfilled = null, callabl
 
 The `Icicle\Promise\PromiseInterface::done(callable $onFulfilled = null, callable $onRejected = null)` method registers callbacks that should either consume promised values or handle errors. No value is returned from `done()`. Values returned by callbacks registered using `done()` are ignored and exceptions thrown from callbacks are re-thrown in an uncatchable way.
 
-*[More on using callbacks to interact with promises...](api/promises.md#interacting-with-promises)*
+*[More on using callbacks to interact with promises...](../api/promises.md#interacting-with-promises)*
 
 ```php
 use Icicle\Coroutine\Coroutine;
@@ -47,12 +47,12 @@ $promise2->done(
 Loop\run();
 ```
 
-The example above uses the [DNS component](api/dns.md) to resolve the IP address for a domain, then connect to the resolved IP address. The `resolve()` method of `$resolver` and the `connect()` method of `$connector` both return promises. `$promise1` created by `resolve()` will either be fulfilled or rejected:
+The example above uses the [DNS component][dns] to resolve the IP address for a domain, then connect to the resolved IP address. The `resolve()` method of `$resolver` and the `connect()` method of `$connector` both return promises. `$promise1` created by `resolve()` will either be fulfilled or rejected:
 
 - If `$promise1` is fulfilled, the callback function registered in the call to `$promise1->then()` is executed, using the fulfillment value of `$promise1` as the argument to the function. The callback function then returns the promise from `connect()`. The resolution of `$promise2` will then be determined by the resolution of this returned promise (`$promise2` will adopt the state of the promise returned by `connect()`).
 - If `$promise1` is rejected, `$promise2` is rejected since no `$onRejected` callback was registered in the call to `$promise1->then()`
 
-*[More on promise resolution and propagation...](api/promises.md#resolution-and-propagation)*
+*[More on promise resolution and propagation...](../api/promises.md#resolution-and-propagation)*
 
 ## Brief overview of promise API features
 
@@ -62,3 +62,6 @@ The example above uses the [DNS component](api/dns.md) to resolve the IP address
 - Operations on collections of promises to join, select, iterate, and map to other promises or values.
 - Support for promise cancellation.
 - Methods to convert synchronous functions or callback-based functions into functions accepting and returning promises.
+
+
+[dns]:          ../api/dns.md
