@@ -4,12 +4,6 @@
 
 Icicle uses [Coroutines](#coroutines) built with [Promises](#promises) to facilitate writing asynchronous code using techniques normally used to write synchronous code, such as returning values and throwing exceptions, instead of using nested callbacks typically found in asynchronous code.
 
-[![Build Status](https://img.shields.io/travis/icicleio/icicle/v1.x.svg?style=flat-square)](https://travis-ci.org/icicleio/icicle)
-[![Coverage Status](https://img.shields.io/coveralls/icicleio/icicle/v1.x.svg?style=flat-square)](https://coveralls.io/r/icicleio/icicle)
-[![Semantic Version](https://img.shields.io/github/release/icicleio/icicle.svg?style=flat-square)](http://semver.org)
-[![MIT License](https://img.shields.io/packagist/l/icicleio/icicle.svg?style=flat-square)](LICENSE)
-[![@icicleio on Twitter](https://img.shields.io/badge/twitter-%40icicleio-5189c7.svg?style=flat-square)](https://twitter.com/icicleio)
-
 #### Library Components
 
 - [Coroutines](#coroutines): Interruptible functions for building asynchronous code using synchronous coding patterns and error handling.

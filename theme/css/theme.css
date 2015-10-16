@@ -1,0 +1,149 @@
+*, *::before, *::after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+}
+
+pre, code {
+    font-family: "Ubuntu Mono", monospace;
+}
+
+a {
+    color: #0048ab;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #756bb1;
+}
+
+.fa:hover {
+    text-decoration: none;
+}
+
+code, .search-box {
+    border: 1px solid #d6dee8;
+}
+
+code {
+    border-radius: 0.25em;
+}
+
+
+.container {
+    max-width: 48rem;
+    padding: 2rem 3rem;
+    background-color: #ffffff;
+}
+
+.pane {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    overflow: hidden;
+    background-color: #eaeef3;
+    -webkit-transition: left 0.4s ease-in;
+    transition: left 0.4s ease-in;
+}
+
+.nav-pane {
+    width: 20rem;
+    padding: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 2;
+    border-right: 1px solid #d6dee8;
+}
+
+.content-pane {
+    left: 20rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.home-logo {
+    text-align: center;
+}
+
+#nav-toggle {
+    display: none;
+}
+
+@media (min-width: 84rem) {
+    .content-pane > .container {
+        border-right: 1px solid #d6dee8;
+    }
+}
+
+@media (max-width: 84rem) {
+    .container {
+        margin: 0 auto;
+    }
+
+    .content-pane {
+        background-color: #ffffff;
+        border-right: none;
+    }
+}
+
+@media (max-width: 52rem) {
+    .nav-pane {
+        left: -20rem;
+    }
+
+    .nav-pane.visible {
+        left: 0;
+        -webkit-transition-timing-function: ease-out;
+        transition-timing-function: ease-out;
+    }
+
+    .content-pane {
+        left: 0;
+    }
+
+    #nav-toggle {
+        display: block;
+        position: absolute;
+        top: 0.25rem;
+        left: 0.25rem;
+        z-index: 3;
+        font-size: 1.5em;
+        padding: 0.25rem 0.4rem;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+        cursor: pointer;
+    }
+
+    #nav-toggle:hover {
+        border-color: lightgray;
+    }
+}
+
+
+.search-box {
+    display: block;
+    margin: 1rem 0;
+    padding: 0.25em 0.5em;
+    border-radius: 1em;
+    background-color: #ffffff;
+}
+
+.search-box > input {
+    padding: 0.25em;
+    width: 100%;
+    border: none;
+    outline: none;
+}

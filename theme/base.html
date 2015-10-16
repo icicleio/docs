@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% if page_description %}<meta name="description" content="{{ page_description }}">{% endif %}
+        {% if site_author %}<meta name="author" content="{{ site_author }}">{% endif %}
+        {% block htmltitle %}
+        <title>{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}</title>
+        {% endblock %}
+
+        {% if favicon %}<link rel="shortcut icon" href="{{ favicon }}">
+        {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700italic,700|Ubuntu+Mono:400,700,400italic,700italic">
+        <link rel="stylesheet" href="{{ base_url }}/css/theme.css">
+        <link rel="stylesheet" href="{{ base_url }}/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{{ base_url }}/css/highlight.css">
+        {%- for path in extra_css %}
+        <link rel="stylesheet" href="{{ path }}">
+        {%- endfor %}
+
+        {% if current_page %}
+        <script>
+            // Current page data
+            var mkdocs_page_name = "{{ page_title }}";
+            var mkdocs_page_input_path = "{{ current_page.input_path }}";
+            var mkdocs_page_url = "{{ current_page.abs_url }}";
+        </script>
+        {% endif %}
+        <script src="{{ base_url }}/js/highlight.pack.js"></script>
+
+        {%- block extrahead %} {% endblock %}
+
+        {%- for path in extra_javascript %}
+        <script src="{{ path }}"></script>
+        {%- endfor %}
+    </head>
+
+
+    <body class="pane" role="document">
+        <a id="nav-toggle" class="fa fa-bars"></a>
+
+        <aside id="nav-pane" class="pane nav-pane">
+            <div class="home-logo">
+                <a href="{{ homepage_url }}">{{ site_name }}</a>
+            </div>
+
+            <div role="search">
+                <form id="search-form" class="search-box" action="{{ base_url }}/search.html" method="get">
+                    <input type="text" name="q" placeholder="Search docs..." />
+                </form>
+            </div>
+
+            <nav class="page-nav" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul class="current">
+                    {% for nav_item in nav %}
+                        <li>{% include "toc.html" %}<li>
+                    {% endfor %}
+                </ul>
+            </nav>
+
+            <p>View <a href="https://github.com/icicleio">the source</a></p>
+            <p>Follow <a href="https://twitter.com/icicleio">@icicleio</a> on Twitter</p>
+            <p>Questions or comments? Send an email to <a href="mailto:hello@icicle.io">hello@icicle.io</a></p>
+        </aside>
+
+        <div class="pane content-pane">
+            <div class="container">
+                <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+                    <a href="{{ homepage_url }}">{{ site_name }}</a>
+                </nav>
+
+              <div class="wy-nav-content">
+                <div class="rst-content">
+                  {% include "breadcrumbs.html" %}
+                  <div role="main">
+                    <div class="section">
+                      {% block content %}
+                        {{ content }}
+                      {% endblock %}
+                    </div>
+                  </div>
+        	  {%- block footer %}
+                  {% include "footer.html" %}
+        	  {% endblock %}
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById("nav-toggle").addEventListener("click", function() {
+                document.getElementById("nav-pane").classList.toggle("visible");
+            });
+            hljs.initHighlightingOnLoad();
+        </script>
+    </body>
+</html>
