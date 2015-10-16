@@ -60,15 +60,6 @@ $coroutine->done();
 Loop\run();
 ```
 
-## Documentation
-
-- [Executors](#executors) - Executes a DNS query.
-    - [Creating an Executor](#creating-an-executor)
-    - [Using an Executor](#using-an-executor)
-    - [MultiExecutor](#multiexecutor)
-- [Resolver](#resolver) - Resolves the IP address for a domain name.
-- [Connector](#connector) - Connects to a host and port.
-
 Methods returning a `Generator` can be used to create a [Coroutine](https://github.com/icicleio/icicle/wiki/Coroutines) (e.g., `new Coroutine($executor->execute(...))`) or yielded within another Coroutine (use `yield from` in PHP 7 for better performance).
 
 This library uses [LibDNS](//github.com/DaveRandom/LibDNS) to create and parse DNS messages. Unfortunately the documentation for this library is currently limited to DocComments in the source code. If only using resolvers and connectors in this library, there is no need to worry about how LibDNS works. Executors returns coroutines that are resolved with `LibDNS\Messages\Message` instances, representing the response from the DNS server. Using these objects is simple and will be described in the executor section below.

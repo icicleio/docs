@@ -43,11 +43,11 @@
         <a id="nav-toggle" class="fa fa-bars"></a>
 
         <aside id="nav-pane" class="pane nav-pane">
-            <div class="home-logo">
+            <div class="home-logo container">
                 <a href="{{ homepage_url }}">{{ site_name }}</a>
             </div>
 
-            <div role="search">
+            <div role="search" class="container">
                 <form id="search-form" class="search-box" action="{{ base_url }}/search.html" method="get">
                     <input type="text" name="q" placeholder="Search docs..." />
                 </form>
@@ -56,43 +56,48 @@
             <nav class="page-nav" data-spy="affix" role="navigation" aria-label="main navigation">
                 <ul class="current">
                     {% for nav_item in nav %}
-                        <li>{% include "toc.html" %}<li>
+                        {% include "toc.html" %}
                     {% endfor %}
                 </ul>
             </nav>
 
-            <p>View <a href="https://github.com/icicleio">the source</a></p>
-            <p>Follow <a href="https://twitter.com/icicleio">@icicleio</a> on Twitter</p>
-            <p>Questions or comments? Send an email to <a href="mailto:hello@icicle.io">hello@icicle.io</a></p>
+            <div class="container">
+                <p>View <a href="https://github.com/icicleio">the source</a></p>
+                <p>Follow <a href="https://twitter.com/icicleio">@icicleio</a> on Twitter</p>
+                <p>Questions or comments? Send an email to <a href="mailto:hello@icicle.io">hello@icicle.io</a></p>
+            </div>
         </aside>
 
         <div class="pane content-pane">
-            <div class="container">
+            <div class="content-container">
                 <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
                     <a href="{{ homepage_url }}">{{ site_name }}</a>
                 </nav>
 
-              <div class="wy-nav-content">
-                <div class="rst-content">
-                  {% include "breadcrumbs.html" %}
-                  <div role="main">
-                    <div class="section">
-                      {% block content %}
+                {% include "breadcrumbs.html" %}
+
+                <div role="main">
+                    {% if page_title %}
+                        <h1>{{ page_title }}</h1>
+                    {% endif %}
+
+                    {% block content %}
                         {{ content }}
-                      {% endblock %}
-                    </div>
-                  </div>
-        	  {%- block footer %}
-                  {% include "footer.html" %}
-        	  {% endblock %}
+                    {% endblock %}
                 </div>
-              </div>
+
+            	{%- block footer %}
+                    {% include "footer.html" %}
+                {% endblock %}
             </div>
         </div>
 
         <script>
             document.getElementById("nav-toggle").addEventListener("click", function() {
                 document.getElementById("nav-pane").classList.toggle("visible");
+            });
+            document.querySelector(".content-pane").addEventListener("click", function() {
+                document.getElementById("nav-pane").classList.remove("visible");
             });
             hljs.initHighlightingOnLoad();
         </script>

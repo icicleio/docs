@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+
+/**
+ * Text and color theming.
+ */
 body {
     font-family: "Open Sans", sans-serif;
 }
@@ -33,15 +37,25 @@ code, .search-box {
     border: 1px solid #d6dee8;
 }
 
+code, .pane {
+    background-color: #eaeef3;
+}
+
 code {
     border-radius: 0.25em;
 }
 
+pre {
+    word-break: break-all;
+    word-wrap: break-word;
+}
 
+
+/**
+ * Pane layout and styling.
+ */
 .container {
-    max-width: 48rem;
-    padding: 2rem 3rem;
-    background-color: #ffffff;
+    padding: 1rem;
 }
 
 .pane {
@@ -53,14 +67,12 @@ code {
     left: 0;
     margin: 0;
     overflow: hidden;
-    background-color: #eaeef3;
-    -webkit-transition: left 0.4s ease-in;
-    transition: left 0.4s ease-in;
+    -webkit-transition: left 0.4s ease-in, box-shadow 0.3s;
+    transition: left 0.4s ease-in, box-shadow 0.3s;
 }
 
 .nav-pane {
     width: 20rem;
-    padding: 1rem;
     overflow-x: hidden;
     overflow-y: auto;
     z-index: 2;
@@ -74,21 +86,31 @@ code {
     z-index: 1;
 }
 
+.content-container {
+    max-width: 48rem;
+    padding: 2rem 3rem;
+    background-color: #ffffff;
+}
+
 .home-logo {
     text-align: center;
 }
 
+
+/**
+ * Mobile and intermediate responsive styles for the navigation pane.
+ */
 #nav-toggle {
     display: none;
 }
 
-@media (min-width: 84rem) {
+@media (min-width: 88rem) {
     .content-pane > .container {
         border-right: 1px solid #d6dee8;
     }
 }
 
-@media (max-width: 84rem) {
+@media (max-width: 88rem) {
     .container {
         margin: 0 auto;
     }
@@ -102,10 +124,14 @@ code {
 @media (max-width: 52rem) {
     .nav-pane {
         left: -20rem;
+        width: auto;
+        max-width: 20rem;
+        box-shadow: 0 0 0 100vw rgba(0, 0, 0, 0);
     }
 
     .nav-pane.visible {
         left: 0;
+        box-shadow: 0 0 0 100vw rgba(0, 0, 0, 0.25);
         -webkit-transition-timing-function: ease-out;
         transition-timing-function: ease-out;
     }
@@ -133,9 +159,11 @@ code {
 }
 
 
+/**
+ * Search box and search results.
+ */
 .search-box {
     display: block;
-    margin: 1rem 0;
     padding: 0.25em 0.5em;
     border-radius: 1em;
     background-color: #ffffff;
@@ -146,4 +174,37 @@ code {
     width: 100%;
     border: none;
     outline: none;
+}
+
+
+/**
+ * Navigation and table of contents.
+ */
+.page-nav ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.page-nav li {
+    display: block;
+    margin: 1rem 0;
+}
+
+.page-nav li > span {
+    display: block;
+    margin-top: 2rem;
+    font-weight: bold;
+}
+
+.toctree-l1 {
+    padding-left: 1rem;
+}
+
+.toctree-l2 {
+    padding-left: 1.25rem;
+}
+
+.toctree-l3 {
+    padding-left: 2.5rem;
 }

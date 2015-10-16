@@ -4,3 +4,16 @@ site_author: "Aaron Piotrowski"
 copyright: "&copy; Icicle contributors"
 theme_dir: theme
 strict: true
+pages:
+- Introduction: 'index.md'
+- Manual:
+    - The Event Loop: 'guide/loop.md'
+    - Promises: 'guide/promises.md'
+    - Coroutines: 'guide/coroutines.md'
+- API:
+    - Loop: 'api/loop.md'
+    - Promises: 'api/promises.md'
+    - Coroutines: 'api/coroutines.md'
+    - Stream: 'api/stream.md'
+    - Socket: 'api/socket.md'
+    - DNS: 'api/dns.md'

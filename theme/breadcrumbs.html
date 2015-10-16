@@ -1,25 +1,26 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href="{{ homepage_url }}">Docs</a> &raquo;</li>
-    {% if current_page %}
-      {% for doc in current_page.ancestors %}
-        {% if doc.link %}
-          <li><a href="{{ doc.link|e }}">{{ doc.title }}</a> &raquo;</li>
-        {% else %}
-          <li>{{ doc.title }} &raquo;</li>
+    <ul class="breadcrumbs">
+        <li><a href="{{ homepage_url }}">Docs</a> &raquo;</li>
+        {% if current_page %}
+            {% for doc in current_page.ancestors %}
+                {% if doc.link %}
+                    <li><a href="{{ doc.link|e }}">{{ doc.title }}</a> &raquo;</li>
+                {% else %}
+                    <li>{{ doc.title }} &raquo;</li>
+                {% endif %}
+            {% endfor %}
         {% endif %}
-      {% endfor %}
-    {% endif %}
-    {% if current_page %}<li>{{ current_page.title }}</li>{% endif %}
-    <li class="wy-breadcrumbs-aside">
-      {% if repo_url %}
-        {% if repo_name == 'GitHub' %}
-          <a href="{{ repo_url }}" class="icon icon-github"> Edit on GitHub</a>
-        {% elif repo_name == 'Bitbucket' %}
-          <a href="{{ repo_url }}" class="icon icon-bitbucket"> Edit on BitBucket</a>
+
+        {% if current_page %}<li>{{ current_page.title }}</li>{% endif %}
+
+        {% if repo_url %}
+            <li class="breadcrumbs-aside">
+            {% if repo_name == 'GitHub' %}
+                <a href="{{ repo_url }}" class="fa fa-github"> Edit on GitHub</a>
+            {% elif repo_name == 'Bitbucket' %}
+                <a href="{{ repo_url }}" class="fa fa-bitbucket"> Edit on BitBucket</a>
+            {% endif %}
+            </li>
         {% endif %}
-      {% endif %}
-    </li>
-  </ul>
-  <hr/>
+    </ul>
 </div>

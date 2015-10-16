@@ -1,5 +1,3 @@
-# Promises
-
 Icicle implements promises based on the [Promises/A+](http://promisesaplus.com) specification, adding support for cancellation.
 
 Promises are objects that act as placeholders for the future value of an asynchronous operation. Pending promises may either be fulfilled with any value (including other promises, `null`, and exceptions) or rejected with any value. (Rejection values that are not exceptions are wrapped by an exception of type `Icicle\Promise\Exception\ReasonException` that has a `getReason()` method returning the original value.) Once a promise is fulfilled or rejected (resolved) with a value, the promise cannot becoming pending and the resolution value cannot change.
@@ -7,72 +5,6 @@ Promises are objects that act as placeholders for the future value of an asynchr
 Callback functions are the primary way of accessing the resolution value of promises. Unlike other APIs that use callbacks, **promises provide an execution context to callback functions, allowing callbacks to return values and throw exceptions**.
 
 Callback functions registered to promises are always [invoked asynchronously](#asynchronous-callback-invocation) to ensure consistent behavior regardless of the state of the promise at the time callbacks are registered.
-
-## Documentation
-
-- [Creating a Promise](#creating-a-promise)
-    - [Promise](#promise)
-    - [Deferred](#deferred)
-    - [Lazy Promise](#lazy-promise)
-    - [resolve()](#resolve)
-    - [reject()](#reject)
-- [Interacting with Promises](#interacting-with-promises)
-    - [PromiseInterface](#promiseinterface)
-        - [then()](#then) - Returns a new promise resolved by the given callbacks.
-        - [done()](#done) - Calls the given callbacks when the promise is fulfilled or rejected.
-        - [cancel()](#cancel) - Cancels the promise.
-        - [timeout()](#timeout) - Cancels the promise after a given amount of time if unresolved.
-        - [delay()](#delay) - Returns a promise that is fulfilled after a delay.
-        - [capture()](#capture) - Catches (captures) specific rejection exceptions.
-        - [tap()](#tap) - Provides access to the fulfillment value of a promise without changing it.
-        - [cleanup()](#cleanup) - Calls the given callback when the promise is resolved.
-        - [splat()](#splat) - Uses a promise fulfilled by an array or `Traversable` as arguments to the given callback.
-        - [isPending()](#ispending) - Determines if the promise is pending.
-        - [isFulfilled()](#isfulfilled) - Determines if the promise is fulfilled.
-        - [isRejected()](#isrejected) - Determines if the promise is rejected.
-        - [getResult()](#getresult) - Gets the result of a resolved promise.
-    - [Combining Promises](#combining-promises)
-        - [settle()](#settle) - Returns a promise fulfilled when all the given promises are resolved.
-        - [all()](#all) - Returns a promise fulfilled only if all the given promises are fulfilled.
-        - [any()](#any) - Returns a promise fulfilled with by the first promise of a set to fulfill.
-        - [some()](#some) - Returns a promise fulfilled when a subset of promises is fulfilled.
-        - [choose()](#choose) - Returns a promise with the same resolution as the first promise to resolve.
-        - [map()](#map) - Returns a set of promises each resolved with a given callback similar to `array_map()`.
-        - [reduce()](#reduce) - Returns a promise resolved in a method similar to `array_reduce()`.
-        - [iterate()](#iterate) - Iterates by calling a callback until another callback returns `true`.
-        - [retry()](#retry) - Retries an operation until a callback function returns true.
-    - [Using Promises with Other Functions and Libraries](#using-promises-with-other-functions-and-libraries)
-        - [lift()](#lift) - Allows an existing function to accept promises as parameters and return a promise.
-        - [wait()](#wait) - Synchronously waits for a promise to resolve.
-        - [promisify()](#promisify) - Allows an API using callbacks to return promises instead.
-        - [adapt()](#adapt) - Adapts any object with a compatible `then()` method to an Icicle promise.
-- [Resolution and Propagation](#resolution-and-propagation)
-    - [Child Promise Resolution](#child-promise-resolution)
-    - [Asynchronous Callback Invocation](#asynchronous-callback-invocation)
-    - [Promise Chaining](#promise-chaining)
-    - [Error Handling](#error-handling)
-    - [Iterative Resolution](#iterative-resolution)
-- [Acknowledgements](#acknowledgements)
-
-#### Function prototypes
-
-Prototypes for object instance methods are described below using the following syntax:
-
-```php
-ClassOrInterfaceName::methodName(ArgumentType $arg): ReturnType
-```
-
-Prototypes for functions in a namespace are described below using the following syntax:
-
-```php
-Namespace\functionName(ArgumentType $arg): ReturnType
-```
-
-To document the expected prototype of a callback function used as method arguments or return types, the documentation below uses the following syntax for `callable` types:
-
-```php
-callable<(ArgumentType $arg): ReturnType>
-```
 
 ## Creating a Promise
 

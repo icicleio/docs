@@ -1,5 +1,3 @@
-# Asynchronous Streams for Icicle
-
 This library is a component for [Icicle](https://github.com/icicleio/Icicle), providing an asynchronous readable, writable, and seekable stream interfaces and a couple basic stream implementations. Like other Icicle components, this library uses [Promises](https://github.com/icicleio/Icicle/wiki/Promises) and [Generators](http://www.php.net/manual/en/language.generators.overview.php) for asynchronous operations that may be used to build [Coroutines](//github.com/icicleio/Icicle/wiki/Coroutines) to make writing asynchronous code more like writing synchronous code.
 
 [![Build Status](https://img.shields.io/travis/icicleio/stream/v1.x.svg?style=flat-square)](https://travis-ci.org/icicleio/stream)
@@ -39,41 +37,6 @@ Streams represent a common promise-based API that may be implemented by classes 
 - `Icicle\Stream\WritableStreamInterface`: Interface to be used by streams that are only writable.
 - `Icicle\Stream\DuplexStreamInterface`: Interface to be used by streams that are readable and writable. Extends both `Icicle\Stream\ReadableStreamInterface` and `Icicle\Stream\WritableStreamInterface`.
 - `Icicle\Stream\SeekableStreamInterface`: Interface to be used by seekable streams (readable and/or writable).
-
-## Documentation
-
-- [StreamInterface](#streaminterface) - Basic stream interface.
-    - [isOpen()](#isopen) - Determines if the stream is still open.
-    - [close()](#close) - Closes the stream.
-- [ReadableStreamInterface](#readablestreaminterface) - Interface for readable streams.
-    - [read()](#read) - Read data from the stream.
-    - [pipe()](#pipe) - Pipes data from this stream to a writable stream.
-    - [isReadable()](#isreadable) - Determines if the stream is readable.
-- [WritableStreamInterface](#writablestreaminterface) - Interface for writable streams.
-    - [write()](#write) - Writes data to the stream.
-    - [end()](#end) - Writes data to the stream then closes the stream.
-    - [isWritable()](#isWritable)
-- [DuplexStreamInterface](#duplexstreaminterface) - Interface for streams that are readable and writable.
-- [SeekableStreamInterface](#seekablestreaminterface) - Interface for seekable streams.
-    - [seek()](#seek) - Moves the stream pointer.
-    - [tell()](#tell) - Returns the current position of the stream pointer.
-    - [getLength()](#getlength) - Returns the length of the stream if known.
-- [Stream](#stream) - Buffer that implements `Icicle\Stream\DuplexStreamInterface`.
-- [Sink](#sink) - Memory buffer that implements `Icicle\Stream\DuplexStreamInterface` and `Icicle\Stream\SeekableStreamInterface`.
-
-#### Function prototypes
-
-Prototypes for object instance methods are described below using the following syntax:
-
-```php
-ClassOrInterfaceName::methodName(ArgumentType $arg): ReturnType
-```
-
-To document the expected prototype of a callback function used as method arguments or return types, the documentation below uses the following syntax for `callable` types:
-
-```php
-callable<(ArgumentType $arg): ReturnType>
-```
 
 ## StreamInterface
 

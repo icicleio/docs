@@ -1,5 +1,3 @@
-# Coroutines
-
 Coroutines are interruptible functions implemented using [Generators](http://www.php.net/manual/en/language.generators.overview.php). A `Generator` usually uses the `yield` keyword to yield a value from a set to implement an iterator. Coroutines use the `yield` keyword to define interruption points. When a coroutine yields a value, execution of the coroutine is temporarily interrupted, allowing other tasks to be run, such as I/O, timers, or other coroutines.
 
 When a coroutine yields a [promise](https://github.com/icicleio/Icicle/wiki/Promises), execution of the coroutine is interrupted until the promise is resolved. If the promise is fulfilled with a value, the yield statement that yielded the promise will take on the resolved value. For example, `$value = (yield Icicle\Promise\resolve(2.718));` will set `$value` to `2.718` when execution of the coroutine is resumed. If the promise is rejected, the exception used to reject the promise will be thrown into the function at the yield statement. For example, `yield Icicle\Promise\reject(new Exception());` would behave identically to replacing the yield statement with `throw new Exception();`.
@@ -7,47 +5,6 @@ When a coroutine yields a [promise](https://github.com/icicleio/Icicle/wiki/Prom
 Note that **no callbacks need to be registered** with the promises yielded in a coroutine and **errors are reported using thrown exceptions**, which will bubble up to the calling context if uncaught in the same way exceptions bubble up in synchronous code.
 
 **`Icicle\Coroutine\Coroutine` instances are also [promises](https://github.com/icicleio/Icicle/wiki/Promises), implementing `Icicle\Promise\PromiseInterface`.** The coroutine is fulfilled with the last value yielded from the generator (or fulfillment value of the last yielded promise) or rejected if an exception is thrown from the generator. A coroutine may then yield other coroutines, suspending execution until the yielded coroutine has resolved. If a coroutine yields a `Generator`, it will automatically be converted to a `Coroutine` and handled in the same way as a yielded coroutine.
-
-## Documentation
-
-- [Writing Generators as Coroutines](#writing-generators-as-coroutines)
-    - [Basic Coroutine](#basic-coroutine)
-    - [Returning Values from Coroutines](#returning-values-from-coroutines)
-    - [Throwing Exceptions from Coroutines](#throwing-exceptions-from-coroutines)
-    - [Interrupting Coroutines with Promises](#interrupting-coroutines-with-promises)
-    - [Calling Coroutines Within Another Coroutine](#calling-coroutines-within-another-coroutine)
-    - [Coroutines as Promises](#coroutines-as-promises)
-- [Creating Coroutines](#creating-coroutines)
-    - [Coroutine Constructor](#coroutine-constructor)
-    - [async()](#async) - Returns a function that returns a coroutine when called.
-    - [create()](#create) - Returns a coroutine from a callable returning a `Generator`.
-- [Coroutine Docblock Annotations](#coroutine-docblock-annotations) - Identifying a coroutine in the code.
-- [Cooperation](#cooperation)
-- [Controlling Execution](#controlling-execution)
-    - [pause()](#pause) - Pauses the coroutine at the next `yield` statement.
-    - [resume()](#resume) - Resumes execution of the coroutine.
-    - [isPaused()](#ispaused) - Determines if the coroutine is paused.
-    - [cancel()](#cancel) - Cancels execution of the coroutine.
-
-#### Function prototypes
-
-Prototypes for object instance methods are described below using the following syntax:
-
-```php
-ClassOrInterfaceName::methodName(ArgumentType $arg): ReturnType
-```
-
-Prototypes for functions in a namespace are described below using the following syntax:
-
-```php
-Namespace\functionName(ArgumentType $arg): ReturnType
-```
-
-To document the expected prototype of a callback function used as method arguments or return types, the documentation below uses the following syntax for `callable` types:
-
-```php
-callable<(ArgumentType $arg): ReturnType>
-```
 
 ## Writing Generators as Coroutines
 
