@@ -319,7 +319,7 @@ The fulfillment value of the promise is returned or the exception used to reject
 
 The `Icicle\Promise` namespace contains several functions for performing operations on sets of promises. All functions in this section are designed so most of their parameters may either be promises or values (or an array containing any combination of promises and values). `Icicle\Promise\resolve()` is used on all values to create promises.
 
-#### settle()
+#### Promise\settle()
 
 ```php
 PromiseInterface Promise\settle(mixed[] $promises)
@@ -329,7 +329,7 @@ Returns a promise that is resolved when all promises are resolved. The returned 
 
 ---
 
-#### all()
+#### Promise\all()
 
 ```php
 Promise\all(mixed[] $promises): PromiseInterface
@@ -339,7 +339,7 @@ Returns a promise that is fulfilled when all promises are fulfilled, and rejecte
 
 ---
 
-#### any()
+#### Promise\any()
 
 ```php
 Promise\any(mixed[] $promises): PromiseInterface
@@ -349,7 +349,7 @@ Returns a promise that is fulfilled when any promise is fulfilled, and rejected 
 
 ---
 
-#### some()
+#### Promise\some()
 
 ```php
 Promise\some(mixed[] $promises, int $required): PromiseInterface
@@ -359,7 +359,7 @@ Returns a promise that is fulfilled when $required number of promises are fulfil
 
 ---
 
-#### choose()
+#### Promise\choose()
 
 ```php
 Promise\choose(mixed[] $promises): PromiseInterface
@@ -369,7 +369,7 @@ Returns a promise that is fulfilled or rejected when the first promise is fulfil
 
 ---
 
-#### map()
+#### Promise\map()
 
 ```php
 Promise\map(
@@ -382,7 +382,7 @@ Maps the callback to each promise as it is fulfilled. Returns an array of promis
 
 ---
 
-#### reduce()
+#### Promise\reduce()
 
 ```php
 Promise\reduce(
@@ -396,7 +396,7 @@ Reduce function similar to `array_reduce()`, only it works on promises and/or va
 
 ---
 
-#### iterate()
+#### Promise\iterate()
 
 ```php
 Promise\iterate(
@@ -410,7 +410,7 @@ Calls `$worker` using the return value of the previous call until `$predicate` r
 
 ---
 
-#### retry()
+#### Promise\retry()
 
 ```php
 Promise\retry(
@@ -425,7 +425,7 @@ Continuously calls `$promisor`, a function that should return a promise (though 
 
 The `Promise` class also contains two static methods for transforming a functions into a function that is able to take promises as arguments and return promises instead of values or throwing exceptions.
 
-#### lift()
+#### Promise\lift()
 
 ```php
 Promise\lift(
@@ -437,7 +437,7 @@ Wraps the given callable `$worker` in a promise aware function that takes the sa
 
 ---
 
-#### promisify()
+#### Promise\promisify()
 
 ```php
 Promise\promisify(
@@ -451,7 +451,7 @@ array of the parameters that would have been passed to the callback function. Th
 
 ---
 
-#### adapt()
+#### Promise\adapt()
 
 ```php
 Promise\adapt(object $thenable): PromiseInterface

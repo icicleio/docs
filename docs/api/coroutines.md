@@ -210,7 +210,7 @@ As shown in the examples above, a `Icicle\Coroutine\Coroutine` instance can be c
 
 ---
 
-### wrap()
+### Coroutine\wrap()
 
 ```php
 Coroutine\wrap(
@@ -244,7 +244,7 @@ The example above will output `{11}{21}{31}{12}{22}{32}{13}{23}{33}`, demonstrat
 
 ---
 
-### create()
+### Coroutine\create()
 
 ```php
 Coroutine\create(

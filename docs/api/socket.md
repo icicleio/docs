@@ -42,8 +42,8 @@ The example below implements a simple HTTP server listening on 127.0.0.1:8080 th
 ```php
 use Icicle\Coroutine\Coroutine;
 use Icicle\Loop;
-use Icicle\Socket\Client\Client;
-use Icicle\Socket\Client\ClientInterface;
+use Icicle\Socket\Socket;
+use Icicle\Socket\SocketInterface;
 use Icicle\Socket\Server\Server;
 use Icicle\Socket\Server\ServerInterface;
 use Icicle\Socket\Server\ServerFactory;
@@ -53,10 +53,10 @@ $server = (new ServerFactory())->create('localhost', 8080);
 $generator = function (ServerInterface $server) {
     printf("Server listening on %s:%d\n", $server->getAddress(), $server->getPort());
 
-    $generator = function (ClientInterface $client) {
+    $generator = function (SocketInterface $socket) {
         $request = '';
         do {
-            $request .= (yield $client->read(0, "\n"));
+            $request .= (yield $socket->read(0, "\n"));
         } while (substr($request, -4) !== "\r\n\r\n");
 
         $message = sprintf("Received the following request:\r\n\r\n%s", $request);
@@ -88,28 +88,6 @@ $coroutine->done();
 Loop\run();
 ```
 
-## SocketInterface
-
-All socket classes in this component implement `Icicle\Socket\SocketInterface`.
-
-#### isOpen()
-
-```php
-SocketInterface::isOpen(): bool
-```
-
-Determines if the socket is still open (connected).
-
----
-
-#### close()
-
-```php
-SocketInterface::close(): void
-```
-
-Closes the socket, making it unreadable or unwritable.
-
 ## Server
 
 The `Icicle\Socket\Server\Server` class implements `Icicle\Socket\Server\ServerInterface`, a coroutine-based interface for creating a TCP server and accepting connections.
@@ -130,11 +108,11 @@ Creates a server from a stream socket server resource generated from `stream_soc
 ServerInterface::accept(): Generator
 ```
 
-A coroutine that is resolved with a `Icicle\Socket\Client\ClientInterface` object when a connection is accepted.
+A coroutine that is resolved with a `Icicle\Socket\SocketInterface` object when a connection is accepted.
 
 Resolution | Type | Description
 :-: | :-- | :--
-Fulfilled | `Icicle\Socket\Client\ClientInterface` | Accepted client connection.
+Fulfilled | `Icicle\Socket\SocketInterface` | Accepted client connection.
 Rejected | `Icicle\Socket\Exception\BusyException` | If the server already had an accept pending.
 Rejected | `Icicle\Socket\Exception\UnavailableException` | If the server was previously closed.
 Rejected | `Icicle\Socket\Exception\ClosedException` | If the server is closed during pending accept.
@@ -161,7 +139,7 @@ Returns the local port.
 
 ## ServerFactory
 
-`Icicle\Socket\Server\ServerFactory` (implements `Icicle\Socket\Server\ServerFactoryInterface`) can be used to create server instances from a hostname or unix socket path, port number (`-1` for unix socket), and list of options.
+`Icicle\Socket\Server\ServerFactory` (implements `Icicle\Socket\Server\ServerFactoryInterface`) can be used to create server instances from a IP or unix socket path, port number (`null` for unix socket), and list of options.
 
 #### create()
 
@@ -173,7 +151,7 @@ ServerFactoryInterface::create(
 ): ServerInterface
 ```
 
-Creates a server bound and listening on the given host and port.
+Creates a server bound and listening on the given ip or unix socket path and port number (`null` for unix socket).
 
 Option | Type | Description
 :-- | :-- | :--
@@ -182,81 +160,36 @@ Option | Type | Description
 `passphrase` | `string` | PEM passphrase if applicable.
 `name` | `string` | Name to use as SNI identifier. If not set, name will be guessed based on `$host`.
 
-## ReadableStream
+## Socket
 
-`Icicle\Socket\Stream\ReadableStream` implements `Icicle\Stream\ReadableStreamInterface`, so it is interoperable with any other class implementing one of the stream interfaces.
+`Icicle\Socket\Socket` objects implement `Icicle\Socket\SocketInterface` and are used as the fulfillment value of the coroutine returned by `Icicle\Socket\Server\Server::accept()` ([see documentation above](#accept)). (Note that `Icicle\Socket\Server\Server` can be easily extended and modified to fulfill accept requests with different objects implementing `Icicle\Socket\SocketInterface`.)
 
-See the [ReadableStreamInterface API documentation](stream.md#readablestreaminterface) for more information on how readable streams are used.
+The class extends `Icicle\Stream\Pipe\DuplexPipe`, so it inherits all the readable and writable stream methods as well as adding those below.
 
-When the other end of the connection is closed and a read is pending, that read will be fulfilled with an empty string. Subsequent reads will then reject with an instance of `Icicle\Stream\Exception\UnreadableException` and `isReadable()` will return `false`.
-
-#### ReadableStream Constructor
+#### Socket Constructor
 
 ```php
-$stream = new ReadableStream(resource $socket)
+$socket = new Socket(resource $socket)
 ```
 
-Creates a readable stream from the given stream socket resource.
-
-## WritableStream
-
-`Icicle\Socket\Stream\WritableStream` implements `Icicle\Stream\WritableStreamInterface`, so it is interoperable with any other class implementing one of the stream interfaces.
-
-See the [WritableStreaminterface API documentation](stream.md#writablestreaminterface) for more information on how writable streams are used.
-
-#### WritableStream Constructor
-
-```php
-$stream = new WritableStream(resource $socket)
-```
-
-Creates a writable stream from the given stream socket resource.
-
-## DuplexStream
-
-`Icicle\Socket\Stream\DuplexStream` implements `Icicle\Stream\DuplexStreamInterface`, making it both a readable stream and a writable stream. It also implements `Icicle\Socket\Stream\DuplexSocketInterface`, adding an optional parameter `float $timeout = 0` to the stream methods as described in the sections above on [ReadableStream](#readablestream) and [WritableStream](#writablestream).
-
-See the [ReadableStreamInterface API documentation](https://github.com/icicleio/stream#readablestreaminterface) and [WritableStreamInterface API documentation](https://github.com/icicleio/stream#writablestreaminterface) for more information on how duplex streams are used.
-
-
-#### DuplexStream Constructor
-
-```php
-$stream = new DuplexStream(resource $socket)
-```
-
-Creates a duplex stream from the given stream socket resource.
-
-## Client
-
-`Icicle\Socket\Client\Client` objects implement `Icicle\Socket\Client\ClientInterface` and are used as the fulfillment value of the coroutine returned by `Icicle\Socket\Server\Server::accept()` ([see documentation above](#accept)). (Note that `Icicle\Socket\Server\Server` can be easily extended and modified to fulfill accept requests with different objects implementing `Icicle\Socket\Client\ClientInterface`.)
-
-The class extends `Icicle\Socket\Stream\DuplexStream`, so it inherits all the readable and writable stream methods as well as adding those below.
-
-#### Client Constructor
-
-```php
-$client = new Client(resource $socket)
-```
+Creates a socket object from the given stream socket resource.
 
 ---
-
-Creates a client object from the given stream socket resource.
 
 #### enableCrypto()
 
 ```php
-ClientInterface::enableCrypto(int $method, float $timeout = 0): Generator
+SocketInterface::enableCrypto(int $method, float $timeout = 0): Generator
 ```
 
-Enables encryption on the socket. For Client objects created from `Icicle\Socket\Server\Server::accept()`, a PEM file must have been provided when creating the server socket (see `Icicle\Socket\Server\ServerFactory`). Use the `STREAM_CRYPTO_METHOD_*_SERVER` constants when enabling crypto on remote clients (e.g., created by `Icicle\Socket\Server\ServerInterface::accept()`) and the `STREAM_CRYPTO_METHOD_*_CLIENT` constants when enabling crypto on a local client connection (e.g., created by `Icicle\Socket\Client\ConnectorInterface::connect()`).
+Enables encryption on the socket. For Socket objects created from `Icicle\Socket\Server\Server::accept()`, a PEM file must have been provided when creating the server socket (see `Icicle\Socket\Server\ServerFactory`). Use the `STREAM_CRYPTO_METHOD_*_SERVER` constants when enabling crypto on remote clients (e.g., created by `Icicle\Socket\Server\ServerInterface::accept()`) and the `STREAM_CRYPTO_METHOD_*_CLIENT` constants when enabling crypto on a local client connection (e.g., created by `Icicle\Socket\Connector\ConnectorInterface::connect()`).
 
 ---
 
 #### getLocalAddress()
 
 ```php
-ClientInterface::getLocalAddress(): string
+SocketInterface::getLocalAddress(): string
 ```
 
 Returns the local IP address as a string.
@@ -266,7 +199,7 @@ Returns the local IP address as a string.
 #### getLocalPort()
 
 ```php
-ClientInterface::getLocalPort(): int
+SocketInterface::getLocalPort(): int
 ```
 
 Returns the local port.
@@ -276,7 +209,7 @@ Returns the local port.
 #### getRemoteAddress()
 
 ```php
-ClientInterface::getRemoteAddress(): string
+SocketInterface::getRemoteAddress(): string
 ```
 
 Returns the remote IP address as a string.
@@ -286,26 +219,26 @@ Returns the remote IP address as a string.
 #### getRemotePort()
 
 ```php
-ClientInterface::getRemotePort(): int
+SocketInterface::getRemotePort(): int
 ```
 
 Returns the remote port.
 
 ## Connector
 
-The `Icicle\Socket\Client\Connector` class (implements `Icicle\Socket\Client\ConnectorInterface`) asynchronously connects to a remote server, returning a coroutine that is fulfilled with an instance of `Icicle\Socket\Client\Client` when the connection is successfully established. Note that the *host should be given as an IP address*, as DNS lookups performed by PHP are synchronous (blocking). If you wish to use domain names instead of IPs, see `Icicle\Dns\Connector\Connector` in the [DNS component](dns.md).
+The `Icicle\Socket\Connector\Connector` class (implements `Icicle\Socket\Connector\ConnectorInterface`) asynchronously connects to a remote server, returning a coroutine that is fulfilled with an instance of `Icicle\Socket\SocketInterface` when the connection is successfully established. Note that the *host should be given as an IP address*, as DNS lookups performed by PHP are synchronous (blocking). If you wish to use domain names instead of IPs, see `Icicle\Dns\Connector\Connector` in the [DNS component](https://github.com/icicleio/dns).
 
 #### connect()
 
 ```php
 ConnectorInterface::connect(
     string $host,
-    int $port,
+    int|null $port,
     mixed[] $options = []
 ): Generator
 ```
 
-Connects asynchronously to the given host on the given port.
+Connects asynchronously to the given IP or unix socket path on the given port number (`null` for unix socket).
 
 Option | Type | Description
 :-- | :-- | :--
@@ -318,7 +251,7 @@ Option | Type | Description
 
 Resolution | Type | Description
 :-: | :-- | :--
-Fulfilled | `Icicle\Socket\Client\ClientInterface` | Fulfilled once the connection is established.
+Fulfilled | `Icicle\Socket\SocketInterface` | Fulfilled once the connection is established.
 Rejected | `Icicle\Socket\Exception\FailureException` | If the connection attempt fails (such as an invalid host).
 Rejected | `Icicle\Promise\Exception\TimeoutException` | If the connection attempt times out.
 
@@ -394,7 +327,7 @@ Returns the local port.
 
 ## DatagramFactory
 
-`Icicle\Socket\Datagram\DatagramFactory` (implements `Icicle\Socket\Datagram\DatagramFactoryInterface`) can be used to create datagram instances from a hostname or unix socket path, port number (`-1` for unix socket), and list of options.
+`Icicle\Socket\Datagram\DatagramFactory` (implements `Icicle\Socket\Datagram\DatagramFactoryInterface`) can be used to create datagram instances from a hostname or unix socket path, port number (`null` for unix socket), and list of options.
 
 #### create()
 
@@ -406,4 +339,45 @@ DatagramFactoryInterface::create(
 ): DatagramInterface
 ```
 
-Creates a datagram bound and listening on the given host and port. No options are defined in this implementation.
+Creates a datagram bound and listening on the given IP and port number. No options are defined in this implementation.
+
+## Functions
+
+#### Socket\connect()
+
+```php
+Icicle\Socket\connect(
+    string $ip,
+    int|null $port,
+    array $options = []
+): Generator
+```
+
+Connects asynchronously to the given host on the given port. Uses the global connector interface that can be set using `Icicle\Socket\connector()`.
+
+Option | Type | Description
+:-- | :-- | :--
+`protocol` | `string` | The protocol to use, such as tcp, udp, s3, ssh. Defaults to tcp.
+`timeout` | `float` | Number of seconds until connection attempt times out. Defaults to 10 seconds.
+`cn` | `string` | Host name (common name) used to verify certificate. e.g., `*.google.com`
+`allow_self_signed` | `bool` | Set to `true` to allow self-signed certificates. Defaults to `false`.
+`max_depth` | `int` | Max levels of certificate authorities the verifier will transverse. Defaults to 10.
+`cafile` | `string` | Path to bundle of root certificates to verify against.
+
+Resolution | Type | Description
+:-: | :-- | :--
+Fulfilled | `Icicle\Socket\SocketInterface` | Fulfilled once the connection is established.
+Rejected | `Icicle\Socket\Exception\FailureException` | If the connection attempt fails (such as an invalid host).
+Rejected | `Icicle\Promise\Exception\TimeoutException` | If the connection attempt times out.
+
+---
+
+#### Socket\connector()
+
+```php
+Icicle\Socket\connector(
+    ConnectorInterface|null $connector = null
+): ConnectorInterface
+```
+
+Gets the global connector instance. If a connector instance is provided, that instance is set as the global connector instance.

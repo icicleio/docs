@@ -6,7 +6,7 @@ Any asynchronous code needs to use the same event loop to be interoperable and n
 
 The functions available in `Icicle\Loop` (abbreviated to `Loop` in the function prototypes) are described below.
 
-#### loop()
+#### Loop\loop()
 
 ```php
 Loop\loop(LoopInterface $loop = null): LoopInterface
@@ -14,7 +14,7 @@ Loop\loop(LoopInterface $loop = null): LoopInterface
 
 This function accesses the active event loop or, if called with an instance of `Icicle\Loop\LoopInterface`, allows any particular or custom implementation of `Icicle\Loop\LoopInterface` to be used as the event loop. If specifying an event loop, this function should be called before any code that would access the event loop, otherwise a `Icicle\Loop\Exception\InitializedException` will be thrown since the default factory would have already created an event loop.
 
-#### run()
+#### Loop\run()
 
 ```php
 Loop\run(callable $initialize = null): bool
@@ -26,7 +26,7 @@ This function is generally the last line in the script that starts the program, 
 
 An optional initialization function may be given that is called as soon as the loop is started. This function can be used to create a set of initial events or set up a server.
 
-#### tick()
+#### Loop\tick()
 
 ```php
 Loop\tick(bool $blocking = false): void
@@ -34,7 +34,7 @@ Loop\tick(bool $blocking = false): void
 
 Executes a single turn of the event loop. Set `$blocking` to `true` to block until at least one pending event becomes active, or set `$blocking` to `false` to return immediately, even if no events are executed.
 
-#### isRunning()
+#### Loop\isRunning()
 
 ```php
 Loop\isRunning(): bool
@@ -42,7 +42,7 @@ Loop\isRunning(): bool
 
 Determines if the loop is running.
 
-#### stop()
+#### Loop\stop()
 
 ```php
 Loop\stop(): void
@@ -50,7 +50,7 @@ Loop\stop(): void
 
 Stops the loop if it is running.
 
-#### schedule()
+#### Loop\schedule()
 
 ```php
 Loop\schedule(callable<(mixed ...$args): void> $callback, mixed ...$args): void
@@ -58,7 +58,7 @@ Loop\schedule(callable<(mixed ...$args): void> $callback, mixed ...$args): void
 
 Schedules the function `$callback` to be executed later (sometime after leaving the scope calling this method). Functions are guaranteed to be executed in the order queued. This method is useful for ensuring that functions are called asynchronously.
 
-#### maxScheduleDepth()
+#### Loop\maxScheduleDepth()
 
 ```php
 Loop\maxScheduleDepth(int $depth): int
@@ -66,7 +66,7 @@ Loop\maxScheduleDepth(int $depth): int
 
 Sets the maximum number of scheduled functions to execute on each turn of the event loop. Returns the previous max schedule depth.
 
-#### poll()
+#### Loop\poll()
 
 ```php
 Loop\poll(
@@ -77,7 +77,7 @@ Loop\poll(
 
 Creates an `Icicle\Loop\Events\SocketEventInterface` object for the given stream socket that will listen for data to become available on the socket.
 
-#### await()
+#### Loop\await()
 
 ```php
 Loop\await(
@@ -88,7 +88,7 @@ Loop\await(
 
 Creates an `Icicle\Loop\Events\SocketEventInterface` object for the given stream socket that will listen for the ability to write to the socket.
 
-#### timer()
+#### Loop\timer()
 
 ```php
 Loop\timer(
@@ -100,7 +100,7 @@ Loop\timer(
 
 Creates a timer that calls the function `$callback` with the given arguments after `$interval` seconds have elapsed. The number of seconds can have a decimal component (e.g., `1.2` to execute the callback in 1.2 seconds). Returns an `Icicle\Loop\Events\TimerInterface` object.
 
-#### periodic()
+#### Loop\periodic()
 
 ```php
 Loop\periodic(
@@ -112,7 +112,7 @@ Loop\periodic(
 
 Creates a timer that calls the function `$callback` with the given arguments every `$interval` seconds until cancelled. The number of seconds can have a decimal component (e.g., `1.2` to execute the callback in 1.2 seconds). Returns an `Icicle\Loop\Events\TimerInterface` object.
 
-#### immediate()
+#### Loop\immediate()
 
 ```php
 Loop\immediate(
@@ -125,7 +125,7 @@ Calls the function `$callback` with the given arguments as soon as there are no 
 
 The name of this function is somewhat misleading, but was chosen because of the similar behavior to the `setImmediate()` function available in some implementations of JavaScript. Think of an immediate as a timer that executes when able rather than after a particular interval.
 
-#### signalHandlingEnabled()
+#### Loop\signalHandlingEnabled()
 
 ```php
 Loop\signalHandlingEnabled(): bool
@@ -133,7 +133,7 @@ Loop\signalHandlingEnabled(): bool
 
 Determines if signals sent to the PHP process can be handled by the event loop. Returns `true` if signal handling is enabled, `false` if not. Signal handling requires the `pcntl` extension to be installed.
 
-#### signal()
+#### Loop\signal()
 
 ```php
 Loop\signal(int $signo, callable<(int $signo): void>): SignalInterface
@@ -141,7 +141,7 @@ Loop\signal(int $signo, callable<(int $signo): void>): SignalInterface
 
 Creates a process signal listener object implementing `Icicle\Loop\Events\SignalInterface` that calls the callback whenever the process receives a signal of the given number. Use constants such as `SIGTERM`, `SIGCHLD`, etc. for the `$signo` argument.
 
-#### isEmpty()
+#### Loop\isEmpty()
 
 ```php
 Loop\isEmpty(): bool
@@ -149,7 +149,7 @@ Loop\isEmpty(): bool
 
 Determines if the are any pending events in the loop.
 
-#### reInit()
+#### Loop\reInit()
 
 ```php
 Loop\reInit(): void
@@ -157,7 +157,7 @@ Loop\reInit(): void
 
 This function should be called by the child process if the process is forked using `pcntl_fork()`.
 
-#### clear()
+#### Loop\clear()
 
 ```php
 Loop\clear(): void
