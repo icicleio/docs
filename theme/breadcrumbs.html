@@ -1,11 +1,12 @@
 <ul class="breadcrumbs" role="navigation" aria-label="breadcrumbs navigation">
-    <li><a href="{{ homepage_url }}">Docs</a> &raquo;</li>
+    <li><a href="{{ homepage_url }}">Docs</a> <span class="fa fa-chevron-right"></span></li>
+
     {% if current_page %}
         {% for doc in current_page.ancestors %}
             {% if doc.link %}
-                <li><a href="{{ doc.link|e }}">{{ doc.title }}</a> &raquo;</li>
+                <li><a href="{{ doc.link|e }}">{{ doc.title }}</a> <span class="fa fa-chevron-right"></span></li>
             {% else %}
-                <li>{{ doc.title }} &raquo;</li>
+                <li>{{ doc.title }} <span class="fa fa-chevron-right"></span></li>
             {% endif %}
         {% endfor %}
     {% endif %}

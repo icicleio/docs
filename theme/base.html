@@ -43,16 +43,16 @@
         <aside class="pane title-pane">
             <a id="nav-toggle" class="fa fa-bars"></a>
 
-            <nav role="navigation" aria-label="top navigation">
+            <nav id="title-home-link" role="navigation" aria-label="top navigation">
                 <a href="{{ homepage_url }}">{{ site_name }}</a>
             </nav>
 
             <div class="pagination-nav" role="navigation" aria-label="related navigation">
                 {% if previous_page %}
-                    <a href="{{ previous_page.url }}" class="btn btn-neutral" title="{{ previous_page.title }}"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+                    <a href="{{ previous_page.url }}" class="btn btn-neutral" title="{{ previous_page.title }}"><span class="fa fa-arrow-circle-left"></span> Previous</a>
                 {% endif %}
                 {% if next_page %}
-                    <a href="{{ next_page.url }}" class="btn btn-neutral float-right" title="{{ next_page.title }}"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+                    <a href="{{ next_page.url }}" class="btn btn-neutral float-right" title="{{ next_page.title }}"/>Next <span class="fa fa-arrow-circle-right"></span></a>
                 {% endif %}
             </div>
         </aside>
@@ -63,8 +63,10 @@
             </div>
 
             <div role="search" class="container">
-                <form id="search-form" class="search-box" action="{{ base_url }}/search.html" method="get">
-                    <input type="text" name="q" placeholder="Search docs..." />
+                <form id="content_search" class="search-box" action="{{ base_url }}/search.html" method="get">
+                    <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                    <label for="mkdocs-search-query" class="fa fa-search"></label>
+                    <input id="mkdocs-search-query" type="text" name="q" placeholder="Search docs..." autocomplete="off" autofocus>
                 </form>
             </div>
 
@@ -105,7 +107,7 @@
                         {% endif %}
                     </div>
 
-                    Built with <a href="http://www.mkdocs.org">MkDocs</a>.
+                    <p>Built with <a href="http://www.mkdocs.org">MkDocs</a> {{ mkdocs_version }}. Last updated on {{ build_date_utc.strftime('%b %d, %Y') }}.</p>
                 </footer>
                 {% endblock %}
             </div>

@@ -1,6 +1,4 @@
 *, *::before, *::after {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
@@ -33,16 +31,13 @@ a:visited {
     text-decoration: none;
 }
 
-code, .search-box {
+code, .search-box, .breadcrumbs {
     border: 1px solid #d6dee8;
-}
-
-code, .pane {
-    background-color: #eaeef3;
-}
-
-code {
     border-radius: 0.25em;
+}
+
+code, .pane, .breadcrumbs {
+    background-color: #eaeef3;
 }
 
 pre {
@@ -79,16 +74,20 @@ pre {
 .title-pane {
     display: -ms-flexbox;
     display: -webkit-flex;
+    display: -webkit-box;
     display: flex;
     -webkit-justify-content: space-between;
-    justify-content: space-between;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
     -webkit-align-items: center;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     height: 2.5rem;
     padding: 0 0.5rem;
     z-index: 10;
     background-color: #368aff;
-    background-image: linear-gradient(#3e92ff, #368aff);
     box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -96,8 +95,19 @@ pre {
     color: white;
 }
 
+.title-pane > .pagination-nav > a {
+    display: inline-block;
+    padding-left: 0.5rem;
+}
+
 #nav-toggle {
-   display: none;
+    display: none;
+}
+
+@media (max-width: 24rem) {
+    #title-home-link {
+        display: none;
+    }
 }
 
 
@@ -171,12 +181,18 @@ a.toctree-item.current {
  * Breadcrumbs navigation.
  */
 .breadcrumbs {
-   padding: 0;
-   list-style-type: none;
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9em;
+    list-style-type: none;
 }
 
 .breadcrumbs li {
-   display: inline-block;
+    display: inline-block;
+}
+
+.breadcrumbs span {
+    color: rgba(0, 0, 0, 0.1);
 }
 
 
@@ -198,14 +214,15 @@ a.toctree-item.current {
 }
 
 @media (min-width: 52rem) {
-   .content-pane, .content-container {
-      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
-   }
+    .content-pane {
+        box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+    }
 }
 
 @media (min-width: 88rem) {
     .content-pane > .content-container {
         border-right: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
     }
 }
 
@@ -224,17 +241,48 @@ a.toctree-item.current {
  * Search box and search results.
  */
 .search-box {
-    display: block;
-    padding: 0.25em 0.5em;
-    border-radius: 0.25em;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: space-around;
+        -ms-flex-pack: distribute;
+            justify-content: space-around;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    border-radius: 0.5em;
     background-color: #fff;
+    overflow: hidden;
+}
+
+.search-box > label {
+    font-size: 0.9em;
+    padding-bottom: 0.125rem;
+    padding-left: 0.5rem;
 }
 
 .search-box > input {
-    padding: 0.25em;
-    width: 100%;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    padding: 0.5rem;
     border: none;
     outline: none;
+    margin: 0;
+    background-color: transparent;
+}
+
+
+/**
+ * Footer layout.
+ */
+footer {
+    margin-top: 4rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: #666;
 }
 
 

@@ -1,7 +1,7 @@
 site_name: 'Icicle documentation'
 site_description: 'Write asynchronous code using synchronous coding techniques in PHP'
 site_author: 'Aaron Piotrowski'
-copyright: '&copy; Icicle contributors'
+copyright: '&copy; Icicle contributors.'
 theme_dir: theme
 strict: true
 pages:
