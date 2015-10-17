@@ -119,6 +119,7 @@ pre {
     width: 20rem;
     overflow-x: hidden;
     overflow-y: auto;
+    font-size: 0.9em;
     z-index: 1;
     border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -155,7 +156,6 @@ a.toctree-item.current {
 
 .toctree-heading {
     margin-top: 2rem;
-    font-size: 0.9em;
     font-weight: bold;
     background-color: rgba(0, 0, 0, 0.1);
 }
@@ -252,7 +252,6 @@ a.toctree-item.current {
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center;
-    border-radius: 0.5em;
     background-color: #fff;
     overflow: hidden;
 }
@@ -272,6 +271,7 @@ a.toctree-item.current {
     border: none;
     outline: none;
     margin: 0;
+    font-size: 1em;
     background-color: transparent;
 }
 

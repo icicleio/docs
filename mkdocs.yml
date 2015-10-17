@@ -4,12 +4,15 @@ site_author: 'Aaron Piotrowski'
 copyright: '&copy; Icicle contributors.'
 theme_dir: theme
 strict: true
+
 pages:
 - Introduction: 'index.md'
+- Installing: 'installing.md'
 - Manual:
     - The Event Loop: 'manual/loop.md'
     - Promises: 'manual/promises.md'
     - Coroutines: 'manual/coroutines.md'
+    - Concurrency: 'manual/concurrency.md'
 - API:
     - Loop: 'api/loop.md'
     - Promises: 'api/promises.md'
@@ -17,3 +20,7 @@ pages:
     - Stream: 'api/stream.md'
     - Socket: 'api/socket.md'
     - DNS: 'api/dns.md'
+    - Concurrent: 'api/concurrent.md'
+
+extra:
+    version: v1.x

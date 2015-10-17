@@ -44,7 +44,7 @@
             <a id="nav-toggle" class="fa fa-bars"></a>
 
             <nav id="title-home-link" role="navigation" aria-label="top navigation">
-                <a href="{{ homepage_url }}">{{ site_name }}</a>
+                <a href="{{ homepage_url }}">Icicle {{ config.extra.version }} documentation</a>
             </nav>
 
             <div class="pagination-nav" role="navigation" aria-label="related navigation">
@@ -87,14 +87,14 @@
 
         <div class="pane content-pane">
             <div class="content-container">
-                {% include "breadcrumbs.html" %}
-
                 <div role="main">
-                    {% if page_title %}
-                        <h1>{{ page_title }}</h1>
-                    {% endif %}
-
                     {% block content %}
+                        {% include "breadcrumbs.html" %}
+
+                        {% if page_title %}
+                            <h1>{{ page_title }}</h1>
+                        {% endif %}
+
                         {{ content }}
                     {% endblock %}
                 </div>
