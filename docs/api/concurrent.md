@@ -80,7 +80,8 @@ See also: [getpriority(2)](http://linux.die.net/man/2/getpriority)
 
 Sets the fork's scheduling priority as a percentage.
 
-Note that on many systems, only the superuser can increase the priority of a process.
+!!! note
+    On many systems, only the superuser can increase the priority of a process.
 
 ---
 
@@ -261,11 +262,12 @@ A shared object is a container that stores an object inside shared memory. The o
 
 Because each shared object uses its own shared memory segment, it is much more efficient to store a larger object containing many values inside a single shared container than to use many small shared containers.
 
-Note that accessing a shared object is not atomic. Access to a shared object should be protected with a mutex to preserve data integrity.
-
 When used with forking, the object must be created prior to forking for both processes to access the synchronized object.
 
 Requires the [shmop](http://php.net/manual/en/book.shmop.php) extension to be enabled.
+
+!!! note
+    Accessing a shared object is not atomic. Access to a shared object should be protected with a mutex to preserve data integrity.
 
 ### Parcel::isFreed()
 
@@ -313,7 +315,8 @@ A non-blocking, interprocess POSIX semaphore that implements [`Icicle\Concurrent
 
 Uses a POSIX message queue to store a queue of permits in a lock-free data structure. This semaphore implementation is preferred over other implementations when available, as it provides the best performance.
 
-**Note:**  Not compatible with Windows.
+!!! note
+    Not compatible with Windows.
 
 ### PosixSemaphore::isFreed()
 

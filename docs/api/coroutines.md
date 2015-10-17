@@ -208,7 +208,6 @@ $coroutine = new Coroutine(Generator $generator)
 
 As shown in the examples above, a `Icicle\Coroutine\Coroutine` instance can be created by passing a `Generator` to the constructor. Execution of the coroutine is begun asynchronously, after leaving the calling scope of the constructor (e.g. after the function calling the constructor returns).
 
----
 
 ### Coroutine\wrap()
 
@@ -219,6 +218,10 @@ Coroutine\wrap(
 ```
 
 Returns a `callable` that returns a `Icicle\Coroutine\Coroutine` by calling `$callback` that must return a `Generator` written to be a coroutine. Any arguments given to the returned callable are also passed to `$callback`.
+
+#### Parameters
+`$callback`
+:   A generator function to create a coroutine function from.
 
 ```php
 use Icicle\Coroutine;
@@ -242,7 +245,6 @@ Loop\run();
 
 The example above will output `{11}{21}{31}{12}{22}{32}{13}{23}{33}`, demonstrating how a generator function can be used to create multiple coroutines. This example also demonstrates the cooperative execution of coroutines.
 
----
 
 ### Coroutine\create()
 
@@ -254,6 +256,13 @@ Coroutine\create(
 ```
 
 Calls the given callback function with the provided arguments. The callback function should return a `Generator` written to be a coroutine.
+
+#### Parameters
+`$callback`
+:   The generator function to call and start a coroutine from.
+
+`...$args`
+:   Arguments to pass to the generator function.
 
 ## Coroutine Docblock Annotations
 
@@ -348,3 +357,7 @@ CoroutineInterface::cancel(mixed $reason = null): void
 ```
 
 Cancels execution of the coroutine. If the coroutine is waiting on a promise, that promise is cancelled with the given exception. If no exception is given, an instance of `Icicle\Promise\Exception\CancelledException` will be used.
+
+##### Parameters
+`$reason`
+:   An exception or value to cancel the coroutine with.

@@ -5,6 +5,10 @@ copyright: '&copy; Icicle contributors.'
 theme_dir: theme
 strict: true
 
+markdown_extensions:
+    - admonition
+    - def_list
+
 pages:
 - Introduction: 'index.md'
 - Installing: 'installing.md'

@@ -31,18 +31,63 @@ a:visited {
     text-decoration: none;
 }
 
-code, .search-box, .breadcrumbs {
+pre > code, .search-box, .breadcrumbs {
     border: 1px solid #d6dee8;
     border-radius: 0.25em;
 }
 
-code, .pane, .breadcrumbs {
+pre > code, .pane, .breadcrumbs {
     background-color: #eaeef3;
+}
+
+:not(pre) > code {
+    font-weight: bold;
 }
 
 pre {
     word-break: break-all;
     word-wrap: break-word;
+}
+
+dl > dt:not(:first-of-type) {
+    margin-top: 1rem;
+}
+
+h2 {
+    margin-top: 2rem;
+}
+
+:not(h2) + h3:not(:first-child) {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.admonition {
+    margin: 1rem 0;
+    padding-bottom: 1px;
+}
+
+.admonition > .admonition-title {
+    padding: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+}
+
+.admonition > p {
+    padding: 0 0.5rem;
+}
+
+.admonition.note {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.admonition.tip {
+    background-color: #8de5b2;
+}
+
+.admonition.warning {
+    background-color: #f1c40f;
 }
 
 
