@@ -74,6 +74,16 @@ ReadableStreamInterface::read(
 
 Returns a promise that is fulfilled with data read from the stream when data becomes available. If `$length` is `0`, the promise is fulfilled with any amount of data available on the stream. If `$length` is not `0` the promise will be fulfilled with a maximum of `$length` bytes, but it may be fulfilled with fewer bytes. If the `$byte` parameter is not `null`, reading will stop once the given byte is encountered in the string. The byte matched by `$byte` will be included in the fulfillment string. `$byte` should be a single byte (tip: use `chr()` to convert an integer to a single-byte string). If a multibyte string is provided, only the first byte will be used.
 
+##### Parameters
+`$length`
+:   Max number of bytes to read. Fewer bytes may be returned. Use 0 to read as much data as possible.
+
+`$byte`
+:   Reading will stop once the given byte occurs in the stream. Note that reading may stop before the byte is found in the stream. The search byte will be included in the resolving string. Use null to effectively ignore this parameter and read any bytes.
+
+`$timeout`
+:   Number of seconds until the returned promise is rejected with a `TimeoutException` if no data is received. Use 0 for no timeout.
+
 Resolution | Type | Description
 :-: | :-- | :--
 Fulfilled | `string` | Any number of bytes or up to `$length` bytes if `$length` was not `0`.
@@ -105,6 +115,13 @@ WritableStreamInterface::write(
 
 Writes the given data to the stream. Returns a promise that is fulfilled with the number of bytes written once that data has successfully been written to the stream.
 
+##### Parameters
+`$data`
+:   The data to write to the stream.
+
+`$timeout`
+:   Number of seconds until the returned promise is rejected with a `TimeoutException` and the stream is closed if the data cannot be written to the stream. Use 0 for no timeout.
+
 Resolution | Type | Description
 :-: | :-- | :--
 Fulfilled | `int` | Fulfilled with the number of bytes written when the data has actually been written to the stream.
@@ -124,6 +141,13 @@ WritableStreamInterface::end(
 ```
 
 Writes the given data to the stream then immediately closes the stream by calling `close()`.
+
+##### Parameters
+`$data`
+:   The data to write to the stream.
+
+`$timeout`
+:   Number of seconds until the returned promise is rejected with a `TimeoutException` and the stream is closed if the data cannot be written to the stream. Use 0 for no timeout.
 
 Resolution | Type | Description
 :-: | :-- | :--
@@ -152,13 +176,23 @@ A duplex stream is both readable and writable. `Icicle\Stream\DuplexStreamInterf
 
 ```php
 SeekableStreamInterface::seek(
-    int $position,
+    int $offset,
     int $whence = SEEK_SET,
     float $timeout = 0
 ): Generator
 ```
 
 Moves the pointer to a new position in the stream. The `$whence` parameter is identical the parameter of the same name on the built-in `fseek()` function.
+
+##### Parameters
+`$offset`
+:   Number of bytes to seek. Usage depends on value of `$whence`.
+
+`$whence`
+:   Values identical to `$whence` values for `fseek()`.
+
+`$timeout`
+:   Number of seconds until the returned promise is rejected with a `TimeoutException` and the stream is closed if the data cannot be written to the stream. Use 0 for no timeout.
 
 Resolution | Type | Description
 :-: | :-- | :--
@@ -321,7 +355,26 @@ Icicle\Stream\pipe(
 ): Generator
 ```
 
-Returns a generator that should be used within a coroutine or used to create a new coroutine. Pipes all data read from this stream to the writable stream. If `$length` is not `0`, only `$length` bytes will be piped to the writable stream.  If `$byte` is not `null`, piping will end once `$byte` is encountered in the stream. The returned promise is fulfilled with the number of bytes piped once the writable stream is no longer writable, `$length` bytes have been piped, or `$byte` is encountered in the stream.
+Returns a generator that should be used within a coroutine or used to create a new coroutine. Pipes all data read from this stream to the writable stream. If `$length` is not `0`, only `$length` bytes will be piped to the writable stream. The returned promise is fulfilled with the number of bytes piped once the writable stream is no longer writable, `$length` bytes have been piped, or `$byte` is encountered in the stream.
+
+##### Parameters
+`$source`
+:   A readable stream to pipe data from.
+
+`$dest`
+:   A writable stream to pipe data to. All data from `$source` will be written to `$dest` as it becomes readable.
+
+`$end`
+:   Indicates if the destination stream should be closed when there is no more data in `$source`.
+
+`$length`
+:   The maximum number of bytes to pipe from `$source` to `$dest`.
+
+`$byte`
+:   If `$byte` is not `null`, piping will end once `$byte` is encountered in the stream.
+
+`$timeout`
+:   Number of seconds until the returned promise is rejected with a `TimeoutException` and the stream is closed if the data cannot be written to the stream. Use 0 for no timeout.
 
 Resolution | Type | Description
 :-: | :-- | :--
@@ -344,6 +397,16 @@ Icicle\Stream\readTo(
 ```
 
 Returns a generator that should be used within a coroutine or used to create a new coroutine. Reads data from the given readable stream until the given number of bytes has been read from the stream.
+
+##### Parameters
+`$source`
+:   A readable stream to read from.
+
+`$length`
+:   The maximum number of bytes to read from `$source`.
+
+`$timeout`
+:   Number of seconds until the returned promise is rejected with a `TimeoutException` and the stream is closed if the data cannot be written to the stream. Use 0 for no timeout.
 
 Resolution | Type | Description
 :-: | :-- | :--
@@ -368,6 +431,19 @@ Icicle\Stream\readUntil(
 
 Returns a generator that should be used within a coroutine or used to create a new coroutine. Reads data from the given readable stream until the given string of bytes is read from the stream or the max length is reached. The matched string of bytes is included in the result string.
 
+##### Parameters
+`$source`
+:   A readable stream to read from.
+
+`$needle`
+:   The string to match against while reading.
+
+`$maxLength`
+:   The maximum number of bytes to read from `$source`.
+
+`$timeout`
+:   Number of seconds until the returned promise is rejected with a `TimeoutException` and the stream is closed if the data cannot be written to the stream. Use 0 for no timeout.
+
 Resolution | Type | Description
 :-: | :-- | :--
 Fulfilled | `string` | Fulfilled when the given string is read from the stream or the max length is reached.
@@ -389,6 +465,16 @@ Icicle\Stream\readAll(
 ```
 
 Returns a generator that should be used within a coroutine or used to create a new coroutine. Reads data from the given readable stream until stream is no longer readable or the max length is reached.
+
+##### Parameters
+`$source`
+:   A readable stream to read from.
+
+`$maxLength`
+:   The maximum number of bytes to read from `$source`.
+
+`$timeout`
+:   Number of seconds until the returned promise is rejected with a `TimeoutException` and the stream is closed if the data cannot be written to the stream. Use 0 for no timeout.
 
 Resolution | Type | Description
 :-: | :-- | :--

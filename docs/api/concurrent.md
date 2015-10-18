@@ -7,7 +7,9 @@ Interface for sending messages between execution contexts. A `ChannelInterface` 
 
 Sends a value across the channel to the receiver.
 
-The value sent must be serializable.
+#### Parameters
+`$data`
+:   The data to send to the receiver. The value given must be serializable.
 
 ### ChannelInterface::receive()
 
@@ -47,7 +49,9 @@ Forcefully kills the context.
 ---
 
 ## Forking\Fork
-A UNIX-compatible execution context that uses forked processes. Implements [`Icicle\Concurrent\ContextInterface`](#contextinterface).
+An execution context that uses forked processes. Implements [`Icicle\Concurrent\ContextInterface`](#contextinterface).
+
+As forked processes are created with the [`pcntl_fork()`](http://php.net/pcntl_fork) function, the [PCNTL extension](http://php.net/manual/en/book.pcntl.php) must be enabled to spawn forks. Not compatible with Windows.
 
 ### Fork::spawn()
 
@@ -57,6 +61,12 @@ A UNIX-compatible execution context that uses forked processes. Implements [`Ici
     ): Fork
 
 Spawns a new forked process and immediately starts it. All arguments following the function to invoke in the fork will be copied and passed as parameters to the function to invoke.
+
+`$function`
+:   The function to invoke inside the forked process.
+
+`...$args`
+:   Arguments to pass to `$function`.
 
 ### Fork::getPid()
 
@@ -79,6 +89,10 @@ See also: [getpriority(2)](http://linux.die.net/man/2/getpriority)
     Fork::setPriority(float $priority)
 
 Sets the fork's scheduling priority as a percentage.
+
+#### Parameters
+`$priority`
+:   A value between 0 and 1 indicating the relative priority to set.
 
 !!! note
     On many systems, only the superuser can increase the priority of a process.
@@ -128,6 +142,10 @@ Forcefully kills the process.
     Process::signal(int $signo)
 
 Sends the given POSIX process signal to the running process.
+
+#### Parameters
+`$signo`
+:   A POSIX signal number. Use constants such as `SIGTERM`, `SIGCHLD`, etc.
 
 ### Process::getPid()
 
@@ -308,6 +326,10 @@ Unwraps the parcel and returns the value inside the parcel.
 
 Wraps a value into the parcel, replacing the old value.
 
+#### Parameters
+`$value`
+:   The value to wrap into the parcel.
+
 ---
 
 ## Sync\PosixSemaphore
@@ -336,7 +358,12 @@ Gets the access permissions of the semaphore.
 
 Sets the access permissions of the semaphore.
 
-The current user must have access to the semaphore in order to change the permissions.
+#### Parameters
+`$mode`
+:   An octal representing the Unix permissions mode to set.
+
+!!! note
+    The current user must already have write access to the semaphore in order to change the semaphore's access permissions.
 
 ### PosixSemaphore::free()
 
@@ -411,6 +438,15 @@ Thread::spawn(
 ```
 
 Creates a new thread and immediately starts it. All arguments following the function to invoke in the thread will be copied and passed as parameters to the function to invoke.
+
+`$function`
+:   The function to invoke inside the new thread.
+
+`...$args`
+:   Arguments to pass to `$function`.
+
+!!! warning
+    Due to the underlying process of passing a closure to another thread, using a closure for `$function` that [imports variables](http://php.net/manual/en/functions.anonymous.php#example-195) from a scope in the parent thread can cause malformed internal pointers. Attempting to pass such a function will result in an `InvalidArgumentError` being thrown.
 
 Example:
 

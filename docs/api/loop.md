@@ -261,16 +261,6 @@ Loop\clear(): void
 
 Removes all events from the loop, returning the loop a state like it had just been created.
 
-## Loop Implementations
-
-There are currently three loop classes, each implementing `Icicle\Loop\LoopInterface`. Any custom implementation written must also implement this interface. Custom loop implementations can be used as the active event loop using the `Icicle\Loop\loop()` function ([see function prototype above](#loop)).
-
-- `Icicle\Loop\SelectLoop`: Works with any installation of PHP since it relies only on core functions. Uses `stream_select()` or `time_nanosleep()` depending on the events pending in the loop.
-- `Icicle\Loop\EventLoop`: Requires the `event` pecl extension. Preferred implementation for best performance.
-- `Icicle\Loop\LibeventLoop`: Requires the `libevent` pecl extension. Also provides better performance than the `SelectLoop` implementation.
-
-While each implementation is different, there should be no difference in the behavior of a program based on the loop implementation used. Note that there may be some differences in the exact timing of the execution of certain events or the order in which different types of events are executed (particularly the ordering of timers and signals). However, programs should not be reliant on the exact timing of callback function execution and therefore should not be affected by these differences. Regardless of implementation, callbacks scheduled with `schedule()` and `immediate()` are always executed in the order queued.
-
 ## Throwing Exceptions
 
 Functions scheduled using `Loop\schedule()` or callback functions used for timers, immediates, and socket events should not throw exceptions. If one of these functions throws an exception, it will be thrown from the `Loop\run()` function. These are referred to as *uncatchable exceptions* since there is no way to catch the thrown exception within the event loop. If an exception can be thrown from code within a callback, that code should be surrounded by a try/catch block and the exception handled within the callback.

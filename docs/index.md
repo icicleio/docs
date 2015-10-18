@@ -1,15 +1,28 @@
 **Icicle is a PHP library for writing *asynchronous* code using *synchronous* coding techniques.**
 
-Icicle uses [Coroutines] built with [Promises] to facilitate writing asynchronous code using techniques normally used to write synchronous code, such as returning values and throwing exceptions, instead of using nested callbacks typically found in asynchronous code.
+Icicle uses [coroutines] built with [promises] to facilitate writing asynchronous code using techniques normally used to write synchronous code, such as returning values and throwing exceptions. Writing functions in this way allows you to focus on the meaning of your code, without a mess of nested callbacks.
 
-## Library Components
 
-- [Coroutines]: Interruptible functions for building asynchronous code using synchronous coding patterns and error handling.
-- [Promises]: Placeholders for future values of asynchronous operations. Callbacks registered with promises may return values and throw exceptions.
-- [Loop (event loop)][loop]: Used to schedule functions, run timers, handle signals, and poll sockets for pending data or await for space to write.
+## Features
+- Full-featured event loop for asynchronous programming
+- Multiple event loop backends
+- Asynchronous TCP and UDP sockets
+- Asynchronous DNS resolution
+- Standalone HTTP server
+- Multi-processing using forking or child processes
+- Multi-threading using native threads
+- Asynchronous process signal handling
+- Worker pool for running blocking tasks
+- Non-blocking concurrency primitives
 
-## Available Components
 
+## Core components
+- [Event loop](api/loop.md): The core of Icicle that manages scheduling incoming events and asynchronous functions.
+- [Promises](api/promise.md): Placeholders for future values of asynchronous operations. Callbacks registered with promises may return values and throw exceptions.
+- [Coroutines](api/coroutine.md): Interruptible functions for building asynchronous code using synchronous coding patterns and error handling.
+
+
+## Optional packages
 - [Stream](https://github.com/icicleio/stream): Common coroutine-based interface for reading and writing data.
 - [Socket](https://github.com/icicleio/socket): Asynchronous stream socket server and client.
 - [Concurrent](https://github.com/icicleio/concurrent): Provides an easy to use interface for parallel execution with non-blocking communication and task execution (under development).
@@ -17,65 +30,14 @@ Icicle uses [Coroutines] built with [Promises] to facilitate writing asynchronou
 - [HTTP](https://github.com/icicleio/http): Asynchronous HTTP server and client (under development).
 - [React Adapter](https://github.com/icicleio/react-adaptor): Adapts the event loop and promises of Icicle to interfaces compatible with components built for React.
 
-## Example
 
-The example below uses the [HTTP component](https://github.com/icicleio/http) (under development) to create a simple HTTP server that responds with `Hello, world!` to every request.
+## Getting help and support
+If you're experiencing problems or find anything in this documentation that is confusing or misleading, you can find help and support in the following ways:
 
-```php
-#!/usr/bin/env php
-<?php
+- Tweet us a question at the [official Twitter account](https://twitter.com/icicleio)
+- Chat in the public [Gitter chat room](https://gitter.im/icicleio/icicle)
+- Send us an email at [hello@icicle.io](mailto:hello@icicle.io)
 
-require '/vendor/autoload.php';
-
-use Icicle\Http\Message\RequestInterface;
-use Icicle\Http\Message\Response;
-use Icicle\Http\Server\Server;
-use Icicle\Loop;
-
-$server = new Server(function (RequestInterface $request) {
-    $response = new Response(200);
-    yield $response->getBody()->end('Hello, world!');
-    yield $response->withHeader('Content-Type', 'text/plain');
-});
-
-$server->listen(8080);
-
-echo "Server running at http://127.0.0.1:8080\n";
-
-Loop\run();
-```
-
-## Documentation and Support
-
-- [Full API Documentation](https://github.com/icicleio/icicle/wiki)
-- [Official Twitter](https://twitter.com/icicleio)
-- [Gitter Chat](https://gitter.im/icicleio/icicle)
-
-## Function prototypes
-
-Prototypes for object instance methods are described in this documentation using the following syntax:
-
-```php
-ClassOrInterfaceName::methodName(ArgumentType $arg): ReturnType
-```
-
-Prototypes for static object methods are described in this documentation using the following syntax:
-
-```php
-static ClassOrInterfaceName::methodName(ArgumentType $arg): ReturnType
-```
-
-Prototypes for functions in a namespace are described in this documentation using the following syntax:
-
-```php
-Namespace\functionName(ArgumentType $arg): ReturnType
-```
-
-To document the expected prototype of a callback function used as method arguments or return types, this documentation uses the following syntax for `callable` types:
-
-```php
-callable<(ArgumentType $arg): ReturnType>
-```
 
 ## License
 The Icicle library, all related packages, and documentation are licensed under the MIT license. View the [license file](https://github.com/icicleio/icicle/blob/master/LICENSE) for details.

@@ -11,7 +11,7 @@ Callback functions registered to promises are always [invoked asynchronously](#a
 Promises can be created in a few different ways depending on your needs. All promises implement `Icicle\Promise\PromiseInterface`, which is described in the section on [interacting with promises](#interacting-with-promises).
 
 !!! note
-    It is rare to need to create a promise instance yourself in Icicle. Usually a promise is created by calling a method or function that returns a promise or by creating a [Coroutine](coroutines.md), which are also promises.
+    It is rare to need to create a promise instance yourself in Icicle. Usually a promise is created by calling a method or function that returns a promise or by creating a [Coroutine](coroutine.md), which are also promises.
 
 ### Promise
 
@@ -40,7 +40,7 @@ If the resolver function throws an exception, the promise is rejected with that 
 
 ##### Example
 
-The following code creates a promise that is resolved when a connection is successfully made to a server. The `connect()` method of the `Icicle\Socket\Client\Connector` class in the [Socket](../Socket) component use a similar approach to establish connections asynchronously.
+The following code creates a promise that is resolved when a connection is successfully made to a server. The `connect()` method of the `Icicle\Socket\Client\Connector` class in the [Socket](socket.md) component use a similar approach to establish connections asynchronously.
 
 ```php
 use Icicle\Loop;
@@ -765,7 +765,3 @@ $child1->cancel(); // Cancels only $child1.
 
 $child2->cancel(); // Cancels both $child2 and $parent.
 ```
-
-## Acknowledgements
-
-The behavior and interface of this class was inspired by the [when.js](https://github.com/cujojs/when) promise implementation for JavaScript.

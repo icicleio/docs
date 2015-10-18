@@ -11,7 +11,9 @@ markdown_extensions:
 
 pages:
 - Introduction: 'index.md'
+- Documentation conventions: 'conventions.md'
 - Installing: 'installing.md'
+- Getting Started: 'getting-started.md'
 - Manual:
     - The Event Loop: 'manual/loop.md'
     - Promises: 'manual/promises.md'
@@ -19,8 +21,8 @@ pages:
     - Concurrency: 'manual/concurrency.md'
 - API:
     - Loop: 'api/loop.md'
-    - Promises: 'api/promises.md'
-    - Coroutines: 'api/coroutines.md'
+    - Promise: 'api/promise.md'
+    - Coroutine: 'api/coroutine.md'
     - Stream: 'api/stream.md'
     - Socket: 'api/socket.md'
     - DNS: 'api/dns.md'

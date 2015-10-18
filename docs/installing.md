@@ -1,4 +1,4 @@
-## Requirements
+## Prerequisites
 
 - PHP 5.5+
 
@@ -23,7 +23,7 @@ You can also manually edit `composer.json` to add Icicle as a project requiremen
 }
 ```
 
-## Suggested
+## Suggested extensions
 
 - [pcntl extension](http://php.net/manual/en/book.pcntl.php): Enables custom signal handling.
 - [ev extension](https://pecl.php.net/package/ev): Allows for the most performant event loop implementation.
