@@ -79,15 +79,17 @@
             </nav>
 
             <div class="container">
-                <p>View <a href="https://github.com/icicleio">the source</a></p>
-                <p>Follow <a href="https://twitter.com/icicleio">@icicleio</a> on Twitter</p>
-                <p>Questions or comments? Send an email to <a href="mailto:hello@icicle.io">hello@icicle.io</a></p>
+                <p>
+                    View <a href="https://github.com/icicleio">the source</a><br/>
+                    Follow <a href="https://twitter.com/icicleio">@icicleio</a> on Twitter<br/>
+                    Questions or comments? Send an email to <a href="mailto:hello@icicle.io">hello@icicle.io</a><br/>
+                </p>
             </div>
         </aside>
 
         <div class="pane content-pane">
             <div class="content-container">
-                <div role="main">
+                <main role="main">
                     {% block content %}
                         {% include "breadcrumbs.html" %}
 
@@ -97,7 +99,7 @@
 
                         {{ content }}
                     {% endblock %}
-                </div>
+                </main>
 
             	{%- block footer %}
                 <footer>
@@ -120,7 +122,12 @@
             document.querySelector(".content-pane").addEventListener("click", function() {
                 document.getElementById("nav-pane").classList.remove("visible");
             });
+
             hljs.initHighlightingOnLoad();
+
+            window.addEventListener("load", function () {
+                document.querySelector(".content-pane").focus();
+            });
         </script>
     </body>
 </html>
