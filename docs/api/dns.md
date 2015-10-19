@@ -1,11 +1,5 @@
 This library is a component for Icicle, providing an asynchronous DNS query executor, resolver, and client connector. An asynchronous DNS server is currently under development and will be added to this component in the future.
 
-[![Build Status](https://img.shields.io/travis/icicleio/dns/v1.x.svg?style=flat-square)](https://travis-ci.org/icicleio/dns)
-[![Coverage Status](https://img.shields.io/coveralls/icicleio/dns/v1.x.svg?style=flat-square)](https://coveralls.io/r/icicleio/dns)
-[![Semantic Version](https://img.shields.io/github/release/icicleio/dns.svg?style=flat-square)](http://semver.org)
-[![MIT License](https://img.shields.io/packagist/l/icicleio/dns.svg?style=flat-square)](LICENSE)
-[![@icicleio on Twitter](https://img.shields.io/badge/twitter-%40icicleio-5189c7.svg?style=flat-square)](https://twitter.com/icicleio)
-
 ##### Requirements
 
 - PHP 5.5+

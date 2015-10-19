@@ -13,12 +13,15 @@ pages:
 - Introduction: 'index.md'
 - Documentation conventions: 'conventions.md'
 - Installing: 'installing.md'
-- Getting Started: 'getting-started.md'
+- Getting started: 'getting-started.md'
 - Manual:
     - The Event Loop: 'manual/loop.md'
     - Promises: 'manual/promises.md'
+    - Using promises: 'manual/using-promises.md'
     - Coroutines: 'manual/coroutines.md'
+    - Writing coroutines: 'manual/writing-coroutines.md'
     - Concurrency: 'manual/concurrency.md'
+    - Foreign asynchronous code: 'manual/foreign-async-code.md'
 - API:
     - Loop: 'api/loop.md'
     - Promise: 'api/promise.md'

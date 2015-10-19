@@ -62,6 +62,7 @@ As forked processes are created with the [`pcntl_fork()`](http://php.net/pcntl_f
 
 Spawns a new forked process and immediately starts it. All arguments following the function to invoke in the fork will be copied and passed as parameters to the function to invoke.
 
+#### Parameters
 `$function`
 :   The function to invoke inside the forked process.
 
@@ -439,6 +440,7 @@ Thread::spawn(
 
 Creates a new thread and immediately starts it. All arguments following the function to invoke in the thread will be copied and passed as parameters to the function to invoke.
 
+#### Parameters
 `$function`
 :   The function to invoke inside the new thread.
 

@@ -1,11 +1,5 @@
 This library is a component for Icicle, providing an asynchronous stream socket server, client, connector, and datagram.
 
-[![Build Status](https://img.shields.io/travis/icicleio/socket/v1.x.svg?style=flat-square)](https://travis-ci.org/icicleio/socket)
-[![Coverage Status](https://img.shields.io/coveralls/icicleio/socket/v1.x.svg?style=flat-square)](https://coveralls.io/r/icicleio/socket)
-[![Semantic Version](https://img.shields.io/github/release/icicleio/socket.svg?style=flat-square)](http://semver.org)
-[![MIT License](https://img.shields.io/packagist/l/icicleio/socket.svg?style=flat-square)](LICENSE)
-[![@icicleio on Twitter](https://img.shields.io/badge/twitter-%40icicleio-5189c7.svg?style=flat-square)](https://twitter.com/icicleio)
-
 ##### Requirements
 
 - PHP 5.5+
@@ -291,7 +285,7 @@ Rejected | `Icicle\Socket\Exception\FailureException` | If the connection attemp
 Rejected | `Icicle\Promise\Exception\TimeoutException` | If the connection attempt times out.
 
 !!! tip
-    See <http://curl.haxx.se/docs/caextract.html> for a list of links to download bundle of CA Root Certificates that may be used for the cafile option if needed.
+    See <http://curl.haxx.se/docs/caextract.html> for links to download a bundle of CA Root Certificates that may be used for the cafile option if needed.
 
 
 ## Datagram

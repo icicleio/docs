@@ -41,3 +41,28 @@ Loop\run();
 The example above does the same thing as the example in the section on [promises](../api/promise.md) above, but instead uses a coroutine to **structure asynchronous code like synchronous code**. Fulfillment values of promises are accessed through simple variable assignments and exceptions used to reject promises are caught using a try/catch block, rather than creating and registering callback functions to each promise.
 
 **`Icicle\Coroutine\Coroutine` instances are also [promises](promises.md), implementing `Icicle\Promise\PromiseInterface`.** The coroutine is fulfilled with the last value yielded from the generator (or fulfillment value of the last yielded promise) or rejected if an exception is thrown from the generator. A coroutine may then yield other coroutines, suspending execution until the yielded coroutine has resolved. If a coroutine yields a `Generator`, it will automatically be converted to a `Coroutine` and handled in the same way as a yielded coroutine.
+
+
+## Cooperation
+
+Coroutines automatically are cooperative, allowing other code to execute once the coroutine has yielded a value.
+
+```php
+use Icicle\Coroutine\Coroutine;
+use Icicle\Loop;
+
+$generator = function ($id, $count = 0) {
+    for ($i = 0; $count > $i; ++$i) {
+        $data = (yield "[{$id}]");
+        echo $data;
+    }
+};
+
+$coroutine1 = new Coroutine($generator(1, 8));
+$coroutine2 = new Coroutine($generator(2, 5));
+$coroutine3 = new Coroutine($generator(3, 2));
+
+Loop\run();
+```
+
+The example above will output the string `[1][2][3][1][2][3][1][2][1][2][1][2][1][1][1]` since each coroutine cooperates with each other running coroutines (as well as other tasks in the loop, such as I/O, timers, and signals).

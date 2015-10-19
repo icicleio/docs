@@ -1,11 +1,5 @@
 This library is a component for Icicle, providing an asynchronous readable, writable, and seekable stream interfaces and a couple basic stream implementations.
 
-[![Build Status](https://img.shields.io/travis/icicleio/stream/v1.x.svg?style=flat-square)](https://travis-ci.org/icicleio/stream)
-[![Coverage Status](https://img.shields.io/coveralls/icicleio/stream/v1.x.svg?style=flat-square)](https://coveralls.io/r/icicleio/stream)
-[![Semantic Version](https://img.shields.io/github/release/icicleio/stream.svg?style=flat-square)](http://semver.org)
-[![Apache 2 License](https://img.shields.io/packagist/l/icicleio/stream.svg?style=flat-square)](LICENSE)
-[![@icicleio on Twitter](https://img.shields.io/badge/twitter-%40icicleio-5189c7.svg?style=flat-square)](https://twitter.com/icicleio)
-
 ##### Requirements
 
 - PHP 5.5+

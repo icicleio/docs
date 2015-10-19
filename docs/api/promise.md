@@ -13,6 +13,7 @@ Promises can be created in a few different ways depending on your needs. All pro
 !!! note
     It is rare to need to create a promise instance yourself in Icicle. Usually a promise is created by calling a method or function that returns a promise or by creating a [Coroutine](coroutine.md), which are also promises.
 
+
 ### Promise
 
 When a `Icicle\Promise\Promise` object is created, it invokes a resolver function given to the constructor with the following prototype: `callable<void (callable (void (mixed $value = null) $resolve, callable (void (Exception $exception) $reject>`. The resolver function initiates the (asynchronous) computation, calling the `$resolve($value = null)` function with the resolution value or `$reject(mixed $reason)` with an exception. An optional cancellation function with the prototype `callable<void Exception $exception>` can also be provided that is called if the promise is cancelled.
@@ -37,6 +38,7 @@ $promise = new Promise($resolver, $onCancelled);
 This may at first glance seem like an usual way to perform an operation and return a value. Remember that the code contained in the resolver function is not meant to be strictly synchronous code, but rather it is meant to perform an asynchronous operation and will likely define other callback functions, calling `$resolve` or `$reject` sometime after the resolver function has been executed. Remember that promises may also be resolved with other promises, causing the resolved promise to adopt the state of that promise (that is, passing a promise to `$resolve` will fulfill or reject the promise when the passed promise is fulfilled or rejected).
 
 If the resolver function throws an exception, the promise is rejected with that exception.
+
 
 ##### Example
 
@@ -84,6 +86,7 @@ $promise = new Promise(
 Loop\run();
 ```
 
+
 ### Deferred
 
 When a task is instigated in one piece of code and completed in another (e.g., separate methods of an object), a `Icicle\Promise\Deferred` object can be used to encapsulate a promise and control the state of that promise externally. A `Icicle\Promise\Deferred` object is designed to be kept private by the code that wishes to control the state of the promise (e.g., a class), while being able to provide the promise to consuming code through the `getPromise()` method. A cancellation function may optionally be provided to the constructor when creating a `Icicle\Promise\Deferred` object that is called if the encapsulated promise is cancelled.
@@ -106,6 +109,7 @@ $promise = $deferred->getPromise();
 - `Deferred::getPromise(): PromiseInterface`: Returns the encapsulated promise so it can be given to consumers.
 
 Other objects can be created that can act like a deferred by implementing `Icicle\Promise\PromisorInterface`.
+
 
 ### Lazy Promise
 
@@ -136,6 +140,7 @@ $lazy->done(
 );
 ```
 
+
 ### resolve()
 
 ```php
@@ -154,13 +159,13 @@ Promise\reject(mixed $reason = null): PromiseInterface
 
 The `Icicle\Promise\reject()` function returns a rejected promise using the given reason. If `$reason` is not an exception, an instance of `Icicle\Promise\Exception\RejectedException` is created using the reason.
 
-## Interacting with Promises
 
-### PromiseInterface
+## PromiseInterface
 
 All promise objects implement `Icicle\Promise\PromiseInterface`, which provides a variety of functions for registering callbacks to receive the resolution value of a promise. While the primary promise implementation is `Icicle\Promise\Promise`, several other classes in this component also implement `Icicle\Promise\PromiseInterface`.
 
-#### then()
+
+### then()
 
 ```php
 PromiseInterface::then(
@@ -178,9 +183,8 @@ This method is the primary way to register callbacks that receive either the val
 `$onRejected`
 :   Callback function that is invoked with an exception if the promise is rejected.
 
----
 
-#### done()
+### done()
 
 ```php
 PromiseInterface::done(
@@ -198,9 +202,8 @@ This method registers callbacks that should either consume promised values or ha
 `$onRejected`
 :   Callback function that is invoked with an exception if the promise is rejected.
 
----
 
-#### cancel()
+### cancel()
 
 ```php
 PromiseInterface::cancel(mixed $reason = null): void
@@ -212,9 +215,8 @@ Cancels the promise with the given reason. Canceling a promise rejects the promi
 `$reason`
 :   The exception to cancel the promise with, if any. If `$reason` is not an exception, an instance of `Icicle\Promise\Exception\CancelledException` is created using the reason.
 
----
 
-#### timeout()
+### timeout()
 
 ```php
 PromiseInterface::timeout(
@@ -232,9 +234,8 @@ Returns a promise that is rejected in `$timeout` seconds with the given exceptio
 `$reason`
 :   The exception to cancel the promise with, if any. If `$reason` is not an exception, an instance of `Icicle\Promise\Exception\CancelledException` is created using the reason.
 
----
 
-#### delay()
+### delay()
 
 ```php
 PromiseInterface::delay(float $time): PromiseInterface
@@ -246,9 +247,8 @@ Returns a promise that is fulfilled `$time` seconds after this promise is fulfil
 `$time`
 :   The delay amount in seconds.
 
----
 
-#### capture()
+### capture()
 
 ```php
 PromiseInterface::capture(
@@ -271,9 +271,8 @@ $promise2 = $promise1->capture(function (RuntimeException $exception) {
 });
 ```
 
----
 
-#### tap()
+### tap()
 
 ```php
 PromiseInterface PromiseInterface::tap(
@@ -287,9 +286,8 @@ Calls the given function with the value used to fulfill the promise, then fulfil
 `$onFulfilled`
 :   The callback function to call.
 
----
 
-#### cleanup()
+### cleanup()
 
 ```php
 PromiseInterface PromiseInterface::cleanup(
@@ -303,9 +301,8 @@ The callback given to this function will be called if the promise is fulfilled o
 `$onResolved`
 :   The callback function to call.
 
----
 
-#### splat()
+### splat()
 
 ```php
 PromiseInterface PromiseInterface::splat(
@@ -319,9 +316,8 @@ If a promise fulfills with an array or `Traversable`, this method uses the eleme
 `$onFulfilled`
 :   The callback function to call.
 
----
 
-#### isPending()
+### isPending()
 
 ```php
 PromiseInterface::isPending(): bool
@@ -329,9 +325,8 @@ PromiseInterface::isPending(): bool
 
 Determines if the promise has been resolved.
 
----
 
-#### isFulfilled()
+### isFulfilled()
 
 ```php
 PromiseInterface::isFulfilled(): bool
@@ -339,9 +334,8 @@ PromiseInterface::isFulfilled(): bool
 
 Determines if the promise has been fulfilled.
 
----
 
-#### isRejected()
+### isRejected()
 
 ```php
 PromiseInterface::isRejected(): bool
@@ -349,9 +343,8 @@ PromiseInterface::isRejected(): bool
 
 Determines if the promise has been rejected.
 
----
 
-#### wait()
+### wait()
 
 ```php
 PromiseInterface::wait(): mixed
@@ -361,11 +354,13 @@ This function may be used to synchronously wait for a promise to be resolved. Th
 
 The fulfillment value of the promise is returned or the exception used to reject the promise is thrown from the function.
 
-### Combining Promises
+
+## Functions
 
 The `Icicle\Promise` namespace contains several functions for performing operations on sets of promises. All functions in this section are designed so most of their parameters may either be promises or values (or an array containing any combination of promises and values). `Icicle\Promise\resolve()` is used on all values to create promises.
 
-#### Promise\settle()
+
+### Promise\settle()
 
 ```php
 PromiseInterface Promise\settle(mixed[] $promises)
@@ -377,9 +372,8 @@ Returns a promise that is resolved when all promises are resolved. The returned 
 `$promises`
 :   An array of values or promises to settle.
 
----
 
-#### Promise\all()
+### Promise\all()
 
 ```php
 Promise\all(mixed[] $promises): PromiseInterface
@@ -391,9 +385,8 @@ Returns a promise that is fulfilled when all promises are fulfilled, and rejecte
 `$promises`
 :   An array of promises or values.
 
----
 
-#### Promise\any()
+### Promise\any()
 
 ```php
 Promise\any(mixed[] $promises): PromiseInterface
@@ -405,9 +398,8 @@ Returns a promise that is fulfilled when any promise is fulfilled, and rejected 
 `$promises`
 :   An array of promises or values.
 
----
 
-#### Promise\some()
+### Promise\some()
 
 ```php
 Promise\some(mixed[] $promises, int $required): PromiseInterface
@@ -422,9 +414,8 @@ Returns a promise that is fulfilled when $required number of promises are fulfil
 `$required`
 :   The number of promises required to be fulfilled.
 
----
 
-#### Promise\choose()
+### Promise\choose()
 
 ```php
 Promise\choose(mixed[] $promises): PromiseInterface
@@ -436,9 +427,8 @@ Returns a promise that is fulfilled or rejected when the first promise is fulfil
 `$promises`
 :   An array of promises or values.
 
----
 
-#### Promise\map()
+### Promise\map()
 
 ```php
 Promise\map(
@@ -459,9 +449,8 @@ Maps the callback to each promise as it is fulfilled. Returns an array of promis
 `...$promises`
 :   Arrays of promises or values.
 
----
 
-#### Promise\reduce()
+### Promise\reduce()
 
 ```php
 Promise\reduce(
@@ -483,9 +472,8 @@ Reduce function similar to `array_reduce()`, only it works on promises and/or va
 `$initial`
 :   The inital value for `$carry` to pass to the reduce function on the first element.
 
----
 
-#### Promise\iterate()
+### Promise\iterate()
 
 ```php
 Promise\iterate(
@@ -507,9 +495,8 @@ Calls `$worker` using the return value of the previous call until `$predicate` r
 `$seed`
 :   The value to use as the initial parameter to `$worker`. If `$seed` is a promise, it will be resolved first and the resolved value used as the seed.
 
----
 
-#### Promise\retry()
+### Promise\retry()
 
 ```php
 Promise\retry(
@@ -527,11 +514,8 @@ Continuously calls `$promisor`, a function that should return a promise (though 
 `$onRejected`
 :   The callback function to call whenever `$promisor` is rejected.
 
-### Using Promises with Other Functions and Libraries
 
-The `Promise` class also contains two static methods for transforming a functions into a function that is able to take promises as arguments and return promises instead of values or throwing exceptions.
-
-#### Promise\lift()
+### Promise\lift()
 
 ```php
 Promise\lift(
@@ -545,9 +529,8 @@ Wraps the given callable `$worker` in a promise aware function that takes the sa
 `$worker`
 :   The function to wrap in a promise-aware wrapper function.
 
----
 
-#### Promise\promisify()
+### Promise\promisify()
 
 ```php
 Promise\promisify(
@@ -565,9 +548,8 @@ Transforms a function `$worker` that takes a callback into a function that retur
 `$index`
 :   The index of the callback parameter to promisify.
 
----
 
-#### Promise\adapt()
+### Promise\adapt()
 
 ```php
 Promise\adapt(object $thenable): PromiseInterface
@@ -578,190 +560,3 @@ Adapts any object with a `then(callable $onFulfilled, callable $onRejected)` met
 ##### Parameters
 `$thenable`
 :   The foreign thenable object to wrap in an Iclce promise.
-
-## Resolution and Propagation
-
-### Child Promise Resolution
-
-When a promise is resolved with a value (or fulfilled), each callback registered to receive the promise fulfillment value is invoked. Similarly, when a promise is rejected with an exception, each callback registered to receive the promise rejection reason is invoked.
-
-When a callback is registered using a method that returns another promise (i.e., `then()`, `always()`, and `capture()`), the return value of the callback is used to fulfill that promise, or if an exception is thrown, reject that promise.
-
-```php
-$promise2 = $promise1->then(
-    function ($value) {
-        if (null === $value) {
-            throw new Exception('Value cannot be null.'); // Throwing rejects $promise2 with the exception.
-        }
-        return $value + 1; // Returning a value will fulfill $promise2 with that value.
-    },
-    function (Exception $exception) {
-        return 1; // Returning from the rejected handler fulfills $promise2 with that value.
-    }
-);
-```
-
-If a callback is omitted when calling `then()`, the returned promise is then fulfilled or rejected using the same value or exception as the parent promise. The example below is similar to the example above, except the `$onRejected` parameter of `then()` is now `null`. If `$promise1` is rejected, `$promise2` is also rejected with the same exception.
-
-```php
-$promise2 = $promise1->then(
-    function ($value) {
-        if (null === $value) {
-            throw new Exception('Value cannot be null.'); // Throwing rejects $promise2 with the exception.
-        }
-        return $value + 1; // Returning a value will fulfill $promise2 with that value.
-    }
-    // No $onRejected callback given, so if $promise1 rejects, $promise2 will automatically be rejected
-    // with the same exception as $promise1.
-);
-```
-
-Similarly, if no `$onFulfilled` callback is given, `$promise2` is fulfilled with the same value as `$promise1` if `$promise1` is fulfilled.
-
-```php
-$promise2 = $promise1->then(
-    null, // No $onFulfilled callback given, so if $promise1 is fulfilled, $promise2 is fulfilled with
-          // the same value as $promise1.
-    function (Exception $exception) {
-        return 1; // Returning from the rejected handler fulfills $promise2 with that value.
-    }
-);
-```
-
-### Asynchronous Callback Invocation
-
-Invocation of callbacks registered to a promise is guaranteed to be asynchronous. This means that registered callbacks will not be invoked until after `then()`, `done()` have returned and execution has left the current scope (i.e., the calling function returns). To make this clearer, consider the example below.
-
-```php
-$promise->then(function ($value) {
-    echo "{1}";
-});
-echo "{2}";
-```
-
-If callbacks were invoked immediately on registration if a promise was resolved, the output of the above code would depend on the state of `$promise`. If the promise was fulfilled, `{1}{2}` would be echoed. If the promise was pending, `{2}{1}` would be output.
-
-While this example is contrived, this behavior can have significant consequences when working with objects or referenced variables. To ensure consistent behavior, callbacks registered to promises are *always* invoked asynchronously.
-
-### Promise Chaining
-
-```php
-use Icicle\Loop;
-use Icicle\Promise\Deferred;
-
-$deferred = new Deferred();
-
-$deferred->getPromise()
-    ->then(function ($value) {
-        $value = (int) $value;
-        if (0 === $value) {
-            throw new RuntimeException('Value cannot be 0.');
-        }
-        return 100 / $value;
-    })
-    ->then(function ($value) {
-        return $value * $value;
-    })
-    ->capture(function (RuntimeException $e) {
-        return 0; // Analogous to a try/catch block.
-    })
-    ->done(
-        function ($value) {
-            echo "Result: {$value}\n";
-        },
-        function (Exception $e) {
-            echo "Error: {$e->getMessage()}\n";
-        }
-    );
-
-$deferred->resolve(0); // Echos "Result: 0"
-
-Loop\run();
-```
-In the example above, resolving the promise with `0` causes the first callback to throw an exception. This exception is used to reject the returned promise. No rejection callback was registered on the promise returned from the first call to `then()`, so that promise is automatically rejected with the same exception. The promise returned from the second call to `then()` had a rejection callback registered using `capture()` with a type-hint of `RuntimeException`, which matches the type of the thrown exception, so the callback is invoked. That callback returns `0`, fulfilling the promise returned from `capture()` with that value. The promise returned from `capture()` had a fulfillment and rejection callback registered with `done()`. Since the promise was resolved with `0`, the fulfillment callback is invoked, echoing `Result: 0`.
-
-##### Another Example
-
-```php
-use Icicle\Dns\Executor\Executor;
-use Icicle\Dns\Resolver\Resolver;
-use Icicle\Loop;
-use Icicle\Socket\Client\ClientInterface;
-use Icicle\Socket\Client\Connector;
-
-$resolver = new Resolver(new Executor('8.8.8.8'));
-
-$promise1 = $resolver->resolve('example.com'); // Method returning a promise.
-
-$promise2 = $promise1->then(
-    function (array $ips) { // Called if $promise1 is fulfilled.
-        $connector = new Connector();
-		return $connector->connect($ips[0], 80); // Method returning a promise.
-		// $promise2 will adopt the state of the promise returned above.
-    }
-);
-
-$promise2->done(
-    function (ClientInterface $client) { // Called if $promise2 is fulfilled.
-        echo "Asynchronously connected to example.com:80\n";
-    },
-    function (Exception $exception) { // Called if $promise1 or $promise2 is rejected.
-        echo "Asynchronous task failed: {$exception->getMessage()}\n";
-    }
-);
-
-Loop\run();
-```
-
-In the example above, the `resolve()` method of `$resolver` and the `connect()` method of `$connector` both return promises. `$promise1` created by `resolve()` will either be fulfilled or rejected:
-
-- If `$promise1` is fulfilled, the callback function registered in the call to `$promise1->then()` is executed, using the fulfillment value of `$promise1` as the argument to the function. The callback function then returns the promise from `connect()`. The resolution of `$promise2` will then be determined by the resolution of this returned promise (`$promise2` will adopt the state of the promise returned by `connect()`).
-- If `$promise1` is rejected, `$promise2` is rejected since no `$onRejected` callback was registered in the call to `$promise1->then()`
-
-### Error Handling
-
-When a promise is rejected, the exception used to reject the promise is not thrown, it is only given to callbacks registered using the methods described above. However, if `done()` is called on a promise without an `$onRejected` callback and that promise is rejected, the exception will be re-thrown in an uncatchable way (see the [Loop](../Loop) component for more on uncatchable exceptions).
-
-Error handling with promises comes down to a simple rule: Call `done()` on the promise to consume the final result or handle any exceptions, or return the promise to the caller, thereby delegating error handling to the code requesting the promise resolution value.
-
-### Iterative Resolution
-
-Promise resolution is handled iteratively, so there is no concern of overflowing the call stack regardless of how deep the chain may have become. The example below demonstrates how a chain of 100 promises maintains a constant call stack size when the registered callbacks are invoked.
-
-```php
-use Icicle\Loop;
-use Icicle\Promise\Deferred;
-
-$deferred = new Deferred();
-$promise = $deferred->getPromise();
-
-for ($i = 0; $i < 100; ++$i) {
-    $promise = $promise->then(function ($value) {
-        printf("%3d) %d\n", $value, xdebug_get_stack_depth()); // Stack size is constant
-        return ++$value;
-    });
-}
-
-$deferred->resolve(1);
-
-Loop\run();
-```
-
-When a promise is resolved with another promise the original promise transfers the responsibility of invoking registered callbacks to the promise used for resolution. A promise may be fulfilled any number of times with another promise, and the call stack will not overflow when the promise is eventually resolved.
-
-## Cancellation
-
-If a promise is still pending, the promise may be cancelled using the `cancel()` method ([see prototype for more information](#promiseinterface-cancel)). This immediately rejects the promise, and calls any cancellation callback that may have been provided when the promise was created.
-
-When cancelling a child promise (a promise returned by `then()` or other methods returning another promise), the parent promise is also cancelled if there are no other pending children. The parent process is only cancelled if all children are also cancelled.
-
-```php
-$parent = new Promise(function ($resolve, $reject) { /* ... */ });
-
-$child1 = $parent->then();
-$child2 = $parent->then();
-
-$child1->cancel(); // Cancels only $child1.
-
-$child2->cancel(); // Cancels both $child2 and $parent.
-```
