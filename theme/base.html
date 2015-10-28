@@ -13,7 +13,8 @@
         {% if favicon %}<link rel="shortcut icon" href="{{ favicon }}">
         {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
 
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700italic,700|Ubuntu+Mono:400,700,400italic,700italic">
+        <meta name="theme-color" content="#71b2e3">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700italic,700|Anonymous+Pro:400,700,400italic,700italic">
         <link rel="stylesheet" href="{{ base_url }}/css/theme.css">
         <link rel="stylesheet" href="{{ base_url }}/css/font-awesome.min.css">
         <link rel="stylesheet" href="{{ base_url }}/css/highlight.css">
@@ -49,10 +50,10 @@
 
             <div class="pagination-nav" role="navigation" aria-label="related navigation">
                 {% if previous_page %}
-                    <a href="{{ previous_page.url }}" class="btn btn-neutral" title="{{ previous_page.title }}"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+                    <a href="{{ previous_page.url }}" title="{{ previous_page.title }}"><span class="fa fa-arrow-circle-left"></span> Previous</a>
                 {% endif %}
                 {% if next_page %}
-                    <a href="{{ next_page.url }}" class="btn btn-neutral float-right" title="{{ next_page.title }}"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+                    <a href="{{ next_page.url }}" title="{{ next_page.title }}">Next <span class="fa fa-arrow-circle-right"></span></a>
                 {% endif %}
             </div>
         </aside>
@@ -98,6 +99,10 @@
                         {% endif %}
 
                         {{ content }}
+
+                        {% if next_page %}
+                            <a href="{{ next_page.url }}" class="next-page-button">Next: {{ next_page.title }} <span class="fa fa-arrow-circle-right"></span></a>
+                        {% endif %}
                     {% endblock %}
                 </main>
 
