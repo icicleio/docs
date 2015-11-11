@@ -1,6 +1,6 @@
 site_name: 'Icicle documentation'
 site_description: 'Write asynchronous code using synchronous coding techniques in PHP'
-site_author: 'Aaron Piotrowski'
+site_author: 'Icicle contributors'
 copyright: '&copy; Icicle contributors.'
 theme_dir: theme
 strict: true
@@ -11,25 +11,28 @@ markdown_extensions:
 
 pages:
 - Introduction: 'index.md'
-- Documentation conventions: 'conventions.md'
+- About the documentation: 'meta.md'
 - Installing: 'installing.md'
 - Getting started: 'getting-started.md'
 - Manual:
-    - The Event Loop: 'manual/loop.md'
+    - Introduction to asynchronous programming: 'manual/introduction.md'
+    - The event loop: 'manual/loop.md'
     - Promises: 'manual/promises.md'
     - Using promises: 'manual/using-promises.md'
     - Coroutines: 'manual/coroutines.md'
     - Writing coroutines: 'manual/writing-coroutines.md'
+    - Console input and output: 'manual/console.md'
+    - Making DNS queries: 'manual/dns-queries.md'
     - Concurrency: 'manual/concurrency.md'
     - Foreign asynchronous code: 'manual/foreign-async-code.md'
 - API:
-    - Loop: 'api/loop.md'
-    - Promise: 'api/promise.md'
-    - Coroutine: 'api/coroutine.md'
-    - Stream: 'api/stream.md'
-    - Socket: 'api/socket.md'
-    - DNS: 'api/dns.md'
-    - Concurrent: 'api/concurrent.md'
+    - Icicle\Concurrent: 'api/concurrent.md'
+    - Icicle\Coroutine: 'api/coroutine.md'
+    - Icicle\Dns: 'api/dns.md'
+    - Icicle\Loop: 'api/loop.md'
+    - Icicle\Promise: 'api/promise.md'
+    - Icicle\Socket: 'api/socket.md'
+    - Icicle\Stream: 'api/stream.md'
 
 extra:
     version: v1.x

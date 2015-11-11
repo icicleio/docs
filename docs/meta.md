@@ -1,4 +1,11 @@
+## Documentation status
+While there is a lot of useful information in these pages, this documentation is far from finished. If you run across any issues, please [create an issue on GitHub](https://github.com/icicleio/docs/issues/new) describing the problem or [submit a pull request](https://github.com/icicleio/docs#fork-destination-box). Pages may be deleted or moved without notice until the documentation is more complete.
+
+
+## Syntax and conventions
 This documentation uses several conventions to help explain concepts and document APIs.
+
+*Italic* and **bold** type face are used to provide emphasis, as you might expect.
 
 `Monospace text` is used for class names, function names, and variable names. It is also used for text that should be typed verbatim in the terminal.
 
@@ -36,3 +43,5 @@ To document the expected prototype of a callback function used as method argumen
 ```php
 callable<(ArgumentType $arg): ReturnType>
 ```
+
+Documentation for methods inherited from a parent class or implementing an interface are not re-documented unless there is a significant difference in behavior.

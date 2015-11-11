@@ -6,11 +6,13 @@ Callback functions are the primary way of accessing the resolution value of prom
 
 Callback functions registered to promises are always [invoked asynchronously](#asynchronous-callback-invocation) to ensure consistent behavior regardless of the state of the promise at the time callbacks are registered.
 
+
+
 ## Creating a Promise
 
 Promises can be created in a few different ways depending on your needs. All promises implement `Icicle\Promise\PromiseInterface`, which is described in the section on [interacting with promises](#interacting-with-promises).
 
-!!! note
+!!! tip
     It is rare to need to create a promise instance yourself in Icicle. Usually a promise is created by calling a method or function that returns a promise or by creating a [Coroutine](coroutine.md), which are also promises.
 
 
@@ -143,9 +145,7 @@ $lazy->done(
 
 ### resolve()
 
-```php
-Promise\resolve(mixed $value = null): PromiseInterface
-```
+    Promise\resolve(mixed $value = null): PromiseInterface
 
 The `Icicle\Promise\resolve()` function returns a fulfilled promise using the given value. There are two possible outcomes depending on the type of the passed value:
     1. `Icicle\Promise\PromiseInterface`: The promise is returned without modification.
@@ -153,9 +153,7 @@ The `Icicle\Promise\resolve()` function returns a fulfilled promise using the gi
 
 ### reject()
 
-```php
-Promise\reject(mixed $reason = null): PromiseInterface
-```
+    Promise\reject(mixed $reason = null): PromiseInterface
 
 The `Icicle\Promise\reject()` function returns a rejected promise using the given reason. If `$reason` is not an exception, an instance of `Icicle\Promise\Exception\RejectedException` is created using the reason.
 
@@ -167,12 +165,10 @@ All promise objects implement `Icicle\Promise\PromiseInterface`, which provides 
 
 ### then()
 
-```php
-PromiseInterface::then(
-    callable<mixed (mixed $value)> $onFulfilled = null,
-    callable<mixed (Exception $exception)> $onRejected = null
-): PromiseInterface
-```
+    PromiseInterface::then(
+        callable<mixed (mixed $value)> $onFulfilled = null,
+        callable<mixed (Exception $exception)> $onRejected = null
+    ): PromiseInterface
 
 This method is the primary way to register callbacks that receive either the value used to fulfill the promise or the exception used to reject the promise. Another `Icicle\Promise\PromiseInterface` object is returned by this method, which is resolved with the return value of a callback or rejected if a callback throws an exception. For more on how promises are resolved by callbacks, see the section on [Resolution and Propagation](#resolution-and-propagation).
 
@@ -186,12 +182,10 @@ This method is the primary way to register callbacks that receive either the val
 
 ### done()
 
-```php
-PromiseInterface::done(
-    callable<void (mixed $value)> $onFulfilled = null,
-    callable<void (Exception $exception)> $onRejected = null
-): void
-```
+    PromiseInterface::done(
+        callable<void (mixed $value)> $onFulfilled = null,
+        callable<void (Exception $exception)> $onRejected = null
+    ): void
 
 This method registers callbacks that should either consume promised values or handle errors. No value is returned from `done()`. Values returned by callbacks registered using this method are ignored and exceptions thrown from callbacks are re-thrown in an *uncatchable* way.
 
@@ -205,9 +199,7 @@ This method registers callbacks that should either consume promised values or ha
 
 ### cancel()
 
-```php
-PromiseInterface::cancel(mixed $reason = null): void
-```
+    PromiseInterface::cancel(mixed $reason = null): void
 
 Cancels the promise with the given reason. Canceling a promise rejects the promise with the given exception and calls the cancellation callback if one was provided when the promise was created. The parent promise is also cancelled if no other children of that parent have been created.
 
@@ -218,12 +210,10 @@ Cancels the promise with the given reason. Canceling a promise rejects the promi
 
 ### timeout()
 
-```php
-PromiseInterface::timeout(
-    float $timeout,
-    mixed $reason = null
-): PromiseInterface
-```
+    PromiseInterface::timeout(
+        float $timeout,
+        mixed $reason = null
+    ): PromiseInterface
 
 Returns a promise that is rejected in `$timeout` seconds with the given exception if the promise is not resolved before that time. When the promise resolves, the returned promise is fulfilled or rejected with the same value.
 
@@ -237,9 +227,7 @@ Returns a promise that is rejected in `$timeout` seconds with the given exceptio
 
 ### delay()
 
-```php
-PromiseInterface::delay(float $time): PromiseInterface
-```
+    PromiseInterface::delay(float $time): PromiseInterface
 
 Returns a promise that is fulfilled `$time` seconds after this promise is fulfilled. If the promise is rejected, the returned promise is immediately rejected.
 
@@ -250,11 +238,9 @@ Returns a promise that is fulfilled `$time` seconds after this promise is fulfil
 
 ### capture()
 
-```php
-PromiseInterface::capture(
-    callable<(Exception $exception): mixed> $onRejected
-): PromiseInterface
-```
+    PromiseInterface::capture(
+        callable<(Exception $exception): mixed> $onRejected
+    ): PromiseInterface
 
 Assigns a callback function that is called when the promise is rejected. If a type-hint is defined on the callable (e.g.: `function (RuntimeException $exception) { /* ... */ }`, then the function will only be called if the exception is an instance of the type-hinted exception.
 
@@ -274,11 +260,9 @@ $promise2 = $promise1->capture(function (RuntimeException $exception) {
 
 ### tap()
 
-```php
-PromiseInterface PromiseInterface::tap(
-    callable<(mixed $value): PromiseInterface|null> $onFulfilled
-): PromiseInterface
-```
+    PromiseInterface PromiseInterface::tap(
+        callable<(mixed $value): PromiseInterface|null> $onFulfilled
+    ): PromiseInterface
 
 Calls the given function with the value used to fulfill the promise, then fulfills the returned promise with the same value. If the promise is rejected, the returned promise is also rejected and `$onFulfilled` is not called. If `$onFulfilled` throws an exception, the returned promise is rejected with the thrown exception. The return value of `$onFulfilled` is not used.
 
@@ -289,11 +273,9 @@ Calls the given function with the value used to fulfill the promise, then fulfil
 
 ### cleanup()
 
-```php
-PromiseInterface PromiseInterface::cleanup(
-    callable<(mixed $value): PromiseInterface|null> $onResolved
-): PromiseInterface
-```
+    PromiseInterface PromiseInterface::cleanup(
+        callable<(mixed $value): PromiseInterface|null> $onResolved
+    ): PromiseInterface
 
 The callback given to this function will be called if the promise is fulfilled or rejected. The callback is called with no arguments. If the callback does not throw, the returned promise is resolved in the same way as the original promise. That is, it is fulfilled or rejected with the same value or exception. If `$onResolved` throws an exception, the returned promise is rejected with the thrown exception. The return value of `$onResolved` is not used.
 
@@ -304,11 +286,9 @@ The callback given to this function will be called if the promise is fulfilled o
 
 ### splat()
 
-```php
-PromiseInterface PromiseInterface::splat(
-    callable<(mixed ...$args): mixed> $onFulfilled
-): PromiseInterface
-```
+    PromiseInterface PromiseInterface::splat(
+        callable<(mixed ...$args): mixed> $onFulfilled
+    ): PromiseInterface
 
 If a promise fulfills with an array or `Traversable`, this method uses the elements of the array (or each value of the `Traversable`) as arguments to the given callback function similar to the `...` (splat) operator. If the promise does not fulfill with an array or `Traversable`, the returned promise is rejected with an instance of `\Icicle\Promise\Exception\TypeException`. Otherwise the returned promise is resolved as though the callback function was registered with `then()`. If the promise is rejected, the returned promise is also rejected.
 
@@ -319,40 +299,33 @@ If a promise fulfills with an array or `Traversable`, this method uses the eleme
 
 ### isPending()
 
-```php
-PromiseInterface::isPending(): bool
-```
+    PromiseInterface::isPending(): bool
 
 Determines if the promise has been resolved.
 
 
 ### isFulfilled()
 
-```php
-PromiseInterface::isFulfilled(): bool
-```
+    PromiseInterface::isFulfilled(): bool
 
 Determines if the promise has been fulfilled.
 
 
 ### isRejected()
 
-```php
-PromiseInterface::isRejected(): bool
-```
+    PromiseInterface::isRejected(): bool
 
 Determines if the promise has been rejected.
 
 
 ### wait()
 
-```php
-PromiseInterface::wait(): mixed
-```
+    PromiseInterface::wait(): mixed
 
 This function may be used to synchronously wait for a promise to be resolved. This function should generally not be used within a running event loop, but rather to set up a task (or set of tasks, then use join() or another function to group them) and synchronously wait for the task to complete. Using this function in a running event loop will not block the loop, but it will prevent control from moving past the call to this function and disrupt program flow.
 
 The fulfillment value of the promise is returned or the exception used to reject the promise is thrown from the function.
+
 
 
 ## Functions
@@ -362,9 +335,7 @@ The `Icicle\Promise` namespace contains several functions for performing operati
 
 ### Promise\settle()
 
-```php
-PromiseInterface Promise\settle(mixed[] $promises)
-```
+    PromiseInterface Promise\settle(mixed[] $promises)
 
 Returns a promise that is resolved when all promises are resolved. The returned promise will not reject by itself (only if cancelled). Returned promise is fulfilled with an array of resolved promises, with keys identical and corresponding to the original given array. The `$promises` array may contain any combination of promises or values.
 
@@ -375,9 +346,7 @@ Returns a promise that is resolved when all promises are resolved. The returned 
 
 ### Promise\all()
 
-```php
-Promise\all(mixed[] $promises): PromiseInterface
-```
+    Promise\all(mixed[] $promises): PromiseInterface
 
 Returns a promise that is fulfilled when all promises are fulfilled, and rejected if any promise is rejected. Returned promise is fulfilled with an array of values used to fulfill each contained promise, with keys corresponding to the array of promises or values. The `$promises` array may contain any combination of promises or values.
 
@@ -388,9 +357,7 @@ Returns a promise that is fulfilled when all promises are fulfilled, and rejecte
 
 ### Promise\any()
 
-```php
-Promise\any(mixed[] $promises): PromiseInterface
-```
+    Promise\any(mixed[] $promises): PromiseInterface
 
 Returns a promise that is fulfilled when any promise is fulfilled, and rejected only if all promises are rejected. The `$promises` array may contain any combination of promises or values.
 
@@ -401,9 +368,7 @@ Returns a promise that is fulfilled when any promise is fulfilled, and rejected 
 
 ### Promise\some()
 
-```php
 Promise\some(mixed[] $promises, int $required): PromiseInterface
-```
 
 Returns a promise that is fulfilled when $required number of promises are fulfilled. The promise is rejected if `$required` number of promises can no longer be fulfilled. The `$promises` array may contain any combination of promises or values.
 
@@ -417,9 +382,7 @@ Returns a promise that is fulfilled when $required number of promises are fulfil
 
 ### Promise\choose()
 
-```php
-Promise\choose(mixed[] $promises): PromiseInterface
-```
+    Promise\choose(mixed[] $promises): PromiseInterface
 
 Returns a promise that is fulfilled or rejected when the first promise is fulfilled or rejected. The `$promises` array may contain any combination of promises or values.
 
@@ -430,12 +393,10 @@ Returns a promise that is fulfilled or rejected when the first promise is fulfil
 
 ### Promise\map()
 
-```php
-Promise\map(
-    callable<(mixed ...$values): mixed> $callback,
-    mixed[] ...$promises
-): PromiseInterface[]
-```
+    Promise\map(
+        callable<(mixed ...$values): mixed> $callback,
+        mixed[] ...$promises
+    ): PromiseInterface[]
 
 Maps the callback to each promise as it is fulfilled. Returns an array of promises resolved by the return callback value of the callback function. The callback may return promises or throw exceptions to reject promises in the array. If a promise in the passed array rejects, the callback will not be called and the promise in the array is rejected for the same reason. The `$promises` array may contain any combination of promises or values.
 
@@ -452,13 +413,11 @@ Maps the callback to each promise as it is fulfilled. Returns an array of promis
 
 ### Promise\reduce()
 
-```php
-Promise\reduce(
-    mixed[] $promises,
-    callable<(mixed $carry): mixed> $callback,
-    mixed $initial = null
-): PromiseInterface
-```
+    Promise\reduce(
+        mixed[] $promises,
+        callable<(mixed $carry): mixed> $callback,
+        mixed $initial = null
+    ): PromiseInterface
 
 Reduce function similar to `array_reduce()`, only it works on promises and/or values. The `$promises` array may contain any combination of promises or values. The callback function may return a promise or value and `$initial` value may also be a promise or value.
 
@@ -475,13 +434,11 @@ Reduce function similar to `array_reduce()`, only it works on promises and/or va
 
 ### Promise\iterate()
 
-```php
-Promise\iterate(
-    callable<(mixed $carry): mixed> $worker,
-    callable<(mixed $carry): mixed> $predicate,
-    mixed $seed = null
-): PromiseInterface
-```
+    Promise\iterate(
+        callable<(mixed $carry): mixed> $worker,
+        callable<(mixed $carry): mixed> $predicate,
+        mixed $seed = null
+    ): PromiseInterface
 
 Calls `$worker` using the return value of the previous call until `$predicate` returns a truthy value. `$predicate` is called before `$worker` with the value to be passed to `$worker`. If `$worker` or `$predicate` throws an exception, the promise is rejected using that exception. The call stack is cleared before each call to `$worker` to avoid filling the call stack. If `$worker` returns a promise, iteration waits for the returned promise to be resolved.
 
@@ -498,12 +455,10 @@ Calls `$worker` using the return value of the previous call until `$predicate` r
 
 ### Promise\retry()
 
-```php
-Promise\retry(
-    callable<(): mixed> $promisor,
-    callable<(Exception $exception): bool> $onRejected
-): PromiseInterface
-```
+    Promise\retry(
+        callable<(): mixed> $promisor,
+        callable<(Exception $exception): bool> $onRejected
+    ): PromiseInterface
 
 Continuously calls `$promisor`, a function that should return a promise (though it can actually return any type of value). If the promise returned by `$promisor` is rejected, `$onRejected` is called with the rejection exception. If `$onRejected` returns a falsey value, `$promisor` is called again to retry the operation, otherwise the promise returned by `retry()` is rejected with the same exception. Once the promise returned by `$promisor` is fulfilled, the promise returned by `retry()` is fulfilled with the same value. If either `$promisor` or `$onRejected` throw an exception, the promise returned by `retry()` is rejected with that exception.
 
@@ -517,11 +472,9 @@ Continuously calls `$promisor`, a function that should return a promise (though 
 
 ### Promise\lift()
 
-```php
-Promise\lift(
-    callable<(mixed ...$args): mixed> $worker
-): callable<(mixed ...$args): PromiseInterface>
-```
+    Promise\lift(
+        callable<(mixed ...$args): mixed> $worker
+    ): callable<(mixed ...$args): PromiseInterface>
 
 Wraps the given callable `$worker` in a promise aware function that takes the same number of arguments as `$worker`, but those arguments may be promises for the future argument value or just values. The returned function will return a promise for the return value of `$worker` and will never throw. The `$worker` function will not be called until each promise given as an argument is fulfilled. If any promise provided as an argument rejects, the promise returned by the returned function will be rejected for the same reason. The promise is fulfilled with the return value of `$worker` or rejected if `$worker` throws.
 
@@ -532,12 +485,10 @@ Wraps the given callable `$worker` in a promise aware function that takes the sa
 
 ### Promise\promisify()
 
-```php
-Promise\promisify(
-    callable<(mixed ...$args): mixed> $worker,
-    int $index = 0
-): callable<(mixed ...$args): PromiseInterface>
-```
+    Promise\promisify(
+        callable<(mixed ...$args): mixed> $worker,
+        int $index = 0
+    ): callable<(mixed ...$args): PromiseInterface>
 
 Transforms a function `$worker` that takes a callback into a function that returns a promise. The promise is fulfilled with an array of the parameters that would have been passed to the callback function. The function returned from this method takes the same arguments as `$worker` except for the callback function, which is replaced by this function.
 
@@ -551,9 +502,7 @@ Transforms a function `$worker` that takes a callback into a function that retur
 
 ### Promise\adapt()
 
-```php
-Promise\adapt(object $thenable): PromiseInterface
-```
+    Promise\adapt(object $thenable): PromiseInterface
 
 Adapts any object with a `then(callable $onFulfilled, callable $onRejected)` method to an promise implementing `Icicle\Promise\PromiseInterface`. This allows Icicle to use promises or futures generated by other libraries.
 

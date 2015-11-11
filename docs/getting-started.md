@@ -1,3 +1,9 @@
+We're glad you've chosen to learn about asynchronous PHP programming and how to use Icicle! The goal of the Icicle project is to make asynchronous coding efficient and much easier to write and understand.
+
+Since you've gotten this far, let's get started with some basic concepts and some fun example code to demonstrate what Icicle has to offer.
+
+
+
 ## Example
 
 The example below uses the [HTTP component](https://github.com/icicleio/http) (under development) to create a simple HTTP server that responds with `Hello, world!` to every request.

@@ -12,6 +12,8 @@ There are two primary ways to parallelize code in Icicle: multithreading, or mul
 
 Threading is generally preferred over multiple processes, but because of all these complications, Icicle supports all three methods.
 
+
+
 ## Threads
 
 Threading is a cross-platform concurrency method that is fast and memory efficient. Thread contexts take advantage of an operating system's multi-threading capabilities to run code in parallel. A spawned thread will run completely parallel to the parent thread, each with its own environment. Each thread is assigned a closure to execute when it is created, and the returned value is passed back to the parent thread. Icicle goes for a "shared-nothing" architecture, so any variables inside the closure are local to that thread and can store any non-safe data.
@@ -35,6 +37,8 @@ Loop\run();
 ```
 
 You can wait for a thread to finish by calling `join()`. Joining does not block the parent thread and will asynchronously wait for the child thread to finish before resolving.
+
+
 
 ## Forks
 
@@ -89,6 +93,8 @@ Loop\run();
 ```
 
 Thread and fork execution contexts include a channel to communicate with the parent and context. The channel methods `send()` and `receive()` may be invoked using `$this` within the function executed in the context and on the context object in the parent. See the example above.
+
+
 
 ## Synchronization with Parcels
 

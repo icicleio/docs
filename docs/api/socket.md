@@ -1,33 +1,7 @@
-This library is a component for Icicle, providing an asynchronous stream socket server, client, connector, and datagram.
+This optional package provides an asynchronous stream socket server, client, connector, and datagram. The package is available on [Packagist](https://packagist.org) as [`icicleio/socket`](https://packagist.org/packages/icicleio/socket).
 
-##### Requirements
-
-- PHP 5.5+
-
-##### Suggested
-
-- [openssl extension](http://php.net/manual/en/book.openssl.php): Enables using SSL/TLS on sockets.
-
-##### Installation
-
-The recommended way to install is with the [Composer](http://getcomposer.org/) package manager. (See the [Composer installation guide](https://getcomposer.org/doc/00-intro.md) for information on installing and using Composer.)
-
-Run the following command to use this library in your project:
-
-```bash
-composer require icicleio/socket
-```
-
-You can also manually edit `composer.json` to add this library as a project requirement.
-
-```js
-// composer.json
-{
-    "require": {
-        "icicleio/socket": "^0.3"
-    }
-}
-```
+!!! note
+    To enable using SSL/TLS on sockets, you must install the [openssl extension](http://php.net/manual/en/book.openssl.php).
 
 The socket component implements network sockets as coroutine-based streams, server, and datagram. Creating a server and accepting connections is very simple, requiring only a few lines of code.
 
@@ -242,9 +216,12 @@ SocketInterface::getRemotePort(): int
 Returns the remote port.
 
 
-## Connector
+## Connector\ConnectorInterface
 
-The `Icicle\Socket\Connector\Connector` class (implements `Icicle\Socket\Connector\ConnectorInterface`) asynchronously connects to a remote server, returning a coroutine that is fulfilled with an instance of `Icicle\Socket\SocketInterface` when the connection is successfully established. Note that the *host should be given as an IP address*, as DNS lookups performed by PHP are synchronous (blocking). If you wish to use domain names instead of IPs, see `Icicle\Dns\Connector\Connector` in the [DNS component](https://github.com/icicleio/dns).
+The `Icicle\Socket\Connector\Connector` class (implements `Icicle\Socket\Connector\ConnectorInterface`) asynchronously connects to a remote server, returning a coroutine that is fulfilled with an instance of `Icicle\Socket\SocketInterface` when the connection is successfully established.
+
+!!! warning
+    The *host should be given as an IP address*, as DNS lookups performed by PHP are synchronous (blocking). If you wish to use domain names instead of IPs, see [`Icicle\Dns\Connector\Connector`](dns.md#connector).
 
 #### connect()
 

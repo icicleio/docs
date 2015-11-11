@@ -23,6 +23,11 @@ Loop\run();
 ```
 
 
+## Creating Coroutines
+A `Coroutine` instance can also be created in a few other different ways depending on your needs.
+
+
+
 ## Returning Values from Coroutines
 
 The `return` keyword cannot be used in generators to return a value (note this will be changing in PHP 7 and will be used in the future to return values from coroutines). However, `return` can be used without an expression to halt execution of the generator. The return value (fulfillment value) of a coroutine is the last value yielded from the coroutine (or fulfillment value of a yielded promise). `return` may be used anytime to halt execution of a coroutine and fulfill with the last yielded value.

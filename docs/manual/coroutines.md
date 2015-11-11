@@ -66,3 +66,10 @@ Loop\run();
 ```
 
 The example above will output the string `[1][2][3][1][2][3][1][2][1][2][1][2][1][1][1]` since each coroutine cooperates with each other running coroutines (as well as other tasks in the loop, such as I/O, timers, and signals).
+
+
+
+## Controlling Execution
+Coroutines begin execution immediately upon construction.
+
+Coroutine objects have some methods for controlling execution once they are created. See the API documentation for [`Icicle\Coroutine\CoroutineInterface`](../api/coroutine.md#coroutineinterface) for available methods.
