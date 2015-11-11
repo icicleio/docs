@@ -24,47 +24,91 @@
  * Load fonts.
  */
 @font-face {
-    font-family: 'Liberation Mono';
-    src: url('../fonts/LiberationMono-Regular-webfont.eot');
-    src: url('../fonts/LiberationMono-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/LiberationMono-Regular-webfont.woff') format('woff'),
-         url('../fonts/LiberationMono-Regular-webfont.ttf') format('truetype'),
-         url('../fonts/LiberationMono-Regular-webfont.svg#liberation_monobold') format('svg');
+    font-family: 'Open Sans';
+    src: url('../fonts/open-sans/regular.eot');
+    src: url('../fonts/open-sans/regular.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/open-sans/regular.woff') format('woff'),
+         url('../fonts/open-sans/regular.ttf') format('truetype'),
+         url('../fonts/open-sans/regular.svg#liberation_monobold') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'Liberation Mono';
-    src: url('../fonts/LiberationMono-Bold-webfont.eot');
-    src: url('../fonts/LiberationMono-Bold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/LiberationMono-Bold-webfont.woff') format('woff'),
-         url('../fonts/LiberationMono-Bold-webfont.ttf') format('truetype'),
-         url('../fonts/LiberationMono-Bold-webfont.svg#liberation_monobold') format('svg');
+    font-family: 'Open Sans';
+    src: url('../fonts/open-sans/bold.eot');
+    src: url('../fonts/open-sans/bold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/open-sans/bold.woff') format('woff'),
+         url('../fonts/open-sans/bold.ttf') format('truetype'),
+         url('../fonts/open-sans/bold.svg#liberation_monobold') format('svg');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'Liberation Mono';
-    src: url('../fonts/LiberationMono-Italic-webfont.eot');
-    src: url('../fonts/LiberationMono-Italic-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/LiberationMono-Italic-webfont.woff') format('woff'),
-         url('../fonts/LiberationMono-Italic-webfont.ttf') format('truetype'),
-         url('../fonts/LiberationMono-Italic-webfont.svg#liberation_monobold') format('svg');
+    font-family: 'Open Sans';
+    src: url('../fonts/open-sans/italic.eot');
+    src: url('../fonts/open-sans/italic.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/open-sans/italic.woff') format('woff'),
+         url('../fonts/open-sans/italic.ttf') format('truetype'),
+         url('../fonts/open-sans/italic.svg#liberation_monobold') format('svg');
     font-weight: normal;
     font-style: italic;
 }
 
 @font-face {
-    font-family: 'Liberation Mono';
-    src: url('../fonts/LiberationMono-BoldItalic-webfont.eot');
-    src: url('../fonts/LiberationMono-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/LiberationMono-BoldItalic-webfont.woff') format('woff'),
-         url('../fonts/LiberationMono-BoldItalic-webfont.ttf') format('truetype'),
-         url('../fonts/LiberationMono-BoldItalic-webfont.svg#liberation_monobold_italic') format('svg');
+    font-family: 'Open Sans';
+    src: url('../fonts/open-sans/bolditalic.eot');
+    src: url('../fonts/open-sans/bolditalic.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/open-sans/bolditalic.woff') format('woff'),
+         url('../fonts/open-sans/bolditalic.ttf') format('truetype'),
+         url('../fonts/open-sans/bolditalic.svg#liberation_monobold_italic') format('svg');
     font-weight: bold;
     font-style: italic;
+}
+
+@font-face {
+   font-family: 'Liberation Mono';
+   src: url('../fonts/liberation-mono/regular.eot');
+   src: url('../fonts/liberation-mono/regular.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/liberation-mono/regular.woff') format('woff'),
+        url('../fonts/liberation-mono/regular.ttf') format('truetype'),
+        url('../fonts/liberation-mono/regular.svg#liberation_monobold') format('svg');
+   font-weight: normal;
+   font-style: normal;
+}
+
+@font-face {
+   font-family: 'Liberation Mono';
+   src: url('../fonts/liberation-mono/bold.eot');
+   src: url('../fonts/liberation-mono/bold.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/liberation-mono/bold.woff') format('woff'),
+        url('../fonts/liberation-mono/bold.ttf') format('truetype'),
+        url('../fonts/liberation-mono/bold.svg#liberation_monobold') format('svg');
+   font-weight: bold;
+   font-style: normal;
+}
+
+@font-face {
+   font-family: 'Liberation Mono';
+   src: url('../fonts/liberation-mono/italic.eot');
+   src: url('../fonts/liberation-mono/italic.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/liberation-mono/italic.woff') format('woff'),
+        url('../fonts/liberation-mono/italic.ttf') format('truetype'),
+        url('../fonts/liberation-mono/italic.svg#liberation_monobold') format('svg');
+   font-weight: normal;
+   font-style: italic;
+}
+
+@font-face {
+   font-family: 'Liberation Mono';
+   src: url('../fonts/liberation-mono/bolditalic.eot');
+   src: url('../fonts/liberation-mono/bolditalic.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/liberation-mono/bolditalic.woff') format('woff'),
+        url('../fonts/liberation-mono/bolditalic.ttf') format('truetype'),
+        url('../fonts/liberation-mono/bolditalic.svg#liberation_monobold_italic') format('svg');
+   font-weight: bold;
+   font-style: italic;
 }
 
 
@@ -83,12 +127,20 @@ body {
 }
 
 p, table, pre > code, .admonition {
-    margin: 1.75rem 0;
+    margin: 1.5rem 0;
 }
 
 pre, code {
     font-family: "Liberation Mono", monospace;
-    font-size: 0.95em;
+}
+
+code {
+   font-size: 0.85em;
+}
+
+:not(pre) > code {
+   padding: 0.0625em 0.25em;
+   background-color: rgba(0, 0, 0, 0.05);
 }
 
 a {
@@ -108,13 +160,34 @@ a:visited {
     text-decoration: none;
 }
 
+blockquote {
+    margin: 0;
+    padding: 0 1.5rem;
+    border-left: 0.5rem solid #e9eff5;
+    border-right: 0.5rem solid #e9eff5;
+    font-size: 1.25rem;
+    font-style: italic;
+}
+
+blockquote cite {
+    display: block;
+    font-size: 1rem;
+    font-style: normal;
+    text-align: right;
+}
+
+blockquote cite::before {
+    content: "—";
+    padding-right: 0.5em;
+}
+
 pre > code, .breadcrumbs {
     box-shadow: inset 0 0 0.25rem 0 rgba(0, 0, 0, 0.1);
 }
 
 pre > code {
     line-height: 1.2em;
-        background-color: #e9eff5 !important;
+    background-color: #e9eff5 !important;
 }
 
 pre {
@@ -152,7 +225,7 @@ dl > dd > :first-child {
  * Heading styles.
  */
 :not(h1) + h2 {
-    margin-top: 4rem;
+    margin-top: 3rem;
 }
 
 :not(h2) + h3:not(:first-child) {
@@ -274,7 +347,7 @@ thead > tr > th:nth-child(even) {
     padding: 0 1rem;
     z-index: 10;
     background-color: #71b2e3;
-    box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.15);
 }
 
 .title-pane a {

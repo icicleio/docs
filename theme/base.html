@@ -14,7 +14,6 @@
         {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
 
         <meta name="theme-color" content="#71b2e3">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700italic,700|Anonymous+Pro:400,700,400italic,700italic">
         <link rel="stylesheet" href="{{ base_url }}/css/theme.css">
         <link rel="stylesheet" href="{{ base_url }}/css/font-awesome.min.css">
         <link rel="stylesheet" href="{{ base_url }}/css/highlight.css">
@@ -80,11 +79,11 @@
             </nav>
 
             <div class="container">
-                <p>
-                    View <a href="https://github.com/icicleio">the source</a><br/>
-                    Follow <a href="https://twitter.com/icicleio">@icicleio</a> on Twitter<br/>
-                    Questions or comments? Send an email to <a href="mailto:hello@icicle.io">hello@icicle.io</a><br/>
-                </p>
+                <p>View <a href="https://github.com/icicleio">the source</a> on GitHub!</p>
+
+                <p>Follow <a href="https://twitter.com/icicleio">@icicleio</a> on Twitter</p>
+
+                <p>Questions or comments? Send an email to <a href="mailto:hello@icicle.io">hello@icicle.io</a></p>
             </div>
         </aside>
 
@@ -129,10 +128,6 @@
             });
 
             hljs.initHighlightingOnLoad();
-
-            window.addEventListener("load", function () {
-                document.querySelector(".content-pane").focus();
-            });
         </script>
     </body>
 </html>
