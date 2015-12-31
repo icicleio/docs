@@ -1,33 +1,35 @@
 This optional package provides an asynchronous DNS query executor, resolver, and client connector. The package is available on [Packagist](https://packagist.org) as [`icicleio/dns`](https://packagist.org/packages/icicleio/dns).
 
+This package provides a set of global [functions](#functions) in the `\Icicle\Dns` namespace to perform asynchronous DNS queries that should be sufficient for most applications. However, if desired an application may customize the methods used to perform DNS queries using the objects described below.
 
 
-## Executor\ExecutorInterface
+## Executor\Executor
 
 Executors are the foundation of the DNS component, performing any DNS query and returning the full results of that query. Resolvers and connectors depend on executors to perform the DNS query required for their operation.
 
-The default implementation is `Icicle\Dns\Executor\Executor`.
-
 ### execute()
 
-    ExecutorInterface::execute(
+    Executor::execute(
         string $domain,
         string|int $type,
-        array $options = []
-    ): Generator
+        mixed[] $options = []
+    ): \Generator
 
 Executes a DNS query.
 
 An executor will retry a query a number of times if it doesn't receive a response within `timeout` seconds. The number of times a query will be retried before failing is defined by `retries`, with `timeout` seconds elapsing between each query attempt.
 
+!!! note
+    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+
 #### Parameters
-`$name`
+`string $name`
 :   Domain name.
 
-`$type`
+`string|int $type`
 :   Query type (e.g., `'A'`, `'MX'`, `'AAAA'`, `'NS'`).
 
-`$options`
+`mixed[] $options = []`
 :   An array of additional options.
 
     Option | Type | Description
@@ -35,39 +37,40 @@ An executor will retry a query a number of times if it doesn't receive a respons
     `timeout` | `float` | Timeout until query fails. Default is 2 seconds.
     `retries` | `int` | Number of times to attempt the query before failing. Default is 5 times.
 
-#### Return value
-Generator that resolves in one of the following ways.
+#### Resolution value
+`LibDNS\Messages\Message`
+:   Response message.
 
-Resolution | Type | Description
-:-: | :-- | :--
-Fulfilled | `LibDNS\Messages\Message` | Response message.
-Rejected | `Icicle\Dns\Exception\FailureException` | If sending the request or parsing the response fails.
-Rejected | `Icicle\Dns\Exception\MessageException` | If the server returns a non-zero response code or no response is received from the server.
+#### Rejection reasons
+`\Icicle\Dns\Exception\FailureException`
+:   If sending the request or parsing the response fails.
+
+`\Icicle\Dns\Exception\MessageException`
+:   If the server returns a non-zero response code or no response is received from the server.
 
 
+## Executor\BasicExecutor
 
-## Executor\Executor
-
-The default executor implementation that implements [`ExecutorInterface`](#executorexecutorinterface).
+The default executor implementation that implements [`Executor`](#executorexecutor).
 
 ### __construct()
 
-    Executor::__construct(
+    BasicExecutor::__construct(
         string $address,
         int $port = Executor::DEFAULT_PORT,
-        Icicle\Socket\Connector\ConnectorInterface $connector = null
+        Icicle\Socket\Connector\Connector $connector = null
     )
 
 Constructs a new DNS executor.
 
 #### Parameters
-`$address`
+`string $address`
 :   The IP address of the DNS resolver to use.
 
-`$port`
+`int $port = 53`
 :   The port to connect to the DNS server. Defaults to `Executor::DEFAULT_PORT` which has the value `53`, the standard port for the DNS protocol.
 
-`$connector`
+`\Icicle\Socket\Connector\Connector $connector = null`
 :   A socket connector instance to use to connect to the DNS server socket. If left as `null`, the [default socket connector](socket.md#socketconnector) is used.
 
 
@@ -78,7 +81,8 @@ Constructs a new DNS executor.
 Gets the IP address of the DNS server used by this executor.
 
 #### Return value
-The server IP address.
+`string`
+:   The server IP address.
 
 
 ### getPort()
@@ -88,7 +92,8 @@ The server IP address.
 Gets the port of the DNS server used by this executor.
 
 #### Return value
-The server port.
+`int`
+:   The server port.
 
 
 
@@ -96,58 +101,62 @@ The server port.
 
 Combines multiple executors to send queries to several name servers so queries can be resolved even if some name servers stop responding.
 
-Implements [`ExecutorInterface`](#executorexecutorinterface).
+Implements [`Executor`](#executorexecutor).
 
 ### add()
 
-    MultiExecutor::add(ExecutorInterface $executor)
+    MultiExecutor::add(Executor $executor)
 
 Adds an executor to the multi-executor.
 
 #### Parameters
-`$executor`
-:   An executor instance to add to the mulit-executor.
+`\Icicle\Dns\Executor\Executor $executor`
+:   An executor instance to add to the multi-executor.
 
 
-
-## Resolver\ResolverInterface
+## Resolver\Resolver
 
 A resolver finds the IP addresses for a given domain. A resolver is essentially a specialized executor that performs only `'A'` queries.
 
-The default implementation is `Icicle\Dns\Resolver\Resolver`, which is constructed by passing an `Icicle\Executor\ExecutorInterface` instance to the constructor that is used to execute queries to resolve domains. If no executor is given, one will be created by default, using `8.8.8.8` and `8.8.4.4` as DNS servers for the executor.
+The default implementation is `\Icicle\Dns\Resolver\Resolver`, which is constructed by passing an `\Icicle\Executor\Executor` instance to the constructor that is used to execute queries to resolve domains. If no executor is given, one will be created by default, using `8.8.8.8` and `8.8.4.4` as DNS servers for the executor.
 
 ### resolve()
 
-    ResolverInterface::resolve(
+    Resolver::resolve(
         string $domain,
         array $options = []
-    ): Generator
+    ): \Generator
 
 Resolves a given domain and yields an array of IP addresses that match the given domain.
 
+!!! note
+    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+
 #### Parameters
-`$domain`
+`string $domain`
 :   The domain name to resolve.
 
-`$options`
+`mixed[] $options`
 :   An associative array of additional options. The available options are as follows:
 
     Option | Type | Description
     :-- | :-- | :--
-    `mode` | `int` | Resolution mode: IPv4 or IPv6. Use the constants `ResolverInterface::IPv4` or `ResolverInterface::IPv6`.
+    `mode` | `int` | Resolution mode: IPv4 or IPv6. Use the constants `Resolver::IPv4` or `Resolver::IPv6`.
     `timeout` | `float` | Timeout until query fails. Default is 2 seconds.
     `retries` | `int` | Number of times to attempt the query before failing. Default is 5 times.
 
 Like executors, a resolver will retry a query `retries` times if the name server does not respond within `timeout` seconds.
 
-#### Return value
-Generator that resolves in one of the following ways.
+#### Resolution value
+`string[]`
+:   Array of resolved IP addresses. May be empty if the query is successful but no IP addresses could be found.
 
-Resolution | Type | Description
-:-: | :-- | :--
-Fulfilled | `array` | Array of resolved IP addresses. May be empty.
-Rejected | `Icicle\Dns\Exception\FailureException` | If sending the request or parsing the response fails.
-Rejected | `Icicle\Dns\Exception\MessageException` | If the server returns a non-zero response code or no response is received.
+#### Rejection reasons
+`\Icicle\Dns\Exception\FailureException`
+:  If sending the request or parsing the response fails.
+
+`\Icicle\Dns\Exception\MessageException`:
+:   If the server returns a non-zero response code or no response is received.
 
 !!! note
     Even if there is only one or no matches at all for the given domain name, the return value will still resolve with an array if the DNS query itself was successful.
@@ -156,11 +165,10 @@ Rejected | `Icicle\Dns\Exception\MessageException` | If the server returns a non
 
 ```php
 use Icicle\Coroutine\Coroutine;
-use Icicle\Dns\Executor\Executor;
-use Icicle\Dns\Resolver\Resolver;
+use Icicle\Dns\Resolver\BasicResolver;
 use Icicle\Loop;
 
-$resolver = new Resolver();
+$resolver = new BasicResolver();
 
 $coroutine = new Coroutine($resolver->resolve('google.com'));
 
@@ -170,7 +178,7 @@ $coroutine->done(
             echo "IP: {$ip}\n";
         }
     },
-    function (Exception $exception) {
+    function (\Exception $exception) {
         echo "Query failed: {$exception->getMessage()}\n";
     }
 );
@@ -179,62 +187,82 @@ Loop\run();
 ```
 
 
+## Resolver\BasicResolver
 
-## Connector\ConnectorInterface
+The default resolver implementation that implements [`Resolver`](#resolverresolver).
 
-The connector component connects to a server by first resolving the hostname provided, then making the connection and resolving the returned coroutine with an instance of `Icicle\Socket\Client\ClientInterface`. `Icicle\Dns\Connector\Connector` implements `Icicle\Socket\Client\ConnectorInterface` and `Icicle\Dns\Connector\ConnectorInterface`, allowing it to be used anywhere a standard connector (`Icicle\Socket\Client\ConnectorInterface`) is required, or allowing components to require a resolving connector (`Icicle\Dns\Connector\ConnectorInterface`).
+### __construct()
 
-`Icicle\Dns\Connector\ConnectorInterface` defines a single method, `connect()` that should resolve a host name and connect to one of the resolved servers, resolving the coroutine with the connected client.
+    BasicResolver::__construct(
+        \Icicle\Dns\Executor\Executor|null $executor = null
+    )
+
+Constructs a new DNS resolver.
+
+#### Parameters
+`\Icicle\Dns\Executor\Executor $executor = null`
+:   Executor object to perform DNS queries. If none is provided, the default global executor will be used.
+
+
+## Connector\Connector
+
+The connector component connects to a server by first resolving the hostname provided, then making the connection and resolving the returned coroutine with an instance of `\Icicle\Socket\Socket`. `\Icicle\Dns\Connector\Connector` implements `\Icicle\Socket\Connector\Connector` and `\Icicle\Dns\Connector\Connector`, allowing it to be used anywhere a standard connector (`\Icicle\Socket\Connector\Connector`) is required or allowing components to require a resolving connector (`\Icicle\Dns\Connector\Connector`).
+
+`\Icicle\Dns\Connector\Connector` defines a single method, `connect()` that should resolve a host name and connect to one of the resolved servers, resolving the coroutine with the connected client.
 
 ### connect()
 
-    ConnectorInterface::connect(
+    Connector::connect(
         string $domain,
         int $port,
         array $options = [],
-    ): Generator
+    ): \Generator
 
-`Icicle\Dns\Connector\Connector` will attempt to connect to one of the IP addresses found for a given host name. If the server at that IP is unresponsive, the connector will attempt to establish a connection to the next IP in the list until a server accepts the connection. Only if the connector is unable to connect to all of the IPs will it reject the coroutine returned from `connect()`. The constructor also optionally accepts an instance of `Icicle\Socket\Client\ConnectorInterface` if custom behavior is desired when connecting to the resolved host.
+`\Icicle\Dns\Connector\DefaultConnector` will attempt to connect to one of the IP addresses found for a given host name. If the server at that IP is unresponsive, the connector will attempt to establish a connection to the next IP in the list until a server accepts the connection. Only if the connector is unable to connect to all of the IPs will it reject the coroutine returned from `connect()`. The constructor also optionally accepts an instance of `\Icicle\Socket\Connector\Connector` if custom behavior is desired when connecting to the resolved host.
+
+!!! note
+    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
-`$domain`
+`string $domain`
 :   The domain name to connect to.
 
-`$port`
+`int $port`
 :   The socket port to connect to.
 
-`$options`
+`mixed[] $options = []`
 :   An associative array of additional options. The available options are as follows:
 
     Option | Type | Description
     :-- | :-- | :--
-    `mode` | `int` | Resolution mode: IPv4 or IPv6. Use the constants `ResolverInterface::IPv4` or `ResolverInterface::IPv6`.
+    `mode` | `int` | Resolution mode: IPv4 or IPv6. Use the constants `Resolver::IPv4` or `Resolver::IPv6`.
     `timeout` | `float` | Timeout until query fails. Default is 2 seconds.
     `retries` | `int` | Number of times to attempt the query before failing. Default is 5 times.
 
-    Additionally, all the [other options available](socket.md#connect) to `Icicle\Socket\Client\Connector::connect()` may also be used.
+    Additionally, all the [other options available](socket.md#connect) to `\Icicle\Socket\Connector\Connector::connect()` may also be used.
 
-#### Return value
-Resolution | Type | Description
-:-: | :-- | :--
-Fulfilled | `Icicle\Socket\Client\ClientInterface` | Connected client.
-Rejected | `Icicle\Socket\Exception\FailureException` | If resolving the IP or connecting fails.
+#### Resolution value
+`\Icicle\Socket\Socket`
+:   Connected client socket object.
+
+#### Rejection reasons
+`\Icicle\Socket\Exception\FailureException`
+:   If resolving the IP or connecting fails.
+
 
 #### Example
 
 ```php
-use Icicle\Dns\Connector\Connector;
-use Icicle\Dns\Executor\Executor;
-use Icicle\Dns\Resolver\Resolver;
+use Icicle\Dns\Connector\DefaultConnector;
 use Icicle\Loop;
-use Icicle\Socket\Client\ClientInterface;
+use Icicle\Socket\Socket;
 
-$connector = new Connector();
+$connector = new DefaultConnector();
 
 $coroutine = new Coroutine($connector->connect('google.com', 80));
 
 $coroutine->done(
-    function (ClientInterface $client) {
+    function (Socket $client) {
         echo "IP: {$client->getRemoteAddress()}\n";
         echo "Port: {$client->getRemotePort()}\n";
     },
@@ -247,92 +275,94 @@ Loop\run();
 ```
 
 
-
 ## Functions
 
 Since most applications don't need specialized DNS executors, several functions are provided that allow you to work with a global DNS executor instance.
 
 ### execute()
 
-    Dns\execute(
+    \Icicle\Dns\execute(
         string $name,
         string|int $type,
-        array $options = []
-    ): Generator
+        mixed[] $options = []
+    ): \Generator
 
 Uses the global executor to execute a DNS query.
 
-See [`ExecutorInterface::execute()`](#execute) for details on how to call the execute function.
+See [`Executor::execute()`](#execute) for details on how to call the execute function.
 
 
 ### executor()
 
 Accesses and sets the global executor instance.
 
-    Dns\executor(
-        ExecutorInterface $executor = null
-    ): ExecutorInterface
+    \Icicle\Dns\executor(
+        \Icicle\Dns\Executor\Executor|null $executor = null
+    ): \Icicle\Dns\Executor\Executor
 
 #### Parameters
-`$executor`
+`\Icicle\Dns\Executor\Executor|null $executor`
 :   The executor to set, as the global instance, or `null` to use the current instance.
 
 #### Return value
-The global executor instance.
+`\Icicle\Dns\Executor\Executor`
+:   The global executor instance.
 
 
 ### resolve()
 
-    Dns\resolve(
+    \Icicle\Dns\resolve(
         string $domain,
-        array $options = []
-    ): Generator
+        mixed[] $options = []
+    ): \Generator
 
 Uses the global resolver to resolve the IP address of a domain name.
 
-See [`ResolverInterface::resolve()`](#resolve) for details on how to call the resolve function.
+See [`Resolver::resolve()`](#resolve) for details on how to call the resolve function.
 
 
 ### resolver()
 
-    Dns\resolver(
-        ResolverInterface $resolver = null
-    ): ResolverInterface
+    \Icicle\Dns\resolver(
+        \Icicle\Dns\Resolver\Resolver|null $resolver = null
+    ): \Icicle\Dns\Resolver\Resolver
 
 Accesses and sets the global resolver instance.
 
 #### Parameters
-`$resolver`
+`\Icicle\Dns\Resolver\Resolver|null $resolver = null`
 :   The resolver to set, as the global instance, or `null` to use the current instance.
 
 #### Return value
-The global resolver instance.
+`\Icicle\Dns\Resolver\Resolver`
+:   The global resolver instance.
 
 
 ### connect()
 
-    Dns\connect(
+    \Icicle\Dns\connect(
         string $domain,
         int $port,
-        array $options = []
-    ): Generator
+        mixed[] $options = []
+    ): \Generator
 
 Uses the global connector to connect to the domain on the given port.
 
-See [`ConnectorInterface::connect()`](#connect) for details on how to call the connect function.
+See [`Connector::connect()`](#connect) for details on how to call the connect function.
 
 
 ### connector()
 
-    Dns\connector(
-        ConnectorInterface $connector = null
-    ): ConnectorInterface
+    \Icicle\Dns\connector(
+        \Icicle\Dns\Connector\Connector|null $connector = null
+    ): \Icicle\Dns\Connector\Connector
 
 Accesses and sets the global connector instance.
 
 #### Parameters
-`$connector`
+`\Icicle\Dns\Connector\Connector|null $connector = null`
 :   The connector to set, as the global instance, or `null` to use the current instance.
 
 #### Return value
-The global connector instance.
+`\Icicle\Dns\Connector\Connector`
+:   The global connector instance.

@@ -23,25 +23,25 @@ Pay special attention to different types of notes as well.
 Prototypes for object instance methods are described in this documentation using the following syntax:
 
 ```php
-ClassOrInterfaceName::methodName(ArgumentType $arg): ReturnType
+ClassOrInterfaceName::methodName(ArgumentType $arg = 'default-value'): ReturnType
 ```
 
 Prototypes for static object methods are described in this documentation using the following syntax:
 
 ```php
-static ClassOrInterfaceName::methodName(ArgumentType $arg): ReturnType
+static ClassOrInterfaceName::methodName(ArgumentType $arg = 'default-value'): ReturnType
 ```
 
 Prototypes for functions in a namespace are described in this documentation using the following syntax:
 
 ```php
-Namespace\functionName(ArgumentType $arg): ReturnType
+Namespace\functionName(ArgumentType $arg = 'default-value'): ReturnType
 ```
 
 To document the expected prototype of a callback function used as method arguments or return types, this documentation uses the following syntax for `callable` types:
 
 ```php
-callable<(ArgumentType $arg): ReturnType>
+callable(ArgumentType $arg): ReturnType
 ```
 
 Documentation for methods inherited from a parent class or implementing an interface are not re-documented unless there is a significant difference in behavior.

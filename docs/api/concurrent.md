@@ -1,85 +1,106 @@
 This optional package provides native threading, multiprocessing, process synchronization, shared memory, and task workers. The package is available on [Packagist](https://packagist.org) as [`icicleio/concurrent`](https://packagist.org/packages/icicleio/concurrent).
 
 
+## Channel
 
-## ChannelInterface
-Interface for sending messages between execution contexts. A `ChannelInterface` object both acts as a sender and a receiver of messages.
+Interface for sending messages between execution contexts. A `\Icicle\Concurrent\Sync\Channel` object both acts as a sender and a receiver of messages.
 
-### ChannelInterface::send()
+### send()
 
-    ChannelInterface::send(mixed $data): Generator
+    Channel::send(mixed $data): \Generator
 
 Sends a value across the channel to the receiver.
 
+!!! note
+    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+
 #### Parameters
-`$data`
+`mixed $data`
 :   The data to send to the receiver. The value given must be serializable.
 
-### ChannelInterface::receive()
+#### Resolution value
+`int`
+:   The number of bytes written to the stream to send the value.
 
-    ChannelInterface::receive(): Generator
+### receive()
+
+    Channel::receive(): \Generator
 
 Receives the next pending value in the channel from the sender. Resolves with the received value.
 
----
+!!! note
+    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-## ContextInterface
-Base interface for all types of execution contexts. Extends [`ChannelInterface`](#channelinterface).
+#### Resolution value
+`mixed`
+:   The data received.
 
-### ContextInterface::isRunning()
 
-    ContextInterface::isRunning(): bool
+## Context
+
+Base interface for all types of execution contexts.
+
+### isRunning()
+
+    Context::isRunning(): bool
 
 Checks if the context is currently running.
 
-### ContextInterface::start()
+### start()
 
-    ContextInterface::start()
+    start(): void
 
 Starts the context execution.
 
-### ContextInterface::join()
+### join()
 
-    ContextInterface::join(): Generator
+    Context::join(): \Generator
 
 Resolves when the context ends and joins with the parent context.
 
-### ContextInterface::kill()
+!!! note
+    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-    ContextInterface::kill()
+### kill()
+
+    Context::kill(): void
 
 Forcefully kills the context.
 
----
+
+## Strand
+
+Execution context that includes a channel for exchanging data. Extends both [`Channel`](#channel) and [`Context`](#context).
+
 
 ## Forking\Fork
-An execution context that uses forked processes. Implements [`Icicle\Concurrent\ContextInterface`](#contextinterface).
+An execution context that uses forked processes. Implements [`\Icicle\Concurrent\Context`](#context).
 
 As forked processes are created with the [`pcntl_fork()`](http://php.net/pcntl_fork) function, the [PCNTL extension](http://php.net/manual/en/book.pcntl.php) must be enabled to spawn forks. Not compatible with Windows.
 
 ### Fork::spawn()
 
     static Fork::spawn(
-        callable<(...$args): mixed> $function,
+        callable(...$args): mixed $function,
         ...$args
     ): Fork
 
 Spawns a new forked process and immediately starts it. All arguments following the function to invoke in the fork will be copied and passed as parameters to the function to invoke.
 
 #### Parameters
-`$function`
+`callable(...$args): mixed $function`
 :   The function to invoke inside the forked process.
 
-`...$args`
+`mixed ...$args`
 :   Arguments to pass to `$function`.
 
-### Fork::getPid()
+### getPid()
 
     Fork::getPid(): int
 
 Gets the forked process's process ID.
 
-### Fork::getPriority()
+### getPriority()
 
     Fork::getPriority(): float
 
@@ -89,14 +110,14 @@ The priority is a float between 0 and 1 that indicates the relative priority for
 
 See also: [getpriority(2)](http://linux.die.net/man/2/getpriority)
 
-### Fork::setPriority()
+### setPriority()
 
     Fork::setPriority(float $priority)
 
 Sets the fork's scheduling priority as a percentage.
 
 #### Parameters
-`$priority`
+`int $priority`
 :   A value between 0 and 1 indicating the relative priority to set.
 
 !!! note
@@ -105,11 +126,13 @@ Sets the fork's scheduling priority as a percentage.
 ---
 
 ## Process\ChannelledProcess
-An execution context that uses a separately executed PHP process. Implements [`Icicle\Concurrent\ContextInterface`](#contextinterface).
+
+An execution context that uses a separately executed PHP process. Implements [`\Icicle\Concurrent\Strand`](#strand).
 
 ---
 
 ## Process\Process
+
 An object for asynchronously spawning and managing an external process.
 
 ### Process::__construct()
@@ -124,121 +147,128 @@ Additional environment variables can be passed to the process by passing in an a
 
 Other options can be passed to [`proc_open()`](http://php.net/proc_open) in `$options`. See the documentation for [`proc_open()`](http://php.net/proc_open) for details.
 
-### Process::start()
+### start()
 
-    Process::start()
+    Process::start(): void
 
 Starts the process execution.
 
-### Process::join()
+### join()
 
-    Process::join(): Generator
+    Process::join(): \Generator
 
 Resolves when the process ends.
 
-### Process::kill()
+!!! note
+    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-    Process::kill()
+### kill()
+
+    Process::kill(): void
 
 Forcefully kills the process.
 
-### Process::signal()
+### signal()
 
-    Process::signal(int $signo)
+    Process::signal(int $signo): void
 
 Sends the given POSIX process signal to the running process.
 
 #### Parameters
-`$signo`
+`int $signo`
 :   A POSIX signal number. Use constants such as `SIGTERM`, `SIGCHLD`, etc.
 
-### Process::getPid()
+### getPid()
 
     Process::getPid(): int
 
 Returns the PID of the child process. Value is only meaningful if the process has been started and PHP was not compiled with ``--enable-sigchild`.
 
-### Process::getCommand()
+### getCommand()
 
     Process::getCommand(): string
 
 Gets the command to execute. Returns the current working directory or null if inherited from the current PHP process.
 
-### Process::getWorkingDirectory()
+### getWorkingDirectory()
 
 Gets the current working directory.
 
-### Process::getEnv()
+### getEnv()
 
     Process::getEnv(): array
 
 Gets an associative array of environment variables passed to the process.
 
-### Process::getOptions()
+### getOptions()
 
     Process::getOptions(): array
 
 Gets the options to pass to [`proc_open()`](http://php.net/proc_open).
 
-### Process::isRunning()
+### isRunning()
 
     Process::isRunning(): bool
 
 Determines if the process is still running.
 
-### Process::getStdIn()
+### getStdIn()
 
-    Process::getStdIn(): WritableStreamInterface
+    Process::getStdIn(): \Icicle\Stream\WritableStream
 
 Gets the process input stream (STDIN).
 
-### Process::getStdOut()
+### getStdOut()
 
-    Process::getStdIn(): ReadableStreamInterface
+    Process::getStdIn(): \Icicle\Stream\ReadableStream
 
 Gets the process output stream (STDERR).
 
-### Process::getStdErr()
+### getStdErr()
 
-    Process::getStdIn(): ReadableStreamInterface
+    Process::getStdIn(): \Icicle\Stream\ReadableStream
 
 Gets the process error stream (STDOUT).
 
 ---
 
-## Sync\Channel
-An implementation of a standalone [`Icicle\Concurrent\Sync\ChannelInterface`](#syncchannelinterface) that uses a pair of streams.
+## Sync\ChannelledStream
+An implementation of a standalone [`\Icicle\Concurrent\Sync\Channel`](#channel) that uses a pair of streams.
 
-### Channel::__construct()
+### ChannelledStream::__construct()
 
-    Channel::__construct(
-        DuplexStreamInterface|ReadableStreamInterface $read,
-        WritableStreamInterface $write = null
+    ChannelledStream::__construct(
+        DuplexStream|ReadableStream $read,
+        WritableStream|null $write = null
     )
 
-Creates a new channel instance from one or two streams. Either a single [`DuplexStreamInterface`](stream.md#duplexstreaminterface) stream can be given, or a separate [`ReadableStreamInterface`](stream.md#readablestreaminterface) stream and [`WritableStreamInterface`](stream.md#writablestreaminterface) stream can be used.
+Creates a new channel instance from one or two streams. Either a single [`DuplexStream`](stream.md#duplexstream) stream can be given, or a separate [`ReadableStream`](stream.md#readablestream) stream and [`WritableStream`](stream.md#writablestream) stream can be used.
+
+#### Parameters
+`\Icicle\Stream\DuplexStream|\Icicle\Stream\ReadableStream $read`
+:   The single duplex stream instance or the readable stream to use for the channel.
+
+`\Icicle\Stream\WritableStream|null $write`
+:   The writable stream to use for the channel if `$read` was only a readable stream.
 
 ---
 
-## Sync\ChannelInterface
-Interface for a standalone channel object that extends [`Icicle\Concurrent\ChannelInterface`](#channelinterface).
+### isOpen()
 
-### ChannelInterface::isOpen()
-
-    ChannelInterface::isOpen(): bool
+    ChannelledStream::isOpen(): bool
 
 Determines if the channel is open.
 
-### ChannelInterface::close()
+### close()
 
-    ChannelInterface::close()
+    ChannelledStream::close()
 
 Closes the channel.
 
 ---
 
 ## Sync\FileMutex
-A cross-platform mutex that implements [`Icicle\Concurrent\Sync\MutexInterface`](#syncmutexinterface) that uses exclusive files as the lock mechanism.
+A cross-platform mutex that implements [`\Icicle\Concurrent\Sync\Mutex`](#syncmutex) that uses exclusive files as the lock mechanism.
 
 This implementation avoids using [`flock()`](http://php.net/flock) because `flock()` is known to have some atomicity issues on some systems. In addition, `flock()` does not work as expected when trying to lock a file multiple times in the same process on Linux. Instead, exclusive file creation is used to create a lock file, which is atomic on most systems.
 
@@ -250,37 +280,42 @@ This implementation avoids using [`flock()`](http://php.net/flock) because `floc
 ## Sync\Lock
 A handle on an acquired lock from a synchronization object.
 
-### Lock::isReleased()
+### isReleased()
 
     Lock::isReleased(): bool
 
 Checks if the lock has already been released. Returns true if the lock has already been released, otherwise returns false.
 
-### Lock::release()
+### release()
 
-    Lock::release()
+    Lock::release(): void
 
 Releases the lock to the mutex or semaphore that the lock was acquired from.
 
 ---
 
-## Sync\MutexInterface
+## Sync\Mutex
 A non-blocking synchronization primitive that can be used for mutual exclusion across contexts.
 
 Objects that implement this interface should guarantee that all operations are atomic. Implementations do not have to guarantee that acquiring a lock is first-come, first serve.
 
-### MutexInterface::acquire()
+### acquire()
 
-    SemaphoreInterface::acquire(): Generator
+    Mutex::acquire(): \Generator
 
 Acquires a lock on the mutex.
 
-Resolves with a [`Icicle\Concurrent\Sync\Lock`](#synclock) object when the acquire is successful, which can be used to release the acquired lock.
+!!! note
+    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+
+#### Resolution value
+`\Icicle\Concurrent\Sync\Lock`
+:   Lock object which can be used to release the acquired.
 
 ---
 
 ## Sync\Parcel
-A container object for sharing a value across contexts. Implements [`Icicle\Concurrent\Sync\ParcelInterface`](#syncparcelinterface).
+A container object for sharing a value across contexts. Implements [`\Icicle\Concurrent\Sync\Parcel`](#syncparcel).
 
 A shared object is a container that stores an object inside shared memory. The object can be accessed and mutated by any thread or process. The shared object handle itself is serializable and can be sent to any thread or procss to give access to the value that is shared in the container.
 
@@ -293,7 +328,7 @@ Requires the [shmop](http://php.net/manual/en/book.shmop.php) extension to be en
 !!! note
     Accessing a shared object is not atomic. Access to a shared object should be protected with a mutex to preserve data integrity.
 
-### Parcel::isFreed()
+### isFreed()
 
     Parcel::isFreed(): bool
 
@@ -301,7 +336,7 @@ Checks if the object has been freed.
 
 Note that this does not check if the object has been destroyed; it only checks if this handle has freed its reference to the object.
 
-### Parcel::free()
+### free()
 
     Parcel::free()
 
@@ -311,7 +346,7 @@ Calling `free()` on an object already freed will have no effect. If this method 
 
 ---
 
-## Sync\ParcelInterface
+## Sync\Parcel
 A parcel object for sharing data across execution contexts.
 
 A parcel is an object that stores a value in a safe way that can be shared between different threads or processes. Different handles to the same parcel will access the same data, and a parcel handle itself is serializable and can be transported to other execution contexts.
@@ -320,58 +355,65 @@ Wrapping and unwrapping values in the parcel are not atomic. To prevent race con
 
 When a parcel is cloned, a new parcel is created and the original parcel's value is duplicated and copied to the new parcel.
 
-### ParcelInterface::unwrap()
+### unwrap()
 
-    ParcelInterface::unwrap(): mixed
+    Parcel::unwrap(): mixed
 
 Unwraps the parcel and returns the value inside the parcel.
 
-### ParcelInterface::wrap()
+### synchronized()
 
-    ParcelInterface::wrap(mixed $value)
+    Parcel::synchronized(callable(mixed $value): mixed $function): \Generator
 
-Wraps a value into the parcel, replacing the old value.
+Calls the given callback function while maintaining a lock on the parcel so only one thread may modify the value of the parcel. The current value of the parcel is given to the callback function and the function should return the new value to be stored in the parcel.
+
+!!! note
+    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
-`$value`
-:   The value to wrap into the parcel.
+`callable(mixed $value): mixed $function`
+:   The callback function to be invoked. This function is given the current parcel value as the parameter and should return the new value to store in the parcel.
+
+#### Resolve
+`mixed`
+:   The new parcel value.
 
 ---
 
 ## Sync\PosixSemaphore
-A non-blocking, interprocess POSIX semaphore that implements [`Icicle\Concurrent\Sync\SemaphoreInterface`](#syncsemaphoreinterface).
+A non-blocking, interprocess POSIX semaphore that implements [`\Icicle\Concurrent\Sync\Semaphore`](#syncsemaphoreinterface).
 
 Uses a POSIX message queue to store a queue of permits in a lock-free data structure. This semaphore implementation is preferred over other implementations when available, as it provides the best performance.
 
 !!! note
     Not compatible with Windows.
 
-### PosixSemaphore::isFreed()
+### isFreed()
 
     PosixSemaphore::isFreed(): bool
 
 Checks if the semaphore has been freed.
 
-### PosixSemaphore::getPermissions()
+### getPermissions()
 
     PosixSemaphore::getPermissions(): int
 
 Gets the access permissions of the semaphore.
 
-### PosixSemaphore::setPermissions()
+### setPermissions()
 
-    PosixSemaphore::setPermissions(int $mode)
+    PosixSemaphore::setPermissions(int $mode): void
 
 Sets the access permissions of the semaphore.
 
 #### Parameters
-`$mode`
+`int $mode`
 :   An octal representing the Unix permissions mode to set.
 
 !!! note
     The current user must already have write access to the semaphore in order to change the semaphore's access permissions.
 
-### PosixSemaphore::free()
+### free()
 
     PosixSemaphore::free()
 
@@ -379,58 +421,63 @@ Removes the semaphore if it still exists. If this method is not called, the sema
 
 ---
 
-## Sync\SemaphoreInterface
+## Sync\Semaphore
 A non-blocking counting semaphore.
 
 Objects that implement this interface guarantee that all operations are atomic. Implementations do not have to guarantee that acquiring a lock is first-come, first serve.
 
-### SemaphoreInterface::count()
+### count()
 
-    SemaphoreInterface::count(): int
+    Semaphore::count(): int
 
 Gets the number of currently available locks.
 
-### SemaphoreInterface::getSize()
+### getSize()
 
-    SemaphoreInterface::getSize(): int
+    Semaphore::getSize(): int
 
 Gets the total number of locks on the semaphore (not the number of available locks).
 
-### SemaphoreInterface::acquire()
+### acquire()
 
-    SemaphoreInterface::acquire(): Generator
+    Semaphore::acquire(): \Generator
 
 Acquires a lock from the semaphore asynchronously.
 
 If there are one or more locks available, this function resolves immediately with a lock and the lock count is decreased. If no locks are available, the semaphore waits asynchronously for a lock to become available.
 
-Resolves with a [`Icicle\Concurrent\Sync\Lock`](#synclock) object when the acquire is successful, which can be used to release the acquired lock.
+!!! note
+    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+
+#### Resolution value
+`\Icicle\Concurrent\Sync\Lock`
+:   Lock object which can be used to release the acquired.
 
 ---
 
 ## Threading\Mutex
-A thread-safe, asynchronous mutex that implements [`Icicle\Concurrent\Sync\MutexInterface`](#syncmutexinterface) using the pthreads locking mechanism.
+A thread-safe, asynchronous mutex that implements [`\Icicle\Concurrent\Sync\Mutex`](#syncmutexinterface) using the pthreads locking mechanism.
 
 Compatible with POSIX systems and Microsoft Windows.
 
 ---
 
 ## Threading\Parcel
-A thread-safe container that shares a value between multiple threads. Implements [`Icicle\Concurrent\Sync\ParcelInterface`](#syncparcelinterface).
+A thread-safe container that shares a value between multiple threads. Implements [`\Icicle\Concurrent\Sync\Parcel`](#syncparcelinterface).
 
 This parcel implementation is preferred when sharing objects between threads.
 
 ---
 
 ## Threading\Semaphore
-An asynchronous semaphore based on pthreads' synchronization methods. Implements [`Icicle\Concurrent\Sync\SemaphoreInterface`](#syncsemaphoreinterface).
+An asynchronous semaphore based on pthreads' synchronization methods. Implements [`\Icicle\Concurrent\Sync\Semaphore`](#syncsemaphoreinterface).
 
 This is an implementation of a thread-safe semaphore that has non-blocking acquire methods. There is a small tradeoff for asynchronous semaphores; you may not acquire a lock immediately when one is available and there may be a small delay. However, the small delay will not block the thread.
 
 ---
 
 ## Threading\Thread
-An execution context using native multi-threading. Implements [`Icicle\Concurrent\ContextInterface`](#contextinterface).
+An execution context using native multi-threading. Implements [`\Icicle\Concurrent\Context`](#contextinterface).
 
 The thread context is not itself threaded. A local instance of the context is maintained both in the context that creates the thread and in the thread itself.
 
@@ -438,7 +485,7 @@ The thread context is not itself threaded. A local instance of the context is ma
 
 ```php
 Thread::spawn(
-    callable<(...$args): mixed> $function,
+    callable(...$args): mixed $function,
     ...$args
 ): Thread
 ```
@@ -446,14 +493,14 @@ Thread::spawn(
 Creates a new thread and immediately starts it. All arguments following the function to invoke in the thread will be copied and passed as parameters to the function to invoke.
 
 #### Parameters
-`$function`
+`callable(...$args): mixed$function`
 :   The function to invoke inside the new thread.
 
-`...$args`
+`mixed ...$args`
 :   Arguments to pass to `$function`.
 
 !!! warning
-    Due to the underlying process of passing a closure to another thread, using a closure for `$function` that [imports variables](http://php.net/manual/en/functions.anonymous.php#example-195) from a scope in the parent thread can cause malformed internal pointers. Attempting to pass such a function will result in an `InvalidArgumentError` being thrown.
+    Due to the underlying process of passing a closure to another thread, using a closure for `$function` that [imports variables](http://php.net/manual/en/functions.anonymous.php#example-195) from a scope in the parent thread can cause malformed internal pointers. Attempting to pass such a function will result in an `\Icicle\Exception\InvalidArgumentError` being thrown.
 
 Example:
 

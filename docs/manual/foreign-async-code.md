@@ -1,8 +1,8 @@
-## Using callbacks or promises from other libraries
-Several functions are provided for transforming functions into promises-aware callables. You can easily turn common callback-based code into a function returning a promise with `Promise\promisify()`:
+## Using callbacks or awaitables from other libraries
+Several functions are provided for transforming functions into awaitables-aware callables. You can easily turn common callback-based code into a function returning an awaitable with `Awaitable\promisify()`:
 
 ```php
-use Icicle\Promise;
+use Icicle\Awaitable;
 
 function asyncWithCallback($callback)
 {
@@ -11,7 +11,7 @@ function asyncWithCallback($callback)
 }
 
 // Promisify the function.
-$promisified = Promise\promisify('asyncWithCallback');
+$promisified = Awaitable\promisify('asyncWithCallback');
 
 // Call the promisified function.
 $promisified()->then(function ($greeting) {
@@ -19,17 +19,17 @@ $promisified()->then(function ($greeting) {
 });
 ```
 
-You can also use promise objects from other libraries that implement other interfaces with [`Promise\adapt()`](). This function takes any object with a `then(callable $onFulfilled, callable $onRejected)` method and returns a new Icicle promise that wraps around the original object. Below is an example of adapting a [ReactPHP](http://reactphp.org) promise:
+You can also use awaitable objects from other libraries that implement other interfaces with [`Awaitable\adapt()`](). This function takes any object with a `then(callable $onFulfilled, callable $onRejected)` method and returns a new Icicle awaitable that wraps around the original object. Below is an example of adapting a [ReactPHP](http://reactphp.org) awaitable:
 
 ```php
-$reactPromise = new \React\Promise\Promise(function ($resolve, $reject) {
+$reactAwaitable = new \React\Awaitable\Awaitable(function ($resolve, $reject) {
     // Resolver
 });
 
-$iciclePromise = \Icicle\Promise\adapt($reactPromise);
+$icicleAwaitable = \Icicle\Awaitable\adapt($reactAwaitable);
 ```
 
-See the [Promise API documentation](../api/promise.md) for more information on `Promise\adapt()`.
+See the [Awaitable API documentation](../api/awaitable.md) for more information on `Awaitable\adapt()`.
 
 
 
@@ -61,14 +61,14 @@ For more details on how to use the adapter, see [the package's README file](http
 
 
 
-## Using promises in ReactPHP code
+## Using awaitables in ReactPHP code
 
-If you need to create a promise that React code needs to wait on, the adapter package also provides `Icicle\ReactAdapter\Promise\ReactPromise`, which implements `React\Promise\ExtendedPromiseInterface` and provides a bridge to Icicle promises.
+If you need to create an awaitable that React code needs to wait on, the adapter package also provides `Icicle\ReactAdapter\Awaitable\ReactAwaitable`, which implements `React\Awaitable\ExtendedAwaitableInterface` and provides a bridge to Icicle awaitables.
 
 ```php
-$iciclePromise = new \Icicle\Promise\Promise(function ($resolve, $reject) {
+$icicleAwaitable = new \Icicle\Awaitable\Awaitable(function ($resolve, $reject) {
     // Resolver
 });
 
-$reactPromise = new \Icicle\ReactAdapter\Promise\ReactPromise($iciclePromise);
+$reactAwaitable = new \Icicle\ReactAdapter\Awaitable\ReactAwaitable($icicleAwaitable);
 ```

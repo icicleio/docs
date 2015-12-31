@@ -1,10 +1,8 @@
-**[Loop API documentation](../api/loop.md)**
+The event loop schedules functions, runs timers, handles signals, and polls sockets for pending reads and available writes. There are several event loop implementations available depending on what PHP extensions are available. The `\Icicle\Loop\SelectLoop` class uses only core PHP functions, so it will work on any PHP installation, but is not as performant as some of the other available implementations. All event loops implement `\Icicle\Loop\Loop` and provide the same features.
 
-The event loop schedules functions, runs timers, handles signals, and polls sockets for pending reads and available writes. There are several event loop implementations available depending on what PHP extensions are available. The `Icicle\Loop\SelectLoop` class uses only core PHP functions, so it will work on any PHP installation, but is not as performant as some of the other available implementations. All event loops implement `Icicle\Loop\LoopInterface` and provide the same features.
+The event loop should be accessed via functions defined in the `\Icicle\Loop` namespace. If a program requires a specific or custom event loop implementation, `\Icicle\Loop\loop()` can be called with an instance of `\Icicle\Loop\Loop` before any other loop functions to use that instance as the event loop.
 
-The event loop should be accessed via functions defined in the `Icicle\Loop` namespace. If a program requires a specific or custom event loop implementation, `Icicle\Loop\loop()` can be called with an instance of `Icicle\Loop\LoopInterface` before any other loop functions to use that instance as the event loop.
-
-The `Icicle\Loop\run()` function runs the event loop and will not return until the event loop is stopped or no events are pending in the loop.
+The `\Icicle\Loop\run()` function runs the event loop and will not return until the event loop is stopped or no events are pending in the loop.
 
 The following code demonstrates how timers can be created to execute functions after a number of seconds elapses using the `Icicle\Loop\timer()` function.
 
@@ -38,26 +36,21 @@ Fourth.
 Second.
 ```
 
-
-
 ## Loop implementations
 
-There are currently three loop classes, each implementing `Icicle\Loop\LoopInterface`. Any custom implementation written must also implement this interface. Custom loop implementations can be used as the active event loop using the [`Icicle\Loop\loop()`](../api/loop.md#looploop) function.
+There are currently two loop classes, each implementing `\Icicle\Loop\Loop`. Any custom implementation written must also implement this interface. Custom loop implementations can be used as the active event loop using the [`\Icicle\Loop\loop()`](../api/loop.md#loop) function.
 
-- `Icicle\Loop\SelectLoop`: Works with any installation of PHP since it relies only on core functions. Uses `stream_select()` or `time_nanosleep()` depending on the events pending in the loop.
-- `Icicle\Loop\EventLoop`: Requires the `event` pecl extension. Preferred implementation for best performance.
-- `Icicle\Loop\LibeventLoop`: Requires the `libevent` pecl extension. Also provides better performance than the `SelectLoop` implementation.
+- `\Icicle\Loop\SelectLoop`: Works with any installation of PHP since it relies only on core functions. Uses `stream_select()` or `usleep()` depending on the events pending in the loop.
+- `\Icicle\Loop\EvLoop`: Requires the `ev` pecl extension. Preferred implementation for best performance.
 
-While each implementation is different, there should be no difference in the behavior of a program based on the loop implementation used. Note that there may be some differences in the exact timing of the execution of certain events or the order in which different types of events are executed (particularly the ordering of timers and signals). However, programs should not be reliant on the exact timing of callback function execution and therefore should not be affected by these differences. Regardless of implementation, callbacks scheduled with `schedule()` and `immediate()` are always executed in the order queued.
-
+While each implementation is different, there should be no difference in the behavior of a program based on the loop implementation used. Note that there may be some differences in the exact timing of the execution of certain events or the order in which different types of events are executed (particularly the ordering of timers and signals). However, programs should not be reliant on the exact timing of callback function execution and therefore should not be affected by these differences. Regardless of implementation, callbacks scheduled with `queue()` are always executed in the order queued.
 
 
 ## Throwing exceptions
 
-Functions scheduled using `Loop\schedule()` or callback functions used for timers, immediates, and socket events should not throw exceptions. If one of these functions throws an exception, it will be thrown from the `Loop\run()` function. These are referred to as *uncatchable exceptions* since there is no way to catch the thrown exception within the event loop. If an exception can be thrown from code within a callback, that code should be surrounded by a try/catch block and the exception handled within the callback.
-
+Functions queued using `\Icicle\Loop\queue()` or callback functions used for timers, immediates, signals, and IO watchers should not throw exceptions. If one of these functions throws an exception, it will be thrown from the `\Icicle\Loop\run()` function. These are referred to as **uncatchable exceptions** since there is no way to catch the thrown exception within the event loop. If an exception can be thrown from code within a callback, that code should be surrounded by a try/catch block and the exception handled within the callback.
 
 
 ## Events
 
-When an event is scheduled in the event loop through the methods `poll()`, `await()`, `timer()`, `periodic()`, and `immediate()`, an object implementing `Icicle\Loop\Events\EventInterface` is returned. These objects provide methods for listening, cancelling, or determining if the event is pending.
+When an event is scheduled in the event loop through the methods `poll()`, `await()`, `timer()`, `periodic()`, and `immediate()`, an object extending `\Icicle\Loop\Watcher\Watcher` is returned. These objects provide methods for listening, cancelling, or determining if the event is pending.

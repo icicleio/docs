@@ -11,28 +11,26 @@ markdown_extensions:
 
 pages:
 - Introduction: 'index.md'
-- About the documentation: 'meta.md'
+- About the Documentation: 'meta.md'
 - Installing: 'installing.md'
-- Getting started: 'getting-started.md'
+- Getting Started: 'getting-started.md'
 - Manual:
-    - Introduction to asynchronous programming: 'manual/introduction.md'
-    - The event loop: 'manual/loop.md'
-    - Promises: 'manual/promises.md'
-    - Using promises: 'manual/using-promises.md'
+    - Introduction to Asynchronous Programming: 'manual/introduction.md'
+    - The Event Loop: 'manual/loop.md'
+    - Awaitables: 'manual/awaitables.md'
     - Coroutines: 'manual/coroutines.md'
-    - Writing coroutines: 'manual/writing-coroutines.md'
-    - Console input and output: 'manual/console.md'
-    - Making DNS queries: 'manual/dns-queries.md'
+    - Console Input and Output: 'manual/console.md'
+    - Making DNS Queries: 'manual/dns-queries.md'
     - Concurrency: 'manual/concurrency.md'
-    - Foreign asynchronous code: 'manual/foreign-async-code.md'
+    - Foreign Asynchronous Code: 'manual/foreign-async-code.md'
 - API:
-    - Icicle\Concurrent: 'api/concurrent.md'
-    - Icicle\Coroutine: 'api/coroutine.md'
-    - Icicle\Dns: 'api/dns.md'
     - Icicle\Loop: 'api/loop.md'
-    - Icicle\Promise: 'api/promise.md'
-    - Icicle\Socket: 'api/socket.md'
+    - Icicle\Awaitable: 'api/awaitable.md'
+    - Icicle\Coroutine: 'api/coroutine.md'
+    - Icicle\Concurrent: 'api/concurrent.md'
+    - Icicle\Dns: 'api/dns.md'
     - Icicle\Stream: 'api/stream.md'
+    - Icicle\Socket: 'api/socket.md'
 
 extra:
     version: v1.x

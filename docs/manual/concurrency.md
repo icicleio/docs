@@ -107,7 +107,7 @@ use Icicle\Concurrent\Threading\Parcel;
 use Icicle\Concurrent\Threading\Thread;
 use Icicle\Coroutine;
 use Icicle\Loop;
-use Icicle\Promise;
+use Icicle\Awaitable;
 
 Coroutine\create(function () {
     // Create a queue and wrap it in a shareable, thread-safe parcel.
@@ -137,7 +137,7 @@ Coroutine\create(function () {
     }
 
     // Wait for all of the threads to finish.
-    yield Promise\all(array_map(function (Thread $thread) {
+    yield Awaitable\all(array_map(function (Thread $thread) {
         // Return an array of coroutines to wait on.
         return new Coroutine\Coroutine($thread->join());
     }, $threads));

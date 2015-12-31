@@ -1,6 +1,6 @@
 **Icicle is a PHP library for writing *asynchronous* code using *synchronous* coding techniques.**
 
-Icicle uses [coroutines] built with [promises] to facilitate writing asynchronous code using techniques normally used to write synchronous code, such as returning values and throwing exceptions. Writing functions in this way allows you to focus on the meaning of your code, without a mess of nested callbacks.
+Icicle uses [coroutines] built with [awaitables] to facilitate writing asynchronous code using techniques normally used to write synchronous code, such as returning values and throwing exceptions. Writing functions in this way allows you to focus on the meaning of your code, without a mess of nested callbacks.
 
 
 ## Features
@@ -18,7 +18,7 @@ Icicle uses [coroutines] built with [promises] to facilitate writing asynchronou
 
 ## Core components
 - [Event loop](api/loop.md): The core of Icicle that manages scheduling incoming events and asynchronous functions.
-- [Promises](api/promise.md): Placeholders for future values of asynchronous operations. Callbacks registered with promises may return values and throw exceptions.
+- [Awaitables](api/awaitable.md): Placeholders for future values of asynchronous operations. Callbacks registered with awaitables may return values and throw exceptions.
 - [Coroutines](api/coroutine.md): Interruptible functions for building asynchronous code using synchronous coding patterns and error handling.
 
 
@@ -28,7 +28,7 @@ Icicle uses [coroutines] built with [promises] to facilitate writing asynchronou
 - [Concurrent](https://github.com/icicleio/concurrent): Provides an easy to use interface for parallel execution with non-blocking communication and task execution (under development).
 - [DNS](https://github.com/icicleio/dns): Asynchronous DNS resolver and connector.
 - [HTTP](https://github.com/icicleio/http): Asynchronous HTTP server and client (under development).
-- [React Adapter](https://github.com/icicleio/react-adaptor): Adapts the event loop and promises of Icicle to interfaces compatible with components built for React.
+- [React Adapter](https://github.com/icicleio/react-adaptor): Adapts the event loop and awaitables of Icicle to interfaces compatible with components built for React.
 
 
 ## Getting help and support
@@ -44,6 +44,6 @@ The Icicle library, all related packages, and documentation are licensed under t
 
 
 [loop]:         manual/loop.md
-[promises]:     manual/promises.md
+[awaitables]:   manual/awaitables.md
 [coroutines]:   manual/coroutines.md
 [dns]:          api/dns.md

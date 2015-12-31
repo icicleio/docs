@@ -51,7 +51,7 @@ To allow for the greatest flexibility possible, Icicle is split up into several 
 - [`icicleio/dns`](https://packagist.org/packages/icicleio/dns): Provides a native implementation of a DNS client.
 - [`icicleio/concurrent`](https://packagist.org/packages/icicleio/concurrent): Provides all of Icicle's concurrency features, such as threads, forks, shared memory, semaphores, and workers.
 - [`icicleio/http`](https://packagist.org/packages/icicleio/http): Provides a stream-aware HTTP parser, with an HTTP client and HTTP server.
-- [`icicleio/react-adapter`](https://packagist.org/packages/icicleio/react-adapter): Adapts the event loop and promises of Icicle to interfaces compatible with components built for ReactPHP.
+- [`icicleio/react-adapter`](https://packagist.org/packages/icicleio/react-adapter): Adapts the event loop and awaitables of Icicle to interfaces compatible with components built for ReactPHP.
 
 Installing these extra packages is easy and is also done using Composer.
 

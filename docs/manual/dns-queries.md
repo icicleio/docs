@@ -10,7 +10,7 @@ The example below uses a resolver to asynchronously find the IP address for the 
 
 ```php
 use Icicle\Coroutine;
-use Icicle\Dns\Resolver\Resolver;
+use Icicle\Dns\Resolver\BasicResolver;
 use Icicle\Loop;
 
 Coroutine\create(function () {

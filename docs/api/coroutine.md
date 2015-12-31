@@ -1,57 +1,55 @@
-Coroutines are interruptible functions implemented using [Generators](http://www.php.net/manual/en/language.generators.overview.php). See the [manual documentation for coroutines](../manual/coroutines.md) for details on how to create and use coroutines.
-
-## Coroutines as Promises
-
-`Icicle\Coroutine\Coroutine` implements `Icicle\Coroutine\CoroutineInterface`, which extends `Icicle\Promise\PromiseInterface`. **Any methods available on promises are also available on coroutines and a coroutine can be treated just like any other promise.**
-
-See the [Promise API documentation](promise.md) for the complete list of the methods available in `Icicle\Promise\PromiseInterface` and the other methods available for working with promises.
+Coroutines are interruptible functions implemented using [Generators](http://www.php.net/manual/en/language.generators.overview.php) and [Awaitables](awaitable.md). See the [manual documentation for coroutines](../manual/coroutines.md) for details on how to create and use coroutines.
 
 
+## Coroutines as Awaitables
 
-## CoroutineInterface
+`\Icicle\Coroutine\Coroutine` implements `\Icicle\Awaitable\Awaitable`. **Any methods available on awaitables are also available on coroutines and a coroutine can be treated just like any other awaitable.**
+
+See the [Awaitable API documentation](awaitable.md) for the complete list of the methods available in `\Icicle\Awaitable\Awaitable` and the other methods available for working with awaitables.
+
+
+## Coroutine
 
 ### Coroutine Constructor
 
-```php
-$coroutine = new Coroutine(Generator $generator)
-```
+    $coroutine = new Coroutine(\Generator $generator)
 
-As shown in the examples above, a `Icicle\Coroutine\Coroutine` instance can be created by passing a `Generator` to the constructor. Execution of the coroutine is begun asynchronously, after leaving the calling scope of the constructor (e.g. after the function calling the constructor returns).
+A `\Icicle\Coroutine\Coroutine` instance can be created by passing a `\Generator` instance to the constructor. The coroutine constructor is often used when you wish to create an awaitable object from a function or method returning a `\Generator` written to be a coroutine (noted with a box in these docs or `@coroutine` in docblocks within the source).
 
 
-### CoroutineInterface::pause()
+### pause()
 
-    CoroutineInterface::pause(): void
+    Coroutine::pause(): void
 
-Pauses the coroutine once it reaches a `yield` statement (if executing). If the coroutine was already at a `yield` statement (or has not begun execution), no further code will be executed until resumed with `resume()`. Any promises that the coroutine is currently waiting for will continue to do work to be resolved, but once resolved, the coroutine will not continue until resumed.
-
-
-### CoroutineInterface::resume()
-
-    CoroutineInterface::resume(): void
-
-Resumes the coroutine if it was paused. If the coroutine was waiting for a promise to resolve, the coroutine will not continue execution until the promise has resolved.
+Pauses the coroutine once it reaches a `yield` statement (if executing). If the coroutine was already at a `yield` statement (or has not begun execution), no further code will be executed until resumed with `resume()`. Any awaitables that the coroutine is currently waiting for will continue to do work to be resolved, but once resolved, the coroutine will not continue until resumed.
 
 
-### CoroutineInterface::isPaused()
+### resume()
 
-    CoroutineInterface::isPaused(): bool
+    Coroutine::resume(): void
 
-Determines if the coroutine is currently paused. Note that true is only returned if the coroutine was explicitly paused. It does not return true if the coroutine is waiting for a promise to resolve.
+Resumes the coroutine if it was paused. If the coroutine was waiting for an awaitable to resolve, the coroutine will not continue execution until the awaitable has resolved.
+
+
+### isPaused()
+
+    Coroutine::isPaused(): bool
+
+Determines if the coroutine is currently paused. Note that true is only returned if the coroutine was explicitly paused. It does not return true if the coroutine is waiting for an awaitable to resolve.
 
 #### Return value
 A boolean indicating if the coroutine is currently paused.
 
 
-### CoroutineInterface::cancel()
+### cancel()
 
-    CoroutineInterface::cancel(mixed $reason = null): void
+    Coroutine::cancel(\Exception $reason = null): void
 
-Cancels execution of the coroutine. If the coroutine is waiting on a promise, that promise is cancelled with the given exception. If no exception is given, an instance of `Icicle\Promise\Exception\CancelledException` will be used.
+Cancels execution of the coroutine. If the coroutine is waiting on an awaitable, that awaitable is cancelled with the given exception.
 
 #### Parameters
 `$reason`
-:   An exception or value to cancel the coroutine with.
+:   An exception to cancel the coroutine with. If no exception is given, an instance of `\Icicle\Coroutine\Exception\TerminatedException` will be used.
 
 
 
@@ -60,13 +58,13 @@ Cancels execution of the coroutine. If the coroutine is waiting on a promise, th
 ### wrap()
 
     Coroutine\wrap(
-        callable<(mixed ...$args): Generator> $callback
-    ): callable<(mixed ...$args): CoroutineInterface>
+        callable(mixed ...$args): \Generator $callback
+    ): callable(mixed ...$args): Coroutine
 
-Returns a `callable` that returns a `Icicle\Coroutine\Coroutine` by calling `$callback` that must return a `Generator` written to be a coroutine. Any arguments given to the returned callable are also passed to `$callback`.
+Returns a `callable` that returns a `\Icicle\Coroutine\Coroutine` by calling `$callback` that must return a `Generator` written to be a coroutine. Any arguments given to the returned callable are also passed to `$callback`.
 
 #### Parameters
-`$callback`
+`callable(mixed ...$args): \Generator $callback`
 :   A generator function to create a coroutine function from.
 
 ```php
@@ -95,17 +93,17 @@ The example above will output `{11}{21}{31}{12}{22}{32}{13}{23}{33}`, demonstrat
 ### create()
 
     Coroutine\create(
-        callable<(mixed ...$args): Generator> $callback,
+        callable(mixed ...$args): \Generator $callback,
         mixed ...$args
-    ): CoroutineInterface
+    ): Coroutine
 
 Creates and runs a new coroutine from a given generator function.
 
 #### Parameters
-`$callback`
+`callable(mixed ...$args): \Generator$callback`
 :   The generator function to call and start a coroutine from. The return type of the callback should be `Generator`.
 
-`...$args`
+`mixed ...$args`
 :   Arguments to pass to the generator function.
 
 #### Return value
@@ -115,32 +113,39 @@ A new coroutine for the given callback function. The created coroutine will begi
 ### run()
 
     Coroutine\run(
-        callable<(mixed ...$args): Generator> $worker,
+        callable(mixed ...$args): \Generator $worker,
         mixed ...$args
     ): mixed
 
-Calls the function (which should return a `Generator` written as a coroutine), then runs the coroutine. This function should not be called within a running event loop. This function is meant to be used to create an initial coroutine that runs the rest of the application. The resolution value of the coroutine is returned or the rejection reason is thrown from this function.
+Calls the function (which should return a `\Generator` written as a coroutine), then runs the coroutine.
+
+!!! warning
+    This function should not be called within a running event loop. This function is meant to be used to create an initial coroutine that runs the rest of the application. The resolution value of the coroutine is returned or the rejection reason is thrown from this function.
 
 ##### Parameters
-`$worker`
+`callable(mixed ...$args): \Generator $worker`
 :   Function returning a `Generator` written as a coroutine.
 
-`...$args`
+`mixed ...$args`
 :   Arguments to pass to `$worker`.
 
 
 ### sleep()
 
-    Coroutine\sleep(float $time): Generator
+    Coroutine\sleep(float $time): \Generator
 
 Sleeps the current coroutine asynchronously for a given number of seconds.
 
+!!! note
+    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+
 #### Parameters
-`$time`
+`float $time`
 :   The amount of time to sleep in seconds.
 
-#### Return value
-A generator that resolves with the actual amount of time slept.
+#### Resolves
+`float`
+:   The amount of time actually slept.
 
 !!! tip
     Whenever you're tempted to use the [`sleep()`](http://php.net/sleep) built-in function, you should probably be using this function instead!
