@@ -8,6 +8,8 @@ strict: true
 markdown_extensions:
     - admonition
     - def_list
+    - toc:
+        permalink: " "
 
 pages:
 - Introduction: 'index.md'

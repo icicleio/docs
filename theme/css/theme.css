@@ -132,7 +132,7 @@ body {
     background: -o-linear-gradient(45deg, #ffffff 0%, #5189c7 100%); /* Opera 11.10+ */
     background: -ms-linear-gradient(45deg, #ffffff 0%, #5189c7 100%); /* IE10+ */
     background: linear-gradient(45deg, #ffffff 0%, #5189c7 100%); /* W3C */
-    
+
     background-attachment: fixed;
 }
 
@@ -255,6 +255,40 @@ dl > dd > :first-child {
 h5 {
     font-size: 1em;
     margin: 1rem 0;
+}
+
+/* Make header permalinks hidden by default and visible on hover. */
+h1:hover > .headerlink,
+h2:hover > .headerlink,
+h3:hover > .headerlink {
+    visibility: visible;
+    opacity: 1;
+}
+
+.headerlink {
+    display: inline-block;
+    position: relative;
+    bottom: 0;
+    left: 0.5rem;
+    padding: 0 0.25em;
+    visibility: hidden;
+    opacity: 0;
+    color: #71b2e3;
+    font-size: 1.25rem;
+    font-weight: normal;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+
+}
+
+.headerlink::before {
+    font-family: FontAwesome;
+    content: "\f0c1";
+}
+
+.headerlink:hover {
+    color: #00397b;
+    text-decoration: none;
 }
 
 
