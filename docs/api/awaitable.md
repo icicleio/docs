@@ -9,7 +9,7 @@ Callback functions registered to awaitables are always [invoked asynchronously](
 
 ## Awaitable
 
-All awaitable objects implement `\Icicle\Awaitable\Awaitable`, which provides a variety of functions for registering callbacks to receive the resolution value of an awaitable. While the primary awaitable implementation is `\Icicle\Awaitable\Awaitable`, several other classes in this component also implement `\Icicle\Awaitable\Awaitable`.
+All awaitable objects implement `Icicle\Awaitable\Awaitable`, which provides a variety of functions for registering callbacks to receive the resolution value of an awaitable. While the primary awaitable implementation is `Icicle\Awaitable\Awaitable`, several other classes in this component also implement `Icicle\Awaitable\Awaitable`.
 
 
 ### then()
@@ -19,7 +19,7 @@ All awaitable objects implement `\Icicle\Awaitable\Awaitable`, which provides a 
         callable(\Exception $exception): mixed $onRejected = null
     ): Awaitable
 
-This method is the primary way to register callbacks that receive either the value used to fulfill the awaitable or the exception used to reject the awaitable. Another `\Icicle\Awaitable\Awaitable` object is returned by this method, which is resolved with the return value of a callback or rejected if a callback throws an exception. For more on how awaitables are resolved by callbacks, see the section on [Resolution and Propagation](#resolution-and-propagation).
+This method is the primary way to register callbacks that receive either the value used to fulfill the awaitable or the exception used to reject the awaitable. Another `Icicle\Awaitable\Awaitable` object is returned by this method, which is resolved with the return value of a callback or rejected if a callback throws an exception. For more on how awaitables are resolved by callbacks, see the section on [Resolution and Propagation](#resolution-and-propagation).
 
 #### Parameters
 `callable(mixed $value): mixed $onFulfilled`
@@ -54,7 +54,7 @@ Cancels the awaitable with the given reason. Canceling an awaitable rejects the 
 
 #### Parameters
 `\Exception $reason`
-:   The exception to cancel the awaitable with, if any. If `$reason` is not an exception, an instance of `\Icicle\Awaitable\Exception\CancelledException` is created using the reason.
+:   The exception to cancel the awaitable with, if any. If `$reason` is not an exception, an instance of `Icicle\Awaitable\Exception\CancelledException` is created using the reason.
 
 
 ### timeout()
@@ -71,7 +71,7 @@ Returns an awaitable that is rejected in `$timeout` seconds with the given excep
 :   The timeout for the awaitable in seconds.
 
 `callable(): mixed $onTimeout`
-:   The function to invoke if the timeout expires. This function will resolve the returned awaitable. If no callback function is given, the returned awaitable will be rejected with an instance of `\Icicle\Awaitable\Exception\TimeoutException`.
+:   The function to invoke if the timeout expires. This function will resolve the returned awaitable. If no callback function is given, the returned awaitable will be rejected with an instance of `Icicle\Awaitable\Exception\TimeoutException`.
 
 
 ### delay()
@@ -139,7 +139,7 @@ The callback given to this function will be called if the awaitable is fulfilled
         callable(mixed ...$args): mixed $onFulfilled
     ): Awaitable
 
-If an awaitable fulfills with an array or `Traversable`, this method uses the elements of the array (or each value of the `Traversable`) as arguments to the given callback function similar to the `...` (splat) operator. If the awaitable does not fulfill with an array or `Traversable`, the returned awaitable is rejected with an instance of `\Icicle\Awaitable\Exception\TypeException`. Otherwise the returned awaitable is resolved as though the callback function was registered with `then()`. If the awaitable is rejected, the returned awaitable is also rejected.
+If an awaitable fulfills with an array or `Traversable`, this method uses the elements of the array (or each value of the `Traversable`) as arguments to the given callback function similar to the `...` (splat) operator. If the awaitable does not fulfill with an array or `Traversable`, the returned awaitable is rejected with an instance of `Icicle\Awaitable\Exception\TypeException`. Otherwise the returned awaitable is resolved as though the callback function was registered with `then()`. If the awaitable is rejected, the returned awaitable is also rejected.
 
 #### Parameters
 `callable(mixed ...$args): mixed$onFulfilled`
@@ -178,7 +178,7 @@ The fulfillment value of the awaitable is returned or the exception used to reje
 
 ## Creating an Awaitable
 
-Awaitables can be created in a few different ways depending on your needs. All awaitables implement `\Icicle\Awaitable\Awaitable`, which is described in the section below.
+Awaitables can be created in a few different ways depending on your needs. All awaitables implement `Icicle\Awaitable\Awaitable`, which is described in the section below.
 
 !!! tip
     It is rare to need to create an awaitable instance yourself in Icicle. Usually an awaitable is created by calling a method or function that returns an awaitable or by creating a [Coroutine](coroutine.md) (a special type of awaitable) from a method or function returning a `\Generator`.
@@ -186,7 +186,7 @@ Awaitables can be created in a few different ways depending on your needs. All a
 
 ### Promise
 
-When an `\Icicle\Awaitable\Promise` object is created, it invokes a resolver function given to the constructor with the following prototype: `callable(callable(mixed $value = null): void $resolve, callable(\Exception $exception): void $reject): callable|null`. The resolver function initiates the (asynchronous) computation, calling the `$resolve($value = null)` function with the resolution value or `$reject(\Exception $reason)` with an exception. An optional cancellation function with the prototype `callable(\Exception $exception): void` can be returned from the resolver function. The cancellation function is invoked if the awaitable is cancelled.
+When an `Icicle\Awaitable\Promise` object is created, it invokes a resolver function given to the constructor with the following prototype: `callable(callable(mixed $value = null): void $resolve, callable(\Exception $exception): void $reject): callable|null`. The resolver function initiates the (asynchronous) computation, calling the `$resolve($value = null)` function with the resolution value or `$reject(\Exception $reason)` with an exception. An optional cancellation function with the prototype `callable(\Exception $exception): void` can be returned from the resolver function. The cancellation function is invoked if the awaitable is cancelled.
 
 ```php
 use Icicle\Awaitable\Promise;
@@ -212,7 +212,7 @@ If the resolver function throws an exception, the awaitable is rejected with tha
 
 ##### Example
 
-The following code creates an awaitable that is resolved when a connection is successfully made to a server. The `connect()` method of the `\Icicle\Socket\Client\Connector` class in the [Socket](socket.md) component use a similar approach to establish connections asynchronously.
+The following code creates an awaitable that is resolved when a connection is successfully made to a server. The `connect()` method of the `Icicle\Socket\Client\Connector` class in the [Socket](socket.md) component use a similar approach to establish connections asynchronously.
 
 ```php
 use Icicle\Loop;
@@ -263,9 +263,9 @@ Loop\run();
 
 ### Delayed
 
-A `\Icicle\Awaitable\Delayed` object is a publicly resolvable awaitable. This class has public methods `resolve()` and `reject()`, allowing the awaitable object to be resolved even by consumers of the awaitable (code using the awaitable rather than code that created the awaitable). *These objects should not be returned as part of a public interface*, but rather used internally within objects or within [coroutines](../manual/coroutines.md). The constructor takes an optional function that is invoked if the awaitable is cancelled.
+A `Icicle\Awaitable\Delayed` object is a publicly resolvable awaitable. This class has public methods `resolve()` and `reject()`, allowing the awaitable object to be resolved even by consumers of the awaitable (code using the awaitable rather than code that created the awaitable). *These objects should not be returned as part of a public interface*, but rather used internally within objects or within [coroutines](../manual/coroutines.md). The constructor takes an optional function that is invoked if the awaitable is cancelled.
 
-`\Icicle\Awaitable\Delayed` should be used when possible as it is more performant than `\Icicle\Awaitable\Promise` (and easier to create and resolve). This is the most common type of awaitable used in Icicle since most functions and methods are written as [coroutines](../manual/coroutines.md), never exposing the awaitables used within the coroutine as part of a public API.
+`Icicle\Awaitable\Delayed` should be used when possible as it is more performant than `Icicle\Awaitable\Promise` (and easier to create and resolve). This is the most common type of awaitable used in Icicle since most functions and methods are written as [coroutines](../manual/coroutines.md), never exposing the awaitables used within the coroutine as part of a public API.
 
 ```php
 use Icicle\Awaitable\Delayed;
@@ -279,7 +279,7 @@ $delayed->resolve(1); // Resolves the awaitable with the integer 1.
 
 ### Deferred
 
-When a task is instigated in one piece of code and completed in another (e.g., separate methods of an object), an `\Icicle\Awaitable\Deferred` object can be used to encapsulate an awaitable and control the state of that awaitable externally. An `\Icicle\Awaitable\Deferred` object is designed to be kept private by the code that wishes to control the state of the awaitable (e.g., a class), while being able to provide the awaitable to consuming code through the `getPromise()` method. A cancellation function may optionally be provided to the constructor when creating a `Deferred` object that is called if the encapsulated awaitable is cancelled.
+When a task is instigated in one piece of code and completed in another (e.g., separate methods of an object), an `Icicle\Awaitable\Deferred` object can be used to encapsulate an awaitable and control the state of that awaitable externally. An `Icicle\Awaitable\Deferred` object is designed to be kept private by the code that wishes to control the state of the awaitable (e.g., a class), while being able to provide the awaitable to consuming code through the `getPromise()` method. A cancellation function may optionally be provided to the constructor when creating a `Deferred` object that is called if the encapsulated awaitable is cancelled.
 
 ```php
 use Icicle\Awaitable\Deferred;
@@ -293,7 +293,7 @@ $deferred = new Deferred($onCancelled);
 $awaitable = $deferred->getPromise();
 ```
 
-`\Icicle\Awaitable\Deferred` objects have only three methods other than the constructor:
+`Icicle\Awaitable\Deferred` objects have only three methods other than the constructor:
 - `Deferred::resolve(mixed $value = null): void`: Resolves the encapsulated promise with the given value or awaitable.
 - `Deferred::reject(\Exception $reason): void`: Rejects the encapsulated awaitable with the given exception.
 - `Deferred::getPromise(): Promise`: Returns the encapsulated promise so it can be given to consumers.
@@ -301,7 +301,7 @@ $awaitable = $deferred->getPromise();
 
 ### Lazy Awaitable
 
-A lazy awaitable is created by calling the function `\Icicle\Awaitable\lazy()`, passing another function as an argument that creates an awaitable that is only called once the result of the awaitable is requested. That is, the function creating the awaitable is not called until a callback using the resolution value of the awaitable is registered using `then()`, `done()`, etc. Lazy awaitables provide an easy way to perform operations only as needed for a computation. The awaitable returned from this function may be treated like any other awaitable.
+A lazy awaitable is created by calling the function `Icicle\Awaitable\lazy()`, passing another function as an argument that creates an awaitable that is only called once the result of the awaitable is requested. That is, the function creating the awaitable is not called until a callback using the resolution value of the awaitable is registered using `then()`, `done()`, etc. Lazy awaitables provide an easy way to perform operations only as needed for a computation. The awaitable returned from this function may be treated like any other awaitable.
 
 ```php
 use Icicle\Awaitable;
@@ -331,33 +331,33 @@ $lazy->done(
 
 ## Functions
 
-The `\Icicle\Awaitable` namespace contains several functions for performing operations on sets of awaitables. All functions in this section are designed so most of their parameters may either be awaitables or values (or an array containing any combination of awaitables and values). `\Icicle\Awaitable\resolve()` is used on all values to create awaitables.
+The `Icicle\Awaitable` namespace contains several functions for performing operations on sets of awaitables. All functions in this section are designed so most of their parameters may either be awaitables or values (or an array containing any combination of awaitables and values). `Icicle\Awaitable\resolve()` is used on all values to create awaitables.
 
 ### resolve()
 
-    \Icicle\Awaitable\resolve(mixed $value = null): \Icicle\Awaitable\Awaitable
+    Icicle\Awaitable\resolve(mixed $value = null): Icicle\Awaitable\Awaitable
 
-The `\Icicle\Awaitable\resolve()` function returns a fulfilled awaitable using the given value. There are two possible outcomes depending on the type of the passed value:
-    1. `\Icicle\Awaitable\Awaitable`: The awaitable is returned without modification.
+The `Icicle\Awaitable\resolve()` function returns a fulfilled awaitable using the given value. There are two possible outcomes depending on the type of the passed value:
+    1. `Icicle\Awaitable\Awaitable`: The awaitable is returned without modification.
     2. All other types: A fulfilled awaitable is returned using the given value as the result.
 
 #### Return value
-`\Icicle\Awaitable\Awaitable`
+`Icicle\Awaitable\Awaitable`
 :   The passed awaitable or a fulfilled awaitable using the given value as the fulfillment value.
 
 ### reject()
 
-    \Icicle\Awaitable\reject(\Exception $reason): \Icicle\Awaitable\Awaitable
+    Icicle\Awaitable\reject(\Exception $reason): Icicle\Awaitable\Awaitable
 
-The `\Icicle\Awaitable\reject()` function returns a rejected awaitable using the given exception as the rejection reason.
+The `Icicle\Awaitable\reject()` function returns a rejected awaitable using the given exception as the rejection reason.
 
 #### Return value
-`\Icicle\Awaitable\Awaitable`
+`Icicle\Awaitable\Awaitable`
 :   Rejected awaitable using the given exception as the rejection reason.
 
 ### settle()
 
-    \Icicle\Awaitable\settle(mixed[] $awaitables): \Icicle\Awaitable\Awaitable
+    Icicle\Awaitable\settle(mixed[] $awaitables): Icicle\Awaitable\Awaitable
 
 Returns an awaitable that is resolved when all awaitables are resolved. The returned awaitable will not reject by itself (only if cancelled). Returned awaitable is fulfilled with an array of resolved awaitables, with keys identical and corresponding to the original given array. The `$awaitables` array may contain any combination of awaitables or values.
 
@@ -367,7 +367,7 @@ Returns an awaitable that is resolved when all awaitables are resolved. The retu
 
 ### all()
 
-    \Icicle\Awaitable\all(mixed[] $awaitables): \Icicle\Awaitable\Awaitable
+    Icicle\Awaitable\all(mixed[] $awaitables): Icicle\Awaitable\Awaitable
 
 Returns an awaitable that is fulfilled when all awaitables are fulfilled, and rejected if any awaitable is rejected. Returned awaitable is fulfilled with an array of values used to fulfill each contained awaitable, with keys corresponding to the array of awaitables or values. The `$awaitables` array may contain any combination of awaitables or values.
 
@@ -376,12 +376,12 @@ Returns an awaitable that is fulfilled when all awaitables are fulfilled, and re
 :   An array of awaitables or values.
 
 #### Return value
-`\Icicle\Awaitable\Awaitable`
+`Icicle\Awaitable\Awaitable`
 :   Awaitable fulfilled only if all awaitables are fulfilled and rejected if any awaitables are rejected.
 
 ### any()
 
-    \Icicle\Awaitable\any(mixed[] $awaitables): \Icicle\Awaitable\Awaitable
+    Icicle\Awaitable\any(mixed[] $awaitables): Icicle\Awaitable\Awaitable
 
 Returns an awaitable that is fulfilled when any awaitable is fulfilled, and rejected only if all awaitables are rejected. The `$awaitables` array may contain any combination of awaitables or values.
 
@@ -390,12 +390,12 @@ Returns an awaitable that is fulfilled when any awaitable is fulfilled, and reje
 :   An array of awaitables or values.
 
 #### Return value
-`\Icicle\Awaitable\Awaitable`
+`Icicle\Awaitable\Awaitable`
 :   Awaitable fulfilled when any of the given awaitables is fulfilled and rejected only if all the given awaitables are rejected.
 
 ### some()
 
-    Awaitable\some(mixed[] $awaitables, int $required): \Icicle\Awaitable\Awaitable
+    Awaitable\some(mixed[] $awaitables, int $required): Icicle\Awaitable\Awaitable
 
 Returns an awaitable that is fulfilled when $required number of awaitables are fulfilled. The awaitable is rejected if `$required` number of awaitables can no longer be fulfilled. The `$awaitables` array may contain any combination of awaitables or values.
 
@@ -407,12 +407,12 @@ Returns an awaitable that is fulfilled when $required number of awaitables are f
 :   The number of awaitables required to be fulfilled.
 
 #### Return value
-`\Icicle\Awaitable\Awaitable`
+`Icicle\Awaitable\Awaitable`
 :   Awaitable fulfilled once enough awaitables are fulfilled or rejected if too many awaitables are rejected.
 
 ### choose()
 
-    \Icicle\Awaitable\choose(mixed[] $awaitables): \Icicle\Awaitable\Awaitable
+    Icicle\Awaitable\choose(mixed[] $awaitables): Icicle\Awaitable\Awaitable
 
 Returns an awaitable that is fulfilled or rejected when the first awaitable is fulfilled or rejected. The `$awaitables` array may contain any combination of awaitables or values.
 
@@ -421,15 +421,15 @@ Returns an awaitable that is fulfilled or rejected when the first awaitable is f
 :   An array of awaitables or values.
 
 #### Return value
-`\Icicle\Awaitable\Awaitable`
+`Icicle\Awaitable\Awaitable`
 :   Awaitable fulfilled with the fulfillment value of the first fulfilled awaitable or rejected if all awaitables are rejected.
 
 ### map()
 
-    \Icicle\Awaitable\map(
+    Icicle\Awaitable\map(
         callable(mixed ...$values): mixed $callback,
         mixed[] ...$awaitables
-    ): \Icicle\Awaitable\Awaitable[]
+    ): Icicle\Awaitable\Awaitable[]
 
 Maps the callback to each awaitable as it is fulfilled. Returns an array of awaitables resolved by the return callback value of the callback function. The callback may return awaitables or throw exceptions to reject awaitables in the array. If an awaitable in the passed array rejects, the callback will not be called and the awaitable in the array is rejected for the same reason. The `$awaitables` array may contain any combination of awaitables or values.
 
@@ -444,16 +444,16 @@ Maps the callback to each awaitable as it is fulfilled. Returns an array of awai
 :   Arrays of awaitables or values.
 
 #### Return value
-`\Icicle\Awaitable\Awaitable[]`
+`Icicle\Awaitable\Awaitable[]`
 :   Array of awaitable resolved by the return value of the mapped callback function.
 
 ### reduce()
 
-    \Icicle\Awaitable\reduce(
+    Icicle\Awaitable\reduce(
         mixed[] $awaitables,
         callable(mixed $carry): mixed $callback,
         mixed $initial = null
-    ): \Icicle\Awaitable\Awaitable
+    ): Icicle\Awaitable\Awaitable
 
 Reduce function similar to `array_reduce()`, only it works on awaitables and/or values. The `$awaitables` array may contain any combination of awaitables or values. The callback function may return an awaitable or value and `$initial` value may also be an awaitable or value.
 
@@ -468,14 +468,14 @@ Reduce function similar to `array_reduce()`, only it works on awaitables and/or 
 :   The inital value for `$carry` to pass to the reduce function on the first element.
 
 #### Return value
-`\Icicle\Awaitable\Awaitable`
+`Icicle\Awaitable\Awaitable`
 :   Awaitable fulfilled with the final carry value when all awaitables have been fulfilled.
 
 ### lift()
 
-    \Icicle\Awaitable\lift(
+    Icicle\Awaitable\lift(
         callable(mixed ...$args): mixed $worker
-    ): callable(mixed ...$args): \Icicle\Awaitable\Awaitable
+    ): callable(mixed ...$args): Icicle\Awaitable\Awaitable
 
 Wraps the given callable `$worker` in an awaitable aware function that takes the same number of arguments as `$worker`, but those arguments may be awaitables for the future argument value or just values. The returned function will return an awaitable for the return value of `$worker` and will never throw. The `$worker` function will not be called until each awaitable given as an argument is fulfilled. If any awaitable provided as an argument rejects, the awaitable returned by the returned function will be rejected for the same reason. The awaitable is fulfilled with the return value of `$worker` or rejected if `$worker` throws.
 
@@ -484,15 +484,15 @@ Wraps the given callable `$worker` in an awaitable aware function that takes the
 :   The function to wrap in an awaitable-aware wrapper function.
 
 #### Return value
-`callable(mixed ...$args): \Icicle\Awaitable\Awaitable`
+`callable(mixed ...$args): Icicle\Awaitable\Awaitable`
 :   Callable function accepting awaitables or values for arguments, returning another awaitable.
 
 ### promisify()
 
-    \Icicle\Awaitable\promisify(
+    Icicle\Awaitable\promisify(
         callable(mixed ...$args): mixed $worker,
         int $index = 0
-    ): callable(mixed ...$args): \Icicle\Awaitable\Awaitable
+    ): callable(mixed ...$args): Icicle\Awaitable\Awaitable
 
 Transforms a function `$worker` that takes a callback into a function that returns an awaitable. The awaitable is fulfilled with an array of the parameters that would have been passed to the callback function. The function returned from this method takes the same arguments as `$worker` except for the callback function, which is replaced by this function.
 
@@ -504,19 +504,19 @@ Transforms a function `$worker` that takes a callback into a function that retur
 :   The index of the callback parameter to promisify.
 
 #### Return value
-`\Icicle\Awaitable\Awaitable`
+`Icicle\Awaitable\Awaitable`
 :   Awaitable fulfilled with an array of the parameters passed to the callback function.
 
 ### adapt()
 
-    \Icicle\Awaitable\adapt(object $thenable): \Icicle\Awaitable\Awaitable
+    Icicle\Awaitable\adapt(object $thenable): Icicle\Awaitable\Awaitable
 
-Adapts any object with a `then(callable $onFulfilled, callable $onRejected)` method to an awaitable implementing `\Icicle\Awaitable\Awaitable`. This allows Icicle to use awaitables or futures generated by other libraries.
+Adapts any object with a `then(callable $onFulfilled, callable $onRejected)` method to an awaitable implementing `Icicle\Awaitable\Awaitable`. This allows Icicle to use awaitables or futures generated by other libraries.
 
 #### Parameters
 `object $thenable`
 :   The foreign thenable object to wrap in an Icicle awaitable.
 
 #### Return value
-`\Icicle\Awaitable\Awaitable`
+`Icicle\Awaitable\Awaitable`
 :   Awaitable resolved by the adapted thenable.

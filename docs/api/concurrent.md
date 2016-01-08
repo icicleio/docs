@@ -3,7 +3,7 @@ This optional package provides native threading, multiprocessing, process synchr
 
 ## Channel
 
-Interface for sending messages between execution contexts. A `\Icicle\Concurrent\Sync\Channel` object both acts as a sender and a receiver of messages.
+Interface for sending messages between execution contexts. A `Icicle\Concurrent\Sync\Channel` object both acts as a sender and a receiver of messages.
 
 ### send()
 
@@ -12,7 +12,7 @@ Interface for sending messages between execution contexts. A `\Icicle\Concurrent
 Sends a value across the channel to the receiver.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
 `mixed $data`
@@ -29,7 +29,7 @@ Sends a value across the channel to the receiver.
 Receives the next pending value in the channel from the sender. Resolves with the received value.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Resolution value
 `mixed`
@@ -59,7 +59,7 @@ Starts the context execution.
 Resolves when the context ends and joins with the parent context.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 ### kill()
 
@@ -74,7 +74,7 @@ Execution context that includes a channel for exchanging data. Extends both [`Ch
 
 
 ## Forking\Fork
-An execution context that uses forked processes. Implements [`\Icicle\Concurrent\Context`](#context).
+An execution context that uses forked processes. Implements [`Icicle\Concurrent\Context`](#context).
 
 As forked processes are created with the [`pcntl_fork()`](http://php.net/pcntl_fork) function, the [PCNTL extension](http://php.net/manual/en/book.pcntl.php) must be enabled to spawn forks. Not compatible with Windows.
 
@@ -127,7 +127,7 @@ Sets the fork's scheduling priority as a percentage.
 
 ## Process\ChannelledProcess
 
-An execution context that uses a separately executed PHP process. Implements [`\Icicle\Concurrent\Strand`](#strand).
+An execution context that uses a separately executed PHP process. Implements [`Icicle\Concurrent\Strand`](#strand).
 
 ---
 
@@ -160,7 +160,7 @@ Starts the process execution.
 Resolves when the process ends.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 ### kill()
 
@@ -214,26 +214,26 @@ Determines if the process is still running.
 
 ### getStdIn()
 
-    Process::getStdIn(): \Icicle\Stream\WritableStream
+    Process::getStdIn(): Icicle\Stream\WritableStream
 
 Gets the process input stream (STDIN).
 
 ### getStdOut()
 
-    Process::getStdIn(): \Icicle\Stream\ReadableStream
+    Process::getStdIn(): Icicle\Stream\ReadableStream
 
 Gets the process output stream (STDERR).
 
 ### getStdErr()
 
-    Process::getStdIn(): \Icicle\Stream\ReadableStream
+    Process::getStdIn(): Icicle\Stream\ReadableStream
 
 Gets the process error stream (STDOUT).
 
 ---
 
 ## Sync\ChannelledStream
-An implementation of a standalone [`\Icicle\Concurrent\Sync\Channel`](#channel) that uses a pair of streams.
+An implementation of a standalone [`Icicle\Concurrent\Sync\Channel`](#channel) that uses a pair of streams.
 
 ### ChannelledStream::__construct()
 
@@ -245,10 +245,10 @@ An implementation of a standalone [`\Icicle\Concurrent\Sync\Channel`](#channel) 
 Creates a new channel instance from one or two streams. Either a single [`DuplexStream`](stream.md#duplexstream) stream can be given, or a separate [`ReadableStream`](stream.md#readablestream) stream and [`WritableStream`](stream.md#writablestream) stream can be used.
 
 #### Parameters
-`\Icicle\Stream\DuplexStream|\Icicle\Stream\ReadableStream $read`
+`Icicle\Stream\DuplexStream|Icicle\Stream\ReadableStream $read`
 :   The single duplex stream instance or the readable stream to use for the channel.
 
-`\Icicle\Stream\WritableStream|null $write`
+`Icicle\Stream\WritableStream|null $write`
 :   The writable stream to use for the channel if `$read` was only a readable stream.
 
 ---
@@ -268,7 +268,7 @@ Closes the channel.
 ---
 
 ## Sync\FileMutex
-A cross-platform mutex that implements [`\Icicle\Concurrent\Sync\Mutex`](#syncmutex) that uses exclusive files as the lock mechanism.
+A cross-platform mutex that implements [`Icicle\Concurrent\Sync\Mutex`](#syncmutex) that uses exclusive files as the lock mechanism.
 
 This implementation avoids using [`flock()`](http://php.net/flock) because `flock()` is known to have some atomicity issues on some systems. In addition, `flock()` does not work as expected when trying to lock a file multiple times in the same process on Linux. Instead, exclusive file creation is used to create a lock file, which is atomic on most systems.
 
@@ -306,16 +306,16 @@ Objects that implement this interface should guarantee that all operations are a
 Acquires a lock on the mutex.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Resolution value
-`\Icicle\Concurrent\Sync\Lock`
+`Icicle\Concurrent\Sync\Lock`
 :   Lock object which can be used to release the acquired.
 
 ---
 
 ## Sync\Parcel
-A container object for sharing a value across contexts. Implements [`\Icicle\Concurrent\Sync\Parcel`](#syncparcel).
+A container object for sharing a value across contexts. Implements [`Icicle\Concurrent\Sync\Parcel`](#syncparcel).
 
 A shared object is a container that stores an object inside shared memory. The object can be accessed and mutated by any thread or process. The shared object handle itself is serializable and can be sent to any thread or procss to give access to the value that is shared in the container.
 
@@ -368,7 +368,7 @@ Unwraps the parcel and returns the value inside the parcel.
 Calls the given callback function while maintaining a lock on the parcel so only one thread may modify the value of the parcel. The current value of the parcel is given to the callback function and the function should return the new value to be stored in the parcel.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
 `callable(mixed $value): mixed $function`
@@ -381,7 +381,7 @@ Calls the given callback function while maintaining a lock on the parcel so only
 ---
 
 ## Sync\PosixSemaphore
-A non-blocking, interprocess POSIX semaphore that implements [`\Icicle\Concurrent\Sync\Semaphore`](#syncsemaphoreinterface).
+A non-blocking, interprocess POSIX semaphore that implements [`Icicle\Concurrent\Sync\Semaphore`](#syncsemaphoreinterface).
 
 Uses a POSIX message queue to store a queue of permits in a lock-free data structure. This semaphore implementation is preferred over other implementations when available, as it provides the best performance.
 
@@ -447,37 +447,37 @@ Acquires a lock from the semaphore asynchronously.
 If there are one or more locks available, this function resolves immediately with a lock and the lock count is decreased. If no locks are available, the semaphore waits asynchronously for a lock to become available.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Resolution value
-`\Icicle\Concurrent\Sync\Lock`
+`Icicle\Concurrent\Sync\Lock`
 :   Lock object which can be used to release the acquired.
 
 ---
 
 ## Threading\Mutex
-A thread-safe, asynchronous mutex that implements [`\Icicle\Concurrent\Sync\Mutex`](#syncmutexinterface) using the pthreads locking mechanism.
+A thread-safe, asynchronous mutex that implements [`Icicle\Concurrent\Sync\Mutex`](#syncmutexinterface) using the pthreads locking mechanism.
 
 Compatible with POSIX systems and Microsoft Windows.
 
 ---
 
 ## Threading\Parcel
-A thread-safe container that shares a value between multiple threads. Implements [`\Icicle\Concurrent\Sync\Parcel`](#syncparcelinterface).
+A thread-safe container that shares a value between multiple threads. Implements [`Icicle\Concurrent\Sync\Parcel`](#syncparcelinterface).
 
 This parcel implementation is preferred when sharing objects between threads.
 
 ---
 
 ## Threading\Semaphore
-An asynchronous semaphore based on pthreads' synchronization methods. Implements [`\Icicle\Concurrent\Sync\Semaphore`](#syncsemaphoreinterface).
+An asynchronous semaphore based on pthreads' synchronization methods. Implements [`Icicle\Concurrent\Sync\Semaphore`](#syncsemaphoreinterface).
 
 This is an implementation of a thread-safe semaphore that has non-blocking acquire methods. There is a small tradeoff for asynchronous semaphores; you may not acquire a lock immediately when one is available and there may be a small delay. However, the small delay will not block the thread.
 
 ---
 
 ## Threading\Thread
-An execution context using native multi-threading. Implements [`\Icicle\Concurrent\Context`](#contextinterface).
+An execution context using native multi-threading. Implements [`Icicle\Concurrent\Context`](#contextinterface).
 
 The thread context is not itself threaded. A local instance of the context is maintained both in the context that creates the thread and in the thread itself.
 
@@ -500,7 +500,7 @@ Creates a new thread and immediately starts it. All arguments following the func
 :   Arguments to pass to `$function`.
 
 !!! warning
-    Due to the underlying process of passing a closure to another thread, using a closure for `$function` that [imports variables](http://php.net/manual/en/functions.anonymous.php#example-195) from a scope in the parent thread can cause malformed internal pointers. Attempting to pass such a function will result in an `\Icicle\Exception\InvalidArgumentError` being thrown.
+    Due to the underlying process of passing a closure to another thread, using a closure for `$function` that [imports variables](http://php.net/manual/en/functions.anonymous.php#example-195) from a scope in the parent thread can cause malformed internal pointers. Attempting to pass such a function will result in an `Icicle\Exception\InvalidArgumentError` being thrown.
 
 Example:
 

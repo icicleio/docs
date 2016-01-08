@@ -17,12 +17,12 @@ $generator = function () {
     try {
         $resolver = new BasicResolver(new BasicExecutor('8.8.8.8'));
 
-        // This coroutine pauses until yielded coroutine is fulfilled or rejected.
+        // Coroutine pauses until yielded coroutine is fulfilled or rejected.
         $ips = (yield $resolver->resolve('example.com'));
 
         $connector = new DefaultConnector();
 
-        // This coroutine pauses again until yielded coroutine is fulfilled or rejected.
+        // Coroutine pauses again until yielded coroutine is fulfilled or rejected.
         $client = (yield $connector->connect($ips[0], 80));
 
         echo "Asynchronously connected to example.com:80\n";
@@ -38,22 +38,19 @@ Loop\run();
 
 The example above does the same thing as the example in the section on [awaitables](../api/awaitable.md), but instead uses a coroutine to **structure asynchronous code like synchronous code**. Fulfillment values of awaitables are accessed through simple variable assignments and exceptions used to reject awaitables are caught using a try/catch block, rather than creating and registering callback functions to each awaitable.
 
-**`Icicle\Coroutine\Coroutine` instances are also [awaitables](awaitables.md), implementing `Icicle\Awaitable\Awaitable`.** The coroutine is fulfilled with the last value yielded from the generator (or fulfillment value of the last yielded awaitable) or rejected if an exception is thrown from the generator. A coroutine may then yield other coroutines, suspending execution until the yielded coroutine has resolved. If a coroutine yields a `\Generator`, it will automatically be converted to a `Coroutine` and handled in the same way as a yielded coroutine. APIs in Icicle have methods that return `\Generator` objects that should be yielded in a coroutine or must be wrapped with `new Coroutine()` to create an awaitable.
+**`Icicle\Coroutine\Coroutine` instances are also [awaitables](awaitables.md), implementing `Icicle\Awaitable\Awaitable`.** The coroutine is fulfilled with the last value yielded from the generator (or fulfillment value of the last yielded awaitable) or rejected if an exception is thrown from the generator ([note in v2.0 (PHP 7 only) return is used to fulfill a coroutine](#coroutines-in-v1x-vs-v2x)). A coroutine may then yield other coroutines, suspending execution until the yielded coroutine has resolved. If a coroutine yields a `\Generator`, it will automatically be converted to a `Coroutine` and handled in the same way as a yielded coroutine. APIs in Icicle have methods that return `\Generator` objects that *must* be yielded in a coroutine or wrapped with `new Coroutine()` to create an awaitable (see warning box below).
 
+!!! warning
+    Functions or methods in Icicle returning a `\Generator` written as a coroutine (noted with a box in these docs or [`@coroutine` in docblocks](#coroutine-docblock-annotations) within the source) must be either yielded in another coroutine (`$result = (yield coroutineFunction());`) or used with the `Coroutine` constructor (`$coroutine = new Coroutine(coroutineFunction());`). If neither of these methods is used, the generator returned from the function or method is never used and the code within the coroutine is not executed.
 
 ## Creating Coroutines
 A `Coroutine` instance can also be created in a few other different ways depending on your needs.
-
 
 ### Coroutine Constructor
 
     $coroutine = new Coroutine(\Generator $generator)
 
 As shown in the examples above, a `Icicle\Coroutine\Coroutine` instance can be created by passing a `\Generator` instance to the constructor. The coroutine constructor is often used when you wish to create an awaitable object from a function or method returning a `\Generator` written to be a coroutine (noted with a box in these docs or `@coroutine` in docblocks within the source).
-
-!!! warning
-    Functions or methods in Icicle returning a `\Generator` instance written as a coroutine (noted with a box in these docs or `@coroutine` in docblocks within the source) must be either yielded in another coroutine or used with the `Coroutine` constructor. If not, the generator returned functions or methods is never used and the code within the coroutine is not executed.
-
 
 ### wrap()
 
@@ -336,9 +333,11 @@ Loop\run();
 
 ## Coroutines in v1.x vs v2.x
 
-The v2.0 branch (under development) takes advantage of two new features in PHP 7: generator delegation and generator return expressions.
+Icicle v2.0 (master branch) (under development) takes advantage of two new features in PHP 7: generator delegation and generator return expressions.
 
-Coroutines in v2.0 return values using the `return` keyword like a normal function. If a coroutine does not use `return`, the coroutine will resolve will `null`, just like a normal function that does not use `return` (or uses `return` without an expression). Requiring the use of `return` allows `yield from` to be used in coroutines, delegating to another coroutine without the overhead of creating another `Coroutine` object.
+Coroutines in v2.0 return values using the `return` keyword like a normal function. If a coroutine does not use `return` with an expression, the coroutine will resolve will `null`, just like a normal function that does not use `return` (or uses `return` without an expression). Requiring the use of `return` allows `yield from` to be used in coroutines, delegating to another coroutine without the overhead of creating and resolving a separate `Coroutine` object.
+
+As an additional bonus, PHP 7 does not require parentheses around yield statements used as an expression (e.g.: `$result = (yield $awaitable);` can be written as `$result = yield $awaitable;` in PHP 7).
 
 ```php
 // PHP 5.5+

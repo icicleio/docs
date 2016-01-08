@@ -1,3 +1,5 @@
+# Icicle
+
 **Icicle is a PHP library for writing *asynchronous* code using *synchronous* coding techniques.**
 
 Icicle uses [coroutines] built with [awaitables] to facilitate writing asynchronous code using techniques normally used to write synchronous code, such as returning values and throwing exceptions. Writing functions in this way allows you to focus on the meaning of your code, without a mess of nested callbacks.
@@ -16,19 +18,21 @@ Icicle uses [coroutines] built with [awaitables] to facilitate writing asynchron
 - Non-blocking concurrency primitives
 
 
-## Core components
+## Core Components
 - [Event loop](api/loop.md): The core of Icicle that manages scheduling incoming events and asynchronous functions.
 - [Awaitables](api/awaitable.md): Placeholders for future values of asynchronous operations. Callbacks registered with awaitables may return values and throw exceptions.
 - [Coroutines](api/coroutine.md): Interruptible functions for building asynchronous code using synchronous coding patterns and error handling.
 
 
-## Optional packages
-- [Stream](https://github.com/icicleio/stream): Common coroutine-based interface for reading and writing data.
-- [Socket](https://github.com/icicleio/socket): Asynchronous stream socket server and client.
-- [Concurrent](https://github.com/icicleio/concurrent): Provides an easy to use interface for parallel execution with non-blocking communication and task execution (under development).
-- [DNS](https://github.com/icicleio/dns): Asynchronous DNS resolver and connector.
-- [HTTP](https://github.com/icicleio/http): Asynchronous HTTP server and client (under development).
-- [React Adapter](https://github.com/icicleio/react-adaptor): Adapts the event loop and awaitables of Icicle to interfaces compatible with components built for React.
+## Optional Packages
+- [Stream](api/stream.md): Common coroutine-based interface for reading and writing data.
+- [Socket](api/socket.md): Asynchronous stream socket server and client.
+- [Concurrent](api/concurrent.md): Provides an easy to use interface for parallel execution with non-blocking communication and task execution.
+- [DNS](api/dns.md): Asynchronous DNS resolver and connector.
+- [Filesystem](https://github.com/icicleio/filesystem): Asynchronous filesystem access *(under development)*.
+- [HTTP](https://github.com/icicleio/http): Asynchronous HTTP server and client *(under development)*.
+- [WebSocket](https://github.com/icicleio/websocket): Asynchronous WebSocket server and client *(under development)*.
+- [React Adapter](manual/foreign-async-code.md): Adapts the event loop and awaitables of Icicle to interfaces compatible with components built for React.
 
 
 ## Getting help and support

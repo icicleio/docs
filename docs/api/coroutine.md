@@ -3,9 +3,9 @@ Coroutines are interruptible functions implemented using [Generators](http://www
 
 ## Coroutines as Awaitables
 
-`\Icicle\Coroutine\Coroutine` implements `\Icicle\Awaitable\Awaitable`. **Any methods available on awaitables are also available on coroutines and a coroutine can be treated just like any other awaitable.**
+`Icicle\Coroutine\Coroutine` implements `Icicle\Awaitable\Awaitable`. **Any methods available on awaitables are also available on coroutines and a coroutine can be treated just like any other awaitable.**
 
-See the [Awaitable API documentation](awaitable.md) for the complete list of the methods available in `\Icicle\Awaitable\Awaitable` and the other methods available for working with awaitables.
+See the [Awaitable API documentation](awaitable.md) for the complete list of the methods available in `Icicle\Awaitable\Awaitable` and the other methods available for working with awaitables.
 
 
 ## Coroutine
@@ -14,7 +14,7 @@ See the [Awaitable API documentation](awaitable.md) for the complete list of the
 
     $coroutine = new Coroutine(\Generator $generator)
 
-A `\Icicle\Coroutine\Coroutine` instance can be created by passing a `\Generator` instance to the constructor. The coroutine constructor is often used when you wish to create an awaitable object from a function or method returning a `\Generator` written to be a coroutine (noted with a box in these docs or `@coroutine` in docblocks within the source).
+A `Icicle\Coroutine\Coroutine` instance can be created by passing a `\Generator` instance to the constructor. The coroutine constructor is often used when you wish to create an awaitable object from a function or method returning a `\Generator` written to be a coroutine (noted with a box in these docs or `@coroutine` in docblocks within the source).
 
 
 ### pause()
@@ -49,7 +49,7 @@ Cancels execution of the coroutine. If the coroutine is waiting on an awaitable,
 
 #### Parameters
 `$reason`
-:   An exception to cancel the coroutine with. If no exception is given, an instance of `\Icicle\Coroutine\Exception\TerminatedException` will be used.
+:   An exception to cancel the coroutine with. If no exception is given, an instance of `Icicle\Coroutine\Exception\TerminatedException` will be used.
 
 
 
@@ -61,7 +61,7 @@ Cancels execution of the coroutine. If the coroutine is waiting on an awaitable,
         callable(mixed ...$args): \Generator $callback
     ): callable(mixed ...$args): Coroutine
 
-Returns a `callable` that returns a `\Icicle\Coroutine\Coroutine` by calling `$callback` that must return a `Generator` written to be a coroutine. Any arguments given to the returned callable are also passed to `$callback`.
+Returns a `callable` that returns a `Icicle\Coroutine\Coroutine` by calling `$callback` that must return a `Generator` written to be a coroutine. Any arguments given to the returned callable are also passed to `$callback`.
 
 #### Parameters
 `callable(mixed ...$args): \Generator $callback`
@@ -137,7 +137,7 @@ Calls the function (which should return a `\Generator` written as a coroutine), 
 Sleeps the current coroutine asynchronously for a given number of seconds.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
 `float $time`

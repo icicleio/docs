@@ -57,39 +57,39 @@ Loop\run();
 
 ## Server\Server
 
-The `\Icicle\Socket\Server\BasicServer` class implements `\Icicle\Socket\Server\Server`, a coroutine-based interface for creating a TCP server and accepting connections.
+The `Icicle\Socket\Server\BasicServer` class implements `Icicle\Socket\Server\Server`, a coroutine-based interface for creating a TCP server and accepting connections.
 
 ### Server Constructor
 
     $server = new BasicServer(resource $socket, bool $autoClose = true)
 
-Creates a server from a stream socket server resource generated from `stream_socket_server()`. Generally it is better to use `\Icicle\Socket\Server\ServerFactory` to create a `\Icicle\Socket\Server\BasicServer` instance.
+Creates a server from a stream socket server resource generated from `stream_socket_server()`. Generally it is better to use `Icicle\Socket\Server\ServerFactory` to create a `Icicle\Socket\Server\BasicServer` instance.
 
 ### accept()
 
     Server::accept(bool $autoClose = true): \Generator
 
-A coroutine that is resolved with a `\Icicle\Socket\Socket` object when a connection is accepted.
+A coroutine that is resolved with a `Icicle\Socket\Socket` object when a connection is accepted.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
 `bool $autoClose = true`
 :   Use `true` to have the return `Socket` object close automatically on destruct, `false` to avoid automatic closure. Only in rare circumstances should this parameter be `false`.
 
 #### Resolution value
-`\Icicle\Socket\Socket`
+`Icicle\Socket\Socket`
 :   Accepted client socket.
 
 #### Rejection reasons
-`\Icicle\Socket\Exception\BusyException`
+`Icicle\Socket\Exception\BusyException`
 :   If the server already had an accept pending.
 
-`\Icicle\Socket\Exception\UnavailableException`
+`Icicle\Socket\Exception\UnavailableException`
 :   If the server was previously closed.
 
-`\Icicle\Socket\Exception\ClosedException`
+`Icicle\Socket\Exception\ClosedException`
 :   If the server is closed during pending accept.
 
 ### getAddress()
@@ -107,7 +107,7 @@ Returns the local port.
 
 ## Server\ServerFactory
 
-`\Icicle\Socket\Server\DefaultServerFactory` (implements `\Icicle\Socket\Server\ServerFactory`) can be used to create server instances from a IP or unix socket path, port number (`null` for unix socket), and list of options.
+`Icicle\Socket\Server\DefaultServerFactory` (implements `Icicle\Socket\Server\ServerFactory`) can be used to create server instances from a IP or unix socket path, port number (`null` for unix socket), and list of options.
 
 ### create()
 
@@ -116,7 +116,7 @@ ServerFactory::create(
     string $host,
     int|null $port = null,
     mixed[] $options = []
-): \Icicle\Socket\Server\Server
+): Icicle\Socket\Server\Server
 ```
 
 Creates a server bound and listening on the given ip or unix socket path and port number (`null` for unix socket).
@@ -144,9 +144,9 @@ Creates a server bound and listening on the given ip or unix socket path and por
 
 ## Socket
 
-`\Icicle\Socket\NetworkSocket` implements `\Icicle\Socket\Socket` and is used as the fulfillment value of the coroutine returned by `\Icicle\Socket\Server\Server::accept()` ([see documentation above](#accept)). (Note that `\Icicle\Socket\Server\BasicServer` can be easily extended and modified to fulfill accept requests with different objects implementing `\Icicle\Socket\Socket`.)
+`Icicle\Socket\NetworkSocket` implements `Icicle\Socket\Socket` and is used as the fulfillment value of the coroutine returned by `Icicle\Socket\Server\Server::accept()` ([see documentation above](#accept)). (Note that `Icicle\Socket\Server\BasicServer` can be easily extended and modified to fulfill accept requests with different objects implementing `Icicle\Socket\Socket`.)
 
-The class extends `\Icicle\Stream\Pipe\DuplexPipe`, so it inherits all the readable and writable stream methods as well as adding those below.
+The class extends `Icicle\Stream\Pipe\DuplexPipe`, so it inherits all the readable and writable stream methods as well as adding those below.
 
 ### BasicSocket Constructor
 
@@ -158,10 +158,10 @@ Creates a socket object from the given stream socket resource.
 
     Socket::enableCrypto(int $method, float $timeout = 0): \Generator
 
-Enables encryption on the socket. For Socket objects created from `\Icicle\Socket\Server\Server::accept()`, a PEM file must have been provided when creating the server socket (see `\Icicle\Socket\Server\ServerFactory`). Use the `STREAM_CRYPTO_METHOD_*_SERVER` constants when enabling crypto on remote clients (e.g., created by `\Icicle\Socket\Server\Server::accept()`) and the `STREAM_CRYPTO_METHOD_*_CLIENT` constants when enabling crypto on a local client connection (e.g., created by `\Icicle\Socket\Connector\Connector::connect()`).
+Enables encryption on the socket. For Socket objects created from `Icicle\Socket\Server\Server::accept()`, a PEM file must have been provided when creating the server socket (see `Icicle\Socket\Server\ServerFactory`). Use the `STREAM_CRYPTO_METHOD_*_SERVER` constants when enabling crypto on remote clients (e.g., created by `Icicle\Socket\Server\Server::accept()`) and the `STREAM_CRYPTO_METHOD_*_CLIENT` constants when enabling crypto on a local client connection (e.g., created by `Icicle\Socket\Connector\Connector::connect()`).
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
 `int $method`
@@ -171,13 +171,13 @@ Enables encryption on the socket. For Socket objects created from `\Icicle\Socke
 :   Seconds to wait between reads/writes to enable crypto before failing. Use `0` for no timeout.
 
 #### Rejection reasons
-`\Icicle\Exception\Socket\FailureException`
+`Icicle\Exception\Socket\FailureException`
 :   If enabling crypto fails.
 
-`\Icicle\Exception\Socket\UnreadableException`
+`Icicle\Exception\Socket\UnreadableException`
 :   If the socket is unreadable.
 
-`\Icicle\Exception\Socket\UnwritableException`
+`Icicle\Exception\Socket\UnwritableException`
 :   If the socket is unwritable.
 
 ### getLocalAddress()
@@ -217,10 +217,10 @@ Returns the remote port.
 
 ## Connector\Connector
 
-The `\Icicle\Socket\Connector\DefaultConnector` class (implements `\Icicle\Socket\Connector\Connector`) asynchronously connects to a remote server, returning a coroutine that is fulfilled with an instance of `\Icicle\Socket\Socket` when the connection is successfully established.
+The `Icicle\Socket\Connector\DefaultConnector` class (implements `Icicle\Socket\Connector\Connector`) asynchronously connects to a remote server, returning a coroutine that is fulfilled with an instance of `Icicle\Socket\Socket` when the connection is successfully established.
 
 !!! warning
-    The *host should be given as an IP address*, as DNS lookups performed by PHP are synchronous (blocking). If you wish to use domain names instead of IPs, see [`\Icicle\Dns\Connector\Connector`](dns.md#connector).
+    The *host should be given as an IP address*, as DNS lookups performed by PHP are synchronous (blocking). If you wish to use domain names instead of IPs, see [`Icicle\Dns\Connector\Connector`](dns.md#connector).
 
 ### connect()
 
@@ -233,7 +233,7 @@ The `\Icicle\Socket\Connector\DefaultConnector` class (implements `\Icicle\Socke
 Connects asynchronously to the given IP or unix socket path on the given port number (`null` for unix socket).
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
 `string $host`
@@ -256,14 +256,14 @@ Connects asynchronously to the given IP or unix socket path on the given port nu
     `cafile` | `string` | Path to bundle of root certificates to verify against.
 
 #### Resolution value
-`\Icicle\Socket\Socket`
+`Icicle\Socket\Socket`
 :   Fulfilled with once the connection is established.
 
 #### Rejection reasons
-`\Icicle\Socket\Exception\FailureException`
+`Icicle\Socket\Exception\FailureException`
 :   If the connection attempt fails (such as an invalid host).
 
-`\Icicle\Awaitable\Exception\TimeoutException`
+`Icicle\Awaitable\Exception\TimeoutException`
 :   If the connection attempt times out.
 
 !!! tip
@@ -272,13 +272,13 @@ Connects asynchronously to the given IP or unix socket path on the given port nu
 
 ## Datagram\Datagram
 
-The `\Icicle\Socket\Datagram\BasicDatagram` class implements `\Icicle\Socket\Datagram\Datagram`, a coroutine-based interface for creating a UDP listener and sender.
+The `Icicle\Socket\Datagram\BasicDatagram` class implements `Icicle\Socket\Datagram\Datagram`, a coroutine-based interface for creating a UDP listener and sender.
 
 ### BasicDatagram Constructor
 
     $datagram = new BasicDatagram(resource $socket, bool $autoClose = true)
 
-Creates a datagram from a stream socket server resource generated from `stream_socket_server()`. Generally it is better to use `\Icicle\Socket\Datagram\DefaultDatagramFactory` to create a `\Icicle\Socket\Datagram\Datagram` instance.
+Creates a datagram from a stream socket server resource generated from `stream_socket_server()`. Generally it is better to use `Icicle\Socket\Datagram\DefaultDatagramFactory` to create a `Icicle\Socket\Datagram\Datagram` instance.
 
 ### receive()
 
@@ -287,7 +287,7 @@ Creates a datagram from a stream socket server resource generated from `stream_s
 A coroutine that is fulfilled with an array when a data is received on the UDP socket (datagram). The array is a 0-indexed array containing the IP address, port, and data received, in that order.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
 `int $length = 0`
@@ -311,7 +311,7 @@ A coroutine that is fulfilled with an array when a data is received on the UDP s
 Send the given data to the IP address and port. This coroutine is fulfilled with the amount of data sent once the data has successfully been sent.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
 `string $address`
@@ -346,7 +346,7 @@ Send the given data to the IP address and port. This coroutine is fulfilled with
 
 ## Datagram\DatagramFactory
 
-`\Icicle\Socket\Datagram\DatagramFactory` (implements `\Icicle\Socket\Datagram\DatagramFactory`) can be used to create datagram instances from a hostname or unix socket path, port number (`null` for unix socket), and list of options.
+`Icicle\Socket\Datagram\DatagramFactory` (implements `Icicle\Socket\Datagram\DatagramFactory`) can be used to create datagram instances from a hostname or unix socket path, port number (`null` for unix socket), and list of options.
 
 ### create()
 
@@ -354,7 +354,7 @@ Send the given data to the IP address and port. This coroutine is fulfilled with
         string $host,
         int $port,
         mixed[] $options = []
-    ): \Icicle\Socket\Datagram\Datagram
+    ): Icicle\Socket\Datagram\Datagram
 
 Creates a datagram bound and listening on the given IP and port number. No options are defined in this implementation.
 
@@ -373,22 +373,22 @@ Creates a datagram bound and listening on the given IP and port number. No optio
 
 ### connect()
 
-    \Icicle\Socket\connect(
+    Icicle\Socket\connect(
         string $ip,
         int|null $port = null,
         array $options = []
     ): \Generator
 
-Connects asynchronously to the given host on the given port. Uses the global connector interface that can be set using `\Icicle\Socket\connector()`. See [connect()](#connect) above for more information.
+Connects asynchronously to the given host on the given port. Uses the global connector interface that can be set using `Icicle\Socket\connector()`. See [connect()](#connect) above for more information.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 ### connector()
 
-    \Icicle\Socket\connector(
-        \Icicle\Socket\Connector\Connector|null $connector = null
-    ): \Icicle\Socket\Connector\Connector
+    Icicle\Socket\connector(
+        Icicle\Socket\Connector\Connector|null $connector = null
+    ): Icicle\Socket\Connector\Connector
 
 Gets the global connector instance. If a connector instance is provided, that instance is set as the global connector instance.
 
@@ -398,7 +398,7 @@ Gets the global connector instance. If a connector instance is provided, that in
 
 #### parseName()
 
-    \Icicle\Socket\parseName(string $name): array
+    Icicle\Socket\parseName(string $name): array
 
 Parses a name of the format `"ip:port"`, returning an array containing the IP address and port.
 
@@ -412,7 +412,7 @@ Parses a name of the format `"ip:port"`, returning an array containing the IP ad
 
 ### Socket\parseAddress()
 
-    \Icicle\Socket\parseAddress(string $address): string
+    Icicle\Socket\parseAddress(string $address): string
 
 Formats given address into a string. Converts integer to IPv4 address, wraps IPv6 address in brackets.
 
@@ -426,7 +426,7 @@ Formats given address into a string. Converts integer to IPv4 address, wraps IPv
 
 ### Socket\makeName()
 
-    \Icicle\Socket\makeName(string $address, int|null $port = null): string
+    Icicle\Socket\makeName(string $address, int|null $port = null): string
 
 Creates string of format `"$address[:$port]"`.
 
@@ -443,7 +443,7 @@ Creates string of format `"$address[:$port]"`.
 
 ### Socket\makeUri()
 
-    \Icicle\Socket\makeUri(string $protocol, string $address, int $port = null)
+    Icicle\Socket\makeUri(string $protocol, string $address, int $port = null)
 
 Creates string of format `"$protocol://$address[:$port]"`.
 
@@ -463,7 +463,7 @@ Creates string of format `"$protocol://$address[:$port]"`.
 
 ### Socket\getName()
 
-    \Icicle\Socket\getName(resource $socket, bool $peer = true): array
+    Icicle\Socket\getName(resource $socket, bool $peer = true): array
 
 Parses the IP address and port of a network socket. Calls stream_socket_get_name() and then parses the returned string. Returns the IP address and port pair.
 

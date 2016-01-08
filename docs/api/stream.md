@@ -39,7 +39,7 @@ Closes the stream. Once closed, a stream will no longer be readable or writable.
 Coroutine that is fulfilled with data read from the stream when data becomes available. If `$length` is `0`, the coroutine is fulfilled with any amount of data available on the stream. If `$length` is not `0` the coroutine will be fulfilled with a maximum of `$length` bytes, but it may be fulfilled with fewer bytes. If the `$byte` parameter is not `null`, reading will stop once the given byte is encountered in the string. The byte matched by `$byte` will be included in the fulfillment string. `$byte` should be a single byte (tip: use `chr()` to convert an integer to a single-byte string). If a multibyte string is provided, only the first byte will be used.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
 `int $length = 0`
@@ -49,20 +49,20 @@ Coroutine that is fulfilled with data read from the stream when data becomes ava
 :   Reading will stop once the given byte occurs in the stream. Note that reading may stop before the byte is found in the stream. The search byte will be included in the resolving string. Use null to effectively ignore this parameter and read any bytes.
 
 `float $timeout = 0`
-:   Number of seconds until the coroutine is rejected with a `\Icicle\Awaitable\Exception\TimeoutException` if no data is received. Use `0` for no timeout.
+:   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException` if no data is received. Use `0` for no timeout.
 
 #### Resolution value
 `string`
 :   Data read from the stream.
 
 #### Rejection reasons
-`\Icicle\Stream\Exception\UnreadableException`
+`Icicle\Stream\Exception\UnreadableException`
 :   If the stream has become unreadable. Use `isReadable()` to determine if a string is still readable.
 
-`\Icicle\Awaitable\Exception\TimeoutException`
+`Icicle\Awaitable\Exception\TimeoutException`
 :   If the read timed out.
 
-`\Icicle\Exception\InvalidArgumentError`
+`Icicle\Exception\InvalidArgumentError`
 :   If the length is invalid.
 
 ### isReadable()
@@ -85,27 +85,27 @@ Coroutine that is fulfilled with data read from the stream when data becomes ava
 Writes the given data to the stream. Returns an awaitable that is fulfilled with the number of bytes written once that data has successfully been written to the stream.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
 `string $data`
 :   The data to write to the stream.
 
 `float $timeout = 0`
-:   Number of seconds until the coroutine is rejected with a `\Icicle\Awaitable\Exception\TimeoutException` and the stream is closed if the data cannot be written to the stream. Use `0` for no timeout.
+:   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException` and the stream is closed if the data cannot be written to the stream. Use `0` for no timeout.
 
 #### Resolution value
 `int`
 :   Number of bytes written to the stream.
 
 #### Rejection reasons
-`\Icicle\Stream\Exception\UnwritableException`
+`Icicle\Stream\Exception\UnwritableException`
 :   If the stream has become unwritable. Use `isWritable()` to determine if a stream is still writable.
 
-`\Icicle\Awaitable\Exception\TimeoutException`
+`Icicle\Awaitable\Exception\TimeoutException`
 :   If the write timed out.
 
-`\Icicle\Stream\Exception\ClosedException`
+`Icicle\Stream\Exception\ClosedException`
 :   If the stream is closed while the write is still pending.
 
 ### end()
@@ -118,27 +118,27 @@ Writes the given data to the stream. Returns an awaitable that is fulfilled with
 Closes the stream once the data has been successfully written to the stream. Immediately makes the stream unwritable.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
 `string $data = ''`
 :   The data to write to the stream.
 
 `float $timeout = 0`
-:   Number of seconds until the coroutine is rejected with a `\Icicle\Awaitable\Exception\TimeoutException` and the stream is closed if the data cannot be written to the stream. Use `0` for no timeout.
+:   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException` and the stream is closed if the data cannot be written to the stream. Use `0` for no timeout.
 
 #### Resolution value
 `int`
 :   Number of bytes written to the stream.
 
 #### Rejection reasons
-`\Icicle\Stream\Exception\UnwritableException`
+`Icicle\Stream\Exception\UnwritableException`
 :   If the stream has become unwritable. Use `isWritable()` to determine if a stream is still writable.
 
-`\Icicle\Awaitable\Exception\TimeoutException`
+`Icicle\Awaitable\Exception\TimeoutException`
 :   If the write timed out.
 
-`\Icicle\Stream\Exception\ClosedException`
+`Icicle\Stream\Exception\ClosedException`
 :   If the stream is closed while the write is still pending.
 
 ### isWritable()
@@ -175,20 +175,20 @@ Moves the pointer to a new position in the stream. The `$whence` parameter is id
 :   Values identical to `$whence` values for `fseek()` such as `\SEEK_SET`.
 
 `float $timeout`
-:   Number of seconds until the coroutine is rejected with a `\Icicle\Awaitable\Exception\TimeoutException` and the stream is closed if the seek could not be performed. Use `0` for no timeout.
+:   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException` and the stream is closed if the seek could not be performed. Use `0` for no timeout.
 
 #### Resolution value
 `int`
 :   New pointer position.
 
 #### Rejection reasons
-`\Icicle\Stream\Exception\UnseekableException`
+`Icicle\Stream\Exception\UnseekableException`
 :   If the stream has become unseekable. Use `isSeekable()` to determine if a stream is still seekable.
 
-`\Icicle\Awaitable\Exception\TimeoutException`
+`Icicle\Awaitable\Exception\TimeoutException`
 :   If the seek timed out.
 
-`\Icicle\Stream\Exception\ClosedException`
+`Icicle\Stream\Exception\ClosedException`
 :   If the stream is closed while the seek is still pending.
 
 ### tell()
@@ -330,9 +330,9 @@ Creates a duplex stream from the given stream resource (note only stream resourc
 
 ### pipe()
 
-    \Icicle\Stream\pipe(
-        \Icicle\Stream\ReadableStream $source
-        \Icicle\Stream\WritableStream $destination,
+    Icicle\Stream\pipe(
+        Icicle\Stream\ReadableStream $source
+        Icicle\Stream\WritableStream $destination,
         bool $end = true,
         int $length = 0,
         string|null $byte = null
@@ -342,13 +342,13 @@ Creates a duplex stream from the given stream resource (note only stream resourc
 Returns a generator that should be used within a coroutine or used to create a new coroutine. Pipes all data read from this stream to the writable stream. If `$length` is not `0`, only `$length` bytes will be piped to the writable stream. The returned awaitable is fulfilled with the number of bytes piped once the writable stream is no longer writable, `$length` bytes have been piped, or `$byte` is encountered in the stream.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
-`\Icicle\Stream\ReadableStream $source`
+`Icicle\Stream\ReadableStream $source`
 :   A readable stream to pipe data from.
 
-`\Icicle\Stream\WritableStream $destination`
+`Icicle\Stream\WritableStream $destination`
 :   A writable stream to pipe data to. All data from `$source` will be written to `$dest` as it becomes readable.
 
 `bool $end = true`
@@ -361,29 +361,29 @@ Returns a generator that should be used within a coroutine or used to create a n
 :   If `$byte` is not `null`, piping will end once `$byte` is encountered in the stream.
 
 `float $timeout = 0`
-:   Number of seconds between successful read or write operations until the coroutine is rejected with a `\Icicle\Awaitable\Exception\TimeoutException` and the destination stream is closed if the data cannot be written to the stream. Use `0` for no timeout.
+:   Number of seconds between successful read or write operations until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException` and the destination stream is closed if the data cannot be written to the stream. Use `0` for no timeout.
 
 #### Resolution value
 `int`
 :   Number of bytes read from the source stream.
 
 #### Rejection reasons
-`\Icicle\Stream\Exception\UnreadableException`
+`Icicle\Stream\Exception\UnreadableException`
 :   If the source stream has become unreadable.
 
-`\Icicle\Stream\Exception\UnwritableException`
+`Icicle\Stream\Exception\UnwritableException`
 :   If the destination stream has become unreadable.
 
-`\Icicle\Awaitable\Exception\TimeoutException`
+`Icicle\Awaitable\Exception\TimeoutException`
 :   If a read or write operation timed out.
 
-`\Icicle\Exception\InvalidArgumentError`
+`Icicle\Exception\InvalidArgumentError`
 :   If the length is invalid.
 
 ### readTo()
 
-    \Icicle\Stream\readTo(
-        \Icicle\Stream\ReadableStream $stream
+    Icicle\Stream\readTo(
+        Icicle\Stream\ReadableStream $stream
         int $length,
         float $timeout = 0
     ): \Generator
@@ -391,36 +391,36 @@ Returns a generator that should be used within a coroutine or used to create a n
 Coroutine that reads data from the given readable stream until the given number of bytes has been read from the stream.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
-`\Icicle\Stream\ReadableStream $stream`
+`Icicle\Stream\ReadableStream $stream`
 :   A readable stream to read from.
 
 `int $length`
 :   The maximum number of bytes to read from `$source`.
 
 `float $timeout = 0`
-:   Number of seconds until the coroutine is rejected with a `\Icicle\Awaitable\Exception\TimeoutException`. Use `0` for no timeout.
+:   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException`. Use `0` for no timeout.
 
 #### Resolution value
 `string`
 :   Data read from the stream.
 
 #### Rejection reasons
-`\Icicle\Stream\Exception\UnreadableException`
+`Icicle\Stream\Exception\UnreadableException`
 :   If the stream has become unreadable. Use `isReadable()` to determine if a string is still readable.
 
-`\Icicle\Awaitable\Exception\TimeoutException`
+`Icicle\Awaitable\Exception\TimeoutException`
 :   If the read timed out.
 
-`\Icicle\Exception\InvalidArgumentError`
+`Icicle\Exception\InvalidArgumentError`
 :   If the length is invalid.
 
 ### readUntil()
 
-    \Icicle\Stream\readUntil(
-        \Icicle\Stream\ReadableStream $stream
+    Icicle\Stream\readUntil(
+        Icicle\Stream\ReadableStream $stream
         string $needle,
         int $maxLength = 0,
         float $timeout = 0
@@ -429,10 +429,10 @@ Coroutine that reads data from the given readable stream until the given number 
 Coroutine that reads data from the given readable stream until the given string of bytes is read from the stream or the max length is reached. The matched string of bytes is included in the result string.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
-`\Icicle\Stream\ReadableStream $stream`
+`Icicle\Stream\ReadableStream $stream`
 :   A readable stream to read from.
 
 `string $needle`
@@ -442,26 +442,26 @@ Coroutine that reads data from the given readable stream until the given string 
 :   The maximum number of bytes to read from `$source`.
 
 `float $timeout = 0`
-:   Number of seconds until the coroutine is rejected with a `\Icicle\Awaitable\Exception\TimeoutException`. Use `0` for no timeout.
+:   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException`. Use `0` for no timeout.
 
 #### Resolution value
 `string`
 :   Data read from the stream.
 
 #### Rejection reasons
-`\Icicle\Stream\Exception\UnreadableException`
+`Icicle\Stream\Exception\UnreadableException`
 :   If the stream has become unreadable. Use `isReadable()` to determine if a string is still readable.
 
-`\Icicle\Awaitable\Exception\TimeoutException`
+`Icicle\Awaitable\Exception\TimeoutException`
 :   If the read timed out.
 
-`\Icicle\Exception\InvalidArgumentError`
+`Icicle\Exception\InvalidArgumentError`
 :   If the length is invalid.
 
 ### readAll()
 
-    \Icicle\Stream\readAll(
-        \Icicle\Stream\ReadableStream $stream
+    Icicle\Stream\readAll(
+        Icicle\Stream\ReadableStream $stream
         int $maxlength = 0,
         float $timeout = 0
     ): \Generator
@@ -469,10 +469,10 @@ Coroutine that reads data from the given readable stream until the given string 
 Coroutine that reads data from the given readable stream until stream is no longer readable or the max length is reached.
 
 !!! note
-    **Coroutine**: Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
+    [**Coroutine**](../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
 #### Parameters
-`\Icicle\Stream\ReadableStream $stream`
+`Icicle\Stream\ReadableStream $stream`
 :   A readable stream to read from.
 
 `int $maxLength = 0`
@@ -486,13 +486,13 @@ Coroutine that reads data from the given readable stream until stream is no long
 :   Data read from the stream.
 
 #### Rejection reasons
-`\Icicle\Stream\Exception\UnreadableException`
+`Icicle\Stream\Exception\UnreadableException`
 :   If the stream has become unreadable. Use `isReadable()` to determine if a string is still readable.
 
-`\Icicle\Awaitable\Exception\TimeoutException`
+`Icicle\Awaitable\Exception\TimeoutException`
 :   If the read timed out.
 
-`\Icicle\Exception\InvalidArgumentError`
+`Icicle\Exception\InvalidArgumentError`
 :   If the length is invalid.
 
 ### pair()
@@ -505,24 +505,24 @@ Coroutine that reads data from the given readable stream until stream is no long
 
 ### stdin()
 
-    Icicle\Stream\stdin(): \Icicle\Stream\ReadableStream
+    Icicle\Stream\stdin(): Icicle\Stream\ReadableStream
 
 #### Return value
-`\Icicle\Stream\ReadableStream`
+`Icicle\Stream\ReadableStream`
 :   Returns a global readable stream instance for STDIN.
 
 ### stdout()
 
-    Icicle\Stream\stdout(): \Icicle\Stream\WritableStream
+    Icicle\Stream\stdout(): Icicle\Stream\WritableStream
 
 #### Return value
-`\Icicle\Stream\WritableStream`
+`Icicle\Stream\WritableStream`
 :   Returns a global writable stream instance for STDOUT.
 
 ### stderr()
 
-    Icicle\Stream\stderr(): \Icicle\Stream\WritableStream
+    Icicle\Stream\stderr(): Icicle\Stream\WritableStream
 
 #### Return value
-`\Icicle\Stream\WritableStream`
+`Icicle\Stream\WritableStream`
 :   Returns a global writable stream instance for STDERR.
