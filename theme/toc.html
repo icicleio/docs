@@ -1,29 +1,34 @@
-{% if nav_item.children %}
-    <li class="toctree-l1 {% if nav_item.active%}current{%endif%}">
-        <span class="toctree-item toctree-heading">{{ nav_item.title }}</span>
-        <ol class="subnav">
-            {% for nav_item in nav_item.children %}
-                {% include 'toc.html' %}
+{% macro tree(item, level = 1, current = true, maxdepth = false) -%}
+{% if item.url %}
+<li class="toctree-item toctree-l{{ level }} {% if current and item.active %}current{% endif %}">
+    <a class="toctree-label {% if current and item.active %}current{% endif %}" href="{{ item.url }}">{{ item.title }}</a>
+{% else %}
+<li class="toctree-item toctree-l{{ level }}">
+    <span class="toctree-label {% if level == 1 %}toctree-heading{% endif %}">{{ item.title }}</span>
+{% endif %}
+
+    {% if maxdepth == false or level < maxdepth %}
+        {% if item.children %}
+        <ol>
+            {% for child in item.children %}
+                {{ tree(child, level + 1, current, maxdepth) }}
             {% endfor %}
         </ol>
-    </li>
-{% else %}
-    <li class="toctree-l2 {% if nav_item.active%}current{%endif%}">
-        <a class="toctree-item {% if nav_item.active%}current{%endif%}" href="{{ nav_item.url }}">{{ nav_item.title }}</a>
-        {% if nav_item == current_page %}
-            <ol class="subnav">
-            {% for toc_item in toc %}
-                <li class="toctree-l3 {% if toc_item.active%}current{%endif%}">
-                    <a class="toctree-item" href="{{ toc_item.url }}">{{ toc_item.title }}</a>
-
-                    <ol class="subnav">
-                    {% for toc_item in toc_item.children %}
-                        <li class="toctree-l4 {% if toc_item.active%}current{%endif%}"><a class="toctree-item" href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-                    {% endfor %}
-                    </ol>
-                </li>
+        {% elif item == current_page %}
+        <ol>
+            {% for child in toc %}
+                {{ tree(child, level + 1, false, level + 2) }}
             {% endfor %}
-            </ol>
+        </ol>
         {% endif %}
-    </li>
-{% endif %}
+    {% endif %}
+
+</li>
+{%- endmacro %}
+
+
+<ul>
+    {% for item in nav %}
+        {{ tree(item) }}
+    {% endfor %}
+</ul>

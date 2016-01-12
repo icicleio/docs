@@ -71,11 +71,7 @@
             </div>
 
             <nav class="page-nav" data-spy="affix" role="navigation" aria-label="main navigation">
-                <ul class="current">
-                    {% for nav_item in nav %}
-                        {% include "toc.html" %}
-                    {% endfor %}
-                </ul>
+                {% include "toc.html" %}
             </nav>
 
             <div class="container">

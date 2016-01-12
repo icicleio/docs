@@ -447,23 +447,23 @@ thead > tr > th:nth-child(even) {
     list-style-type: none;
 }
 
-.toctree-item {
+.toctree-label {
     display: block;
     padding: 0.5rem 1rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* top border if no item above it */
-.page-nav :not(.subnav) > li:first-child > .toctree-item, .toctree-l1 > .toctree-item {
+.page-nav ul > li:first-child > .toctree-label, .toctree-heading {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-a.toctree-item:hover {
+a.toctree-label:hover {
     text-decoration: none;
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-a.toctree-item.current {
+a.toctree-label.current {
     background-color: #fff;
     text-decoration: underline;
 }
@@ -474,20 +474,24 @@ a.toctree-item.current {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.toctree-l2.current {
+.toctree-item.current {
     background-color: #f5f5f5;
 }
 
-.toctree-l2 > .toctree-item {
-    padding-left: 1rem;
-}
-
-.toctree-l3 > .toctree-item {
+.toctree-l2 > .toctree-label {
     padding-left: 2rem;
 }
 
-.toctree-l4 > .toctree-item {
+.toctree-l3 > .toctree-label {
     padding-left: 3rem;
+}
+
+.toctree-l4 > .toctree-label {
+    padding-left: 4rem;
+}
+
+.toctree-l5 > .toctree-label {
+    padding-left: 5rem;
 }
 
 
