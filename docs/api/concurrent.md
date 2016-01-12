@@ -123,13 +123,11 @@ Sets the fork's scheduling priority as a percentage.
 !!! note
     On many systems, only the superuser can increase the priority of a process.
 
----
 
 ## Process\ChannelledProcess
 
 An execution context that uses a separately executed PHP process. Implements [`Icicle\Concurrent\Strand`](#strand).
 
----
 
 ## Process\Process
 
@@ -230,7 +228,6 @@ Gets the process output stream (STDERR).
 
 Gets the process error stream (STDOUT).
 
----
 
 ## Sync\ChannelledStream
 An implementation of a standalone [`Icicle\Concurrent\Sync\Channel`](#channel) that uses a pair of streams.
@@ -251,8 +248,6 @@ Creates a new channel instance from one or two streams. Either a single [`Duplex
 `Icicle\Stream\WritableStream|null $write`
 :   The writable stream to use for the channel if `$read` was only a readable stream.
 
----
-
 ### isOpen()
 
     ChannelledStream::isOpen(): bool
@@ -265,7 +260,6 @@ Determines if the channel is open.
 
 Closes the channel.
 
----
 
 ## Sync\FileMutex
 A cross-platform mutex that implements [`Icicle\Concurrent\Sync\Mutex`](#syncmutex) that uses exclusive files as the lock mechanism.
@@ -275,7 +269,6 @@ This implementation avoids using [`flock()`](http://php.net/flock) because `floc
 !!! note
     This mutex implementation is not always atomic and depends on the operating system's implementation of file creation operations. Use this implementation only if no other mutex types are available.
 
----
 
 ## Sync\Lock
 A handle on an acquired lock from a synchronization object.
@@ -292,7 +285,6 @@ Checks if the lock has already been released. Returns true if the lock has alrea
 
 Releases the lock to the mutex or semaphore that the lock was acquired from.
 
----
 
 ## Sync\Mutex
 A non-blocking synchronization primitive that can be used for mutual exclusion across contexts.
@@ -312,7 +304,6 @@ Acquires a lock on the mutex.
 `Icicle\Concurrent\Sync\Lock`
 :   Lock object which can be used to release the acquired.
 
----
 
 ## Sync\Parcel
 A container object for sharing a value across contexts. Implements [`Icicle\Concurrent\Sync\Parcel`](#syncparcel).
@@ -344,7 +335,6 @@ Frees the shared object from memory. The memory containing the shared value will
 
 Calling `free()` on an object already freed will have no effect. If this method is not called, the parcel will remain in memory until the system is restarted.
 
----
 
 ## Sync\Parcel
 A parcel object for sharing data across execution contexts.
@@ -378,7 +368,6 @@ Calls the given callback function while maintaining a lock on the parcel so only
 `mixed`
 :   The new parcel value.
 
----
 
 ## Sync\PosixSemaphore
 A non-blocking, interprocess POSIX semaphore that implements [`Icicle\Concurrent\Sync\Semaphore`](#syncsemaphoreinterface).
@@ -419,7 +408,6 @@ Sets the access permissions of the semaphore.
 
 Removes the semaphore if it still exists. If this method is not called, the semaphore will remain in existence until the system is restarted.
 
----
 
 ## Sync\Semaphore
 A non-blocking counting semaphore.
@@ -453,28 +441,24 @@ If there are one or more locks available, this function resolves immediately wit
 `Icicle\Concurrent\Sync\Lock`
 :   Lock object which can be used to release the acquired.
 
----
 
 ## Threading\Mutex
 A thread-safe, asynchronous mutex that implements [`Icicle\Concurrent\Sync\Mutex`](#syncmutexinterface) using the pthreads locking mechanism.
 
 Compatible with POSIX systems and Microsoft Windows.
 
----
 
 ## Threading\Parcel
 A thread-safe container that shares a value between multiple threads. Implements [`Icicle\Concurrent\Sync\Parcel`](#syncparcelinterface).
 
 This parcel implementation is preferred when sharing objects between threads.
 
----
 
 ## Threading\Semaphore
 An asynchronous semaphore based on pthreads' synchronization methods. Implements [`Icicle\Concurrent\Sync\Semaphore`](#syncsemaphoreinterface).
 
 This is an implementation of a thread-safe semaphore that has non-blocking acquire methods. There is a small tradeoff for asynchronous semaphores; you may not acquire a lock immediately when one is available and there may be a small delay. However, the small delay will not block the thread.
 
----
 
 ## Threading\Thread
 An execution context using native multi-threading. Implements [`Icicle\Concurrent\Context`](#contextinterface).
@@ -493,7 +477,7 @@ Thread::spawn(
 Creates a new thread and immediately starts it. All arguments following the function to invoke in the thread will be copied and passed as parameters to the function to invoke.
 
 #### Parameters
-`callable(...$args): mixed$function`
+`callable(...$args): mixed $function`
 :   The function to invoke inside the new thread.
 
 `mixed ...$args`
@@ -509,3 +493,368 @@ $thread = Thread::spawn(function ($value) {
     echo $value === 42 ? 'true' : 'false';
 }, 42);
 ```
+
+
+## Worker\AbstractWorker
+Base class for most common types of task workers.
+
+
+## Worker\DefaultPool
+The default [Worker\Pool](#workerpool) implementation.
+
+### Constructor
+
+    DefaultPool::__construct(
+        int $minSize = null,
+        int $maxSize = null,
+        WorkerFactory $factory = null
+    )
+
+Creates a new worker pool.
+
+#### Parameters
+`int|null $minSize`
+:   The minimum number of workers the pool should spawn. Defaults to `Pool::DEFAULT_MIN_SIZE`.
+
+`int|null $maxSize`
+:   The maximum number of workers the pool should spawn. Defaults to `Pool::DEFAULT_MAX_SIZE`.
+
+`\Icicle\Concurrent\Worker\WorkerFactory|null $factory`
+:   A worker factory to be used to create new workers.
+
+
+## Worker\DefaultQueue
+The default [`Worker\Queue`](#workerqueue) implementation.
+
+### Constructor
+
+    DefaultPool::__construct(
+        int $minSize = null,
+        int $maxSize = null,
+        WorkerFactory $factory = null
+    )
+
+Creates a new worker pool.
+
+#### Parameters
+`int|null $minSize`
+:   The minimum number of workers the pool should spawn. Defaults to `Pool::DEFAULT_MIN_SIZE`.
+
+`int|null $maxSize`
+:   The maximum number of workers the pool should spawn. Defaults to `Pool::DEFAULT_MAX_SIZE`.
+
+`\Icicle\Concurrent\Worker\WorkerFactory|null $factory`
+:   A worker factory to be used to create new workers.
+
+
+## Worker\DefaultWorkerFactory
+The built-in [`Worker\WorkerFactory`](#workerworkerfactory) type.
+
+The type of worker created by this factory depends on the extensions available. If multi-threading is enabled, a `WorkerThread` will be created. If threads are not available, a `WorkerFork` will be created if forking is available, otherwise a `WorkerProcess` will be created.
+
+
+## Worker\Environment
+`implements \ArrayAccess, \Countable`
+
+A persistent object storage type provided by a worker.
+
+When a worker is created, it initializes a new environment object, which is stored in memory that is local to that worker. When a worker executes a task, this persistent environment object is given to the task to use.
+
+An environment is not destroyed until the worker that owns it is shut down.
+
+
+### exists()
+
+    Environment::exists(string $key): bool
+
+Checks if a given key exists.
+
+#### Parameters
+`string $key`
+:   The key to check.
+
+#### Return value
+True if the key exists, otherwise false.
+
+
+### get()
+
+    Environment::get(string $key): mixed|null
+
+#### Parameters
+`string $key`
+:   The key to get.
+
+#### Return value
+The value stored for the given key, or `null` if the key does not exist.
+
+
+### set()
+
+    Environment::set(string $key, mixed $value, int $ttl = 0)
+
+Sets a key/value pair in the environment.
+
+#### Parameters
+`string $key`
+:   The key to set.
+
+`mixed $value`
+:   The value to set.
+
+`int $ttl`
+:   Number of seconds until data is automatically deleted. Use 0 for unlimited TTL.
+
+
+### delete()
+
+    Environment::delete(string $key)
+
+Deletes a value based on its key.
+
+#### Parameters
+`string $key`
+:   The key to delete.
+
+
+### count()
+
+    Environment::count(): int
+
+Gets the number of values in the environment.
+
+
+### clear()
+
+    Environment::clear()
+
+Removes all values.
+
+
+## Worker\Pool
+A pool of workers that can be used to execute multiple tasks synchronously.
+
+A worker pool is a collection of worker threads that can perform multiple tasks simultaneously. The load on each worker is balanced such that tasks are completed as soon as possible and workers are used efficiently.
+
+
+### getWorkerCount()
+
+    Pool::getWorkerCount(): int
+
+Gets the number of workers currently running in the pool.
+
+#### Return value
+The number of workers.
+
+
+### getIdleWorkerCount()
+
+    Pool::getIdleWorkerCount(): int
+
+Gets the number of workers that are currently idle.
+
+#### Return value
+The number of idle workers.
+
+
+### getMinSize()
+
+    Pool::getMinSize(): int
+
+Gets the minimum number of workers the pool may have idle.
+
+#### Return value
+The minimum number of workers.
+
+
+### getMaxSize()
+
+    Pool::getMaxSize(): int
+
+Gets the maximum number of workers the pool may spawn to handle concurrent tasks.
+
+#### Return value
+The maximum number of workers.
+
+
+## Worker\Queue
+
+### pull()
+
+    Queue::pull(): Worker
+
+Pulls a worker from the queue. The worker is marked as busy and will only be reused if the queue runs out of idle workers.
+
+#### Exceptions
+`Icicle\Concurrent\Exception\StatusError`
+:   If the queue is not running.
+
+#### Return value
+A worker pulled from the queue.
+
+
+### push()
+
+    Queue::push(Worker $worker)
+
+Pushes a worker into the queue, marking it as idle and available to be pulled from the queue again.
+
+#### Parameters
+`Icicle\Concurrent\Worker\Worker $worker`
+:   The worker to push.
+
+#### Exceptions
+`Icicle\Concurrent\Exception\StatusError`
+:   If the queue is not running.
+
+`Icicle\Exception\InvalidArgumentError`
+:   If the given worker is not part of this queue or was already pushed into the queue.
+
+
+### getWorkerCount()
+
+    Pool::getWorkerCount(): int
+
+Gets the number of workers currently running in the queue.
+
+#### Return value
+The number of workers.
+
+
+### getIdleWorkerCount()
+
+    Pool::getIdleWorkerCount(): int
+
+Gets the number of workers that are currently idle.
+
+#### Return value
+The number of idle workers.
+
+
+### getMinSize()
+
+    Pool::getMinSize(): int
+
+Gets the minimum number of workers the queue may have idle.
+
+#### Return value
+The minimum number of workers.
+
+
+### getMaxSize()
+
+    Pool::getMaxSize(): int
+
+Gets the maximum number of workers the queue may spawn to handle concurrent tasks.
+
+#### Return value
+The maximum number of workers.
+
+
+## Worker\Task
+A runnable unit of execution.
+
+### Task::run()
+
+    Task::run(Environment $environment): mixed
+
+Runs the task inside the caller's context.
+
+Does not have to be a coroutine, can also be a regular function returning a value.
+
+#### Parameters
+`Environment $environment`
+:   The worker environment that the task is being run in.
+
+#### Return value
+Any return value that should be passed to the caller running the task.
+
+
+## Worker\Worker
+An interface for a parallel worker thread that runs a queue of tasks.
+
+### isRunning()
+
+    Worker::isRunning(): bool
+
+Checks if the worker is running.
+
+#### Return value
+True if the worker is running, otherwise false.
+
+
+### isIdle()
+
+    Worker::isIdle(): bool
+
+Checks if the worker is currently idle.
+
+#### Return value
+True if the worker is idle, otherwise false.
+
+
+### start()
+
+    Worker::start()
+
+Starts the context execution.
+
+
+### enqueue()
+
+    Worker::enqueue(Task $task): \Generator<mixed>
+
+Enqueues a task to be executed by the worker.
+
+#### Parameters
+`Task $task`
+:   The task to enqueue.
+
+#### Return value
+Generator that resolves with the task return value.
+
+
+### shutdown()
+
+    Worker::shutdown(): \Generator<int>
+
+#### Return value
+Generator that resolves with the underlaying context's exit code.
+
+
+### kill()
+
+    Worker::kill()
+
+Immediately kills the worker and the underlaying context.
+
+
+## Worker\WorkerFactory
+Interface for factories used to create new workers.
+
+### create()
+
+    WorkerFactory::create(): Worker
+
+Creates a new worker instance.
+
+#### Return value
+The newly created worker.
+
+
+## Worker\WorkerFork
+Implements the [`Worker\Worker`](#workerworker) interface.
+
+A forked process that executes task objects.
+
+
+## Worker\WorkerProcess
+Implements the [`Worker\Worker`](#workerworker) interface.
+
+A PHP process that executes task objects.
+
+
+## Worker\WorkerThread
+Implements the [`Worker\Worker`](#workerworker) interface.
+
+A worker thread that executes task objects.
