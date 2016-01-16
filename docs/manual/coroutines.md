@@ -4,7 +4,7 @@ When a coroutine yields a [awaitable](awaitables.md), execution of the coroutine
 
 Note that **no callbacks need to be registered** with the awaitables yielded in a coroutine and **errors are reported using thrown exceptions**, which will bubble up to the calling context if uncaught in the same way exceptions bubble up in synchronous code.
 
-The example below creates an `Icicle\Coroutine\Coroutine` instance from a function returning a `Generator`. (`Icicle\Dns\Connector\Connector` in the [DNS component](../api/dns.md) uses a coroutine structured similarly to the one below, except it attempts to connect to other IPs returned from the resolver if the first one fails.)
+The example below creates an `Icicle\Coroutine\Coroutine` instance from a function returning a `Generator`. (`Icicle\Dns\Connector\Connector` in the [DNS component](../api/Dns/index.md) uses a coroutine structured similarly to the one below, except it attempts to connect to other IPs returned from the resolver if the first one fails.)
 
 ```php
 use Icicle\Coroutine\Coroutine;
@@ -36,7 +36,7 @@ $coroutine = new Coroutine($generator());
 Loop\run();
 ```
 
-The example above does the same thing as the example in the section on [awaitables](../api/awaitable.md), but instead uses a coroutine to **structure asynchronous code like synchronous code**. Fulfillment values of awaitables are accessed through simple variable assignments and exceptions used to reject awaitables are caught using a try/catch block, rather than creating and registering callback functions to each awaitable.
+The example above does the same thing as the example in the section on [awaitables](../api/Awaitable/index.md), but instead uses a coroutine to **structure asynchronous code like synchronous code**. Fulfillment values of awaitables are accessed through simple variable assignments and exceptions used to reject awaitables are caught using a try/catch block, rather than creating and registering callback functions to each awaitable.
 
 **`Icicle\Coroutine\Coroutine` instances are also [awaitables](awaitables.md), implementing `Icicle\Awaitable\Awaitable`.** The coroutine is fulfilled with the last value yielded from the generator (or fulfillment value of the last yielded awaitable) or rejected if an exception is thrown from the generator ([note in v2.0 (PHP 7 only) return is used to fulfill a coroutine](#coroutines-in-v1x-vs-v2x)). A coroutine may then yield other coroutines, suspending execution until the yielded coroutine has resolved. If a coroutine yields a `\Generator`, it will automatically be converted to a `Coroutine` and handled in the same way as a yielded coroutine. APIs in Icicle have methods that return `\Generator` objects that *must* be yielded in a coroutine or wrapped with `new Coroutine()` to create an awaitable (see warning box below).
 
@@ -140,7 +140,7 @@ The example above will output the string `[1][2][3][1][2][3][1][2][1][2][1][2][1
 
 Coroutines begin execution immediately upon construction.
 
-Coroutine objects have some methods for controlling execution once they are created. See the API documentation for [`Icicle\Coroutine\Coroutine`](../api/coroutine.md#coroutine) for available methods.
+Coroutine objects have some methods for controlling execution once they are created. See the API documentation for [`Icicle\Coroutine\Coroutine`](../api/Coroutine/Coroutine.md) for available methods.
 
 Coroutines are the basic units of execution in asynchronous code, and allow you to write expressive functions that return asynchronously without callbacks or boilerplate code.
 

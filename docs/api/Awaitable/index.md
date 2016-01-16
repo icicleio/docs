@@ -4,7 +4,7 @@ Awaitables are objects that act as placeholders for the future value of an async
 
 Callback functions are the primary way of accessing the resolution value of awaitables. Unlike other APIs that use callbacks, **awaitables provide an execution context to callback functions, allowing callbacks to return values and throw exceptions**.
 
-Callback functions registered to awaitables are always [invoked asynchronously](../manual/awaitables.md#asynchronous-callback-invocation) to ensure consistent behavior regardless of the state of the awaitable at the time callbacks are registered.
+Callback functions registered to awaitables are always [invoked asynchronously](../../manual/awaitables.md#asynchronous-callback-invocation) to ensure consistent behavior regardless of the state of the awaitable at the time callbacks are registered.
 
 
 ## Awaitable
@@ -181,7 +181,7 @@ The fulfillment value of the awaitable is returned or the exception used to reje
 Awaitables can be created in a few different ways depending on your needs. All awaitables implement `Icicle\Awaitable\Awaitable`, which is described in the section below.
 
 !!! tip
-    It is rare to need to create an awaitable instance yourself in Icicle. Usually an awaitable is created by calling a method or function that returns an awaitable or by creating a [Coroutine](coroutine.md) (a special type of awaitable) from a method or function returning a `\Generator`.
+    It is rare to need to create an awaitable instance yourself in Icicle. Usually an awaitable is created by calling a method or function that returns an awaitable or by creating a [Coroutine](../Coroutine/Coroutine.md) (a special type of awaitable) from a method or function returning a `\Generator`.
 
 
 ### Promise
@@ -196,7 +196,7 @@ $resolver = function (callable $resolve, callable $reject) {
     // $resolve and $reject can be directly called
     // or passed as callbacks to other functions.
     $resolve($result);
-    
+
     return function (\Exception $exception) {
         // Perform any necessary cleanup when the awaitable is cancelled.
     };
@@ -212,7 +212,7 @@ If the resolver function throws an exception, the awaitable is rejected with tha
 
 ##### Example
 
-The following code creates an awaitable that is resolved when a connection is successfully made to a server. The `connect()` method of the `Icicle\Socket\Client\Connector` class in the [Socket](socket.md) component use a similar approach to establish connections asynchronously.
+The following code creates an awaitable that is resolved when a connection is successfully made to a server. The `connect()` method of the [`Icicle\Socket\Connector\Connector`](../Socket/Connector.Connector.md) class in the Socket component use a similar approach to establish connections asynchronously.
 
 ```php
 use Icicle\Loop;
@@ -238,17 +238,17 @@ $awaitable = new Promise(
             $resolve, $reject
         ) {
             $await->free();
-            
+
             if ($expired) {
                 $reject('Connecting to the DNS server timed out.');
                 return;
             }
-            
+
             $resolve($client);
         });
 
         $await->listen(10);
-        
+
         return function (\Exception $exception) use ($await) {
             $await->free();
         };
@@ -263,9 +263,9 @@ Loop\run();
 
 ### Delayed
 
-A `Icicle\Awaitable\Delayed` object is a publicly resolvable awaitable. This class has public methods `resolve()` and `reject()`, allowing the awaitable object to be resolved even by consumers of the awaitable (code using the awaitable rather than code that created the awaitable). *These objects should not be returned as part of a public interface*, but rather used internally within objects or within [coroutines](../manual/coroutines.md). The constructor takes an optional function that is invoked if the awaitable is cancelled.
+A `Icicle\Awaitable\Delayed` object is a publicly resolvable awaitable. This class has public methods `resolve()` and `reject()`, allowing the awaitable object to be resolved even by consumers of the awaitable (code using the awaitable rather than code that created the awaitable). *These objects should not be returned as part of a public interface*, but rather used internally within objects or within [coroutines](../../manual/coroutines.md). The constructor takes an optional function that is invoked if the awaitable is cancelled.
 
-`Icicle\Awaitable\Delayed` should be used when possible as it is more performant than `Icicle\Awaitable\Promise` (and easier to create and resolve). This is the most common type of awaitable used in Icicle since most functions and methods are written as [coroutines](../manual/coroutines.md), never exposing the awaitables used within the coroutine as part of a public API.
+`Icicle\Awaitable\Delayed` should be used when possible as it is more performant than `Icicle\Awaitable\Promise` (and easier to create and resolve). This is the most common type of awaitable used in Icicle since most functions and methods are written as [coroutines](../../manual/coroutines.md), never exposing the awaitables used within the coroutine as part of a public API.
 
 ```php
 use Icicle\Awaitable\Delayed;

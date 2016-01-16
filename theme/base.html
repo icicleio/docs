@@ -4,36 +4,47 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {% if page_description %}<meta name="description" content="{{ page_description }}">{% endif %}
-        {% if site_author %}<meta name="author" content="{{ site_author }}">{% endif %}
-        {% block htmltitle %}
-        <title>{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}</title>
-        {% endblock %}
+        {%- if page_description -%}
+            <meta name="description" content="{{ page_description }}">
+        {%- endif %}
+        {% if site_author -%}
+            <meta name="author" content="{{ site_author }}">
+        {%- endif %}
+        {% block htmltitle -%}
+        <title>
+            {%- if page_title -%}
+                {{ page_title }} - {% endif -%}
+            {{ site_name -}}
+        </title>
+        {%- endblock %}
 
-        {% if favicon %}<link rel="shortcut icon" href="{{ favicon }}">
-        {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
+        {% if favicon -%}
+            <link rel="shortcut icon" href="{{ favicon }}">
+        {%- else -%}
+            <link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">
+        {%- endif %}
 
         <meta name="theme-color" content="#71b2e3">
         <link rel="stylesheet" href="{{ base_url }}/css/theme.css">
         <link rel="stylesheet" href="{{ base_url }}/css/font-awesome.min.css">
         <link rel="stylesheet" href="{{ base_url }}/css/highlight.css">
-        {%- for path in extra_css %}
-        <link rel="stylesheet" href="{{ path }}">
+        {%- for path in extra_css -%}
+            <link rel="stylesheet" href="{{ path }}">
         {%- endfor %}
 
-        {% if current_page %}
+        {% if current_page -%}
         <script>
             // Current page data
             var mkdocs_page_name = "{{ page_title }}";
             var mkdocs_page_input_path = "{{ current_page.input_path }}";
             var mkdocs_page_url = "{{ current_page.abs_url }}";
         </script>
-        {% endif %}
+        {%- endif %}
         <script src="{{ base_url }}/js/highlight.pack.js"></script>
 
         {%- block extrahead %} {% endblock %}
 
-        {%- for path in extra_javascript %}
+        {% for path in extra_javascript -%}
         <script src="{{ path }}"></script>
         {%- endfor %}
     </head>
@@ -48,12 +59,12 @@
             </nav>
 
             <div class="pagination-nav" role="navigation" aria-label="related navigation">
-                {% if previous_page %}
+                {% if previous_page -%}
                     <a href="{{ previous_page.url }}" title="{{ previous_page.title }}"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-                {% endif %}
-                {% if next_page %}
+                {%- endif %}
+                {% if next_page -%}
                     <a href="{{ next_page.url }}" title="{{ next_page.title }}">Next <span class="fa fa-arrow-circle-right"></span></a>
-                {% endif %}
+                {%- endif %}
             </div>
         </aside>
 
@@ -86,19 +97,19 @@
         <div class="pane content-pane">
             <div class="content-container">
                 <main role="main">
-                    {% block content %}
+                    {% block content -%}
                         {% include "breadcrumbs.html" %}
 
-                        {% if page_title %}
+                        {% if page_title -%}
                             <h1>{{ page_title }}</h1>
-                        {% endif %}
+                        {%- endif %}
 
                         {{ content }}
 
-                        {% if next_page %}
+                        {% if next_page -%}
                             <a href="{{ next_page.url }}" class="next-page-button">Next: {{ next_page.title }} <span class="fa fa-arrow-circle-right"></span></a>
-                        {% endif %}
-                    {% endblock %}
+                        {%- endif %}
+                    {%- endblock %}
                 </main>
 
             	{%- block footer %}

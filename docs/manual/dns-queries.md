@@ -36,7 +36,7 @@ Executors are the foundation of the DNS package, performing any DNS query and re
 
 ### Using an Executor
 
-The global DNS executor (see the [DNS API docs](../api/dns.md#executor) for information on setting the global executor if desired) may used by calling the `Icicle\Dns\execute()` function with the domain and type of DNS query to be performed. The type may be a case-insensitive string naming a record type (e.g., `'A'`, `'MX'`, `'NS'`, `'PTR'`, `'AAAA'`) or the integer value corresponding to a record type (`LibDNS\Records\ResourceQTypes` defines constants corresponding to a the integer value of a type). `execute()` returns a coroutine fulfilled with an instance of `LibDNS\Messages\Message` that represents the response from the name server. `LibDNS\Messages\Message` objects have several methods that will need to be used to fetch the data in the response.
+The global DNS executor (see the [DNS API docs](../api/Dns/Executor.Executor.md) for information on setting the global executor if desired) may used by calling the `Icicle\Dns\execute()` function with the domain and type of DNS query to be performed. The type may be a case-insensitive string naming a record type (e.g., `'A'`, `'MX'`, `'NS'`, `'PTR'`, `'AAAA'`) or the integer value corresponding to a record type (`LibDNS\Records\ResourceQTypes` defines constants corresponding to a the integer value of a type). `execute()` returns a coroutine fulfilled with an instance of `LibDNS\Messages\Message` that represents the response from the name server. `LibDNS\Messages\Message` objects have several methods that will need to be used to fetch the data in the response.
 
 - `getAnswerRecords()`: Returns an instance of `LibDNS\Records\RecordCollection`, a traversable collection of `LibDNS\Record\Resource` objects containing the response answer records.
 - `getAuthorityRecords()`: Returns an instance of `LibDNS\Records\RecordCollection` containing the response authority records.
@@ -79,7 +79,7 @@ Loop\run();
 
 A resolver finds the IP addresses for a given domain. A resolver is essentially a specialized executor that performs only `A` or `AAAA` queries, fulfilling the coroutine returned from `resolve()` with an array of IP addresses (even if only one or zero IP addresses is found, the coroutine is still resolved with an array).
 
-The global DNS resolver (see the [DNS API docs](../api/dns.md#resolver) for information on setting the global resolver if desired) may used by calling the `Icicle\Dns\resolve()` function with the domain name to resolve.
+The global DNS resolver (see the [DNS API docs](../api/Dns/Resolver.Resolver.md) for information on setting the global resolver if desired) may used by calling the `Icicle\Dns\resolve()` function with the domain name to resolve.
 
 ##### Example
 
@@ -109,11 +109,11 @@ Loop\run();
 
 Connectors first resolve the hostname provided, then make a connection to the resolved IP address, resolving the coroutine with an instance of `Icicle\Socket\Socket`. `Icicle\Dns\Connector\Connector` extends `Icicle\Socket\Connector\Connector`, allowing it to be used anywhere a standard connector is required or allowing components to require a resolving connector (generally recommended).
 
-`Icicle\Dns\Connector\Connect` defines a single method, [`connect()`](../api/dns.md#connect) that should resolve a host name and connect to one of the resolved servers, resolving the coroutine with the connected client.
+`Icicle\Dns\Connector\Connector` defines a single method, [`connect()`](../api/Dns/Connector.Connector.md#connect) that should resolve a host name and connect to one of the resolved servers, resolving the coroutine with the connected client.
 
 `Icicle\Dns\Connector\DefaultConnector` will attempt to connect to one of the IP addresses found for a given host name. If the server at that IP is unresponsive, the connector will attempt to establish a connection to the next IP in the list until a server accepts the connection. Only if the connector is unable to connect to all of the IPs will it reject the coroutine returned from `connect()`. The constructor also optionally accepts an instance of `Icicle\Socket\Connector\Connector` if custom behavior is desired when connecting to the resolved host.
 
-Generally code can rely on the global connector (see the [DNS API docs](../api/dns.md#resolver) for information on setting the global connector if desired) using the `Icicle\Dns\connect()` function to make network connections.
+Generally code can rely on the global connector (see the [DNS API docs](../api/Dns/Resolver.Resolver.md) for information on setting the global connector if desired) using the `Icicle\Dns\connect()` function to make network connections.
 
 ##### Example
 

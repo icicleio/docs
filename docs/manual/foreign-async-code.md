@@ -20,7 +20,7 @@ $promisified()->then(function ($greeting) {
 });
 ```
 
-You can also use awaitable objects from other libraries that implement other interfaces with [`Icicle\Awaitable\adapt()`](). This function takes any object with a `then(callable $onFulfilled, callable $onRejected)` method and returns a new Icicle awaitable that wraps around the original object. Below is an example of adapting a [ReactPHP](http://reactphp.org) awaitable:
+You can also use awaitable objects from other libraries that implement other interfaces with [`Icicle\Awaitable\adapt()`](../api/Awaitable/index.md#adapt). This function takes any object with a `then(callable $onFulfilled, callable $onRejected)` method and returns a new Icicle awaitable that wraps around the original object. Below is an example of adapting a [ReactPHP](http://reactphp.org) awaitable:
 
 ```php
 $reactAwaitable = new \React\Awaitable\Awaitable(function ($resolve, $reject) {
@@ -30,7 +30,7 @@ $reactAwaitable = new \React\Awaitable\Awaitable(function ($resolve, $reject) {
 $icicleAwaitable = Icicle\Awaitable\adapt($reactAwaitable);
 ```
 
-See the [Awaitable API documentation](../api/awaitable.md) for more information on `Icicle\Awaitable\adapt()`.
+See the [Awaitable API documentation](../api/Awaitable/index.md) for more information on `Icicle\Awaitable\adapt()`.
 
 
 ## Using the event loop in ReactPHP code

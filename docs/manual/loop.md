@@ -38,7 +38,7 @@ Second.
 
 ## Loop implementations
 
-There are currently three loop classes, each implementing `Icicle\Loop\Loop`. Any custom implementation written must also implement this interface. Custom loop implementations can be used as the active event loop using the [`Icicle\Loop\loop()`](../api/loop.md#loop) function.
+There are currently three loop classes, each implementing `Icicle\Loop\Loop`. Any custom implementation written must also implement this interface. Custom loop implementations can be used as the active event loop using the [`Icicle\Loop\loop()`](../api/Loop/index.md#loop) function.
 
 - `Icicle\Loop\SelectLoop`: Works with any installation of PHP since it relies only on core functions. Uses `stream_select()` or `usleep()` depending on the events pending in the loop.
 - `Icicle\Loop\EvLoop`: Uses libev to create an event loop and requires the [`ev` pecl extension](https://pecl.php.net/package/ev). Preferred implementation for best performance.

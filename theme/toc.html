@@ -1,34 +1,57 @@
-{% macro tree(item, level = 1, current = true, maxdepth = false) -%}
-{% if item.url %}
-<li class="toctree-item toctree-l{{ level }} {% if current and item.active %}current{% endif %}">
-    <a class="toctree-label {% if current and item.active %}current{% endif %}" href="{{ item.url }}">{{ item.title }}</a>
-{% else %}
-<li class="toctree-item toctree-l{{ level }}">
-    <span class="toctree-label {% if level == 1 %}toctree-heading{% endif %}">{{ item.title }}</span>
-{% endif %}
+{%- macro tree(item, level = 1, maxdepth = false, parent = false) -%}
+{%- if parent.title != item.title -%}
+    {# Trickery to figure out if the current item has an "index" child. #}
+    {%- set index = [false] -%}
+    {%- if not item.url -%}
+        {%- if item.children[0].title == item.title -%}
+            {% set _ = index.append(item.children[0]) %}
+        {%- endif -%}
+    {%- endif -%}
+    {%- set index = index.pop() -%}
+    {%- set url = item.url or index.url -%}
+    {%- set current = item == current_page or index == current_page -%}
 
-    {% if maxdepth == false or level < maxdepth %}
-        {% if item.children %}
+    {%- if url -%}
+    <li class="toctree-item toctree-l{{ level }}
+        {%- if current %} current{% endif -%}
+    ">
+        <a class="toctree-label
+            {%- if not url and level == 1 %} toctree-heading{% endif -%}" href="{{ url }}">
+            {{- item.title -}}
+        </a>
+    {%- else -%}
+    <li class="toctree-item toctree-l{{ level }}
+        {%- if level == 1 %} toctree-lheading{% endif -%}
+    ">
+        <span class="toctree-label
+            {%- if level == 1 %} toctree-heading{% endif -%}">{{- item.title -}}</span>
+    {%- endif -%}
+
+    {% if maxdepth == false or level < maxdepth -%}
+        {%- if current -%}
         <ol>
-            {% for child in item.children %}
-                {{ tree(child, level + 1, current, maxdepth) }}
+            {% for child in toc -%}
+                {{ tree(child, level + 1, level + 1) }}
             {% endfor %}
         </ol>
-        {% elif item == current_page %}
-        <ol>
-            {% for child in toc %}
-                {{ tree(child, level + 1, false, level + 2) }}
-            {% endfor %}
-        </ol>
-        {% endif %}
-    {% endif %}
+        {%- endif %}
 
-</li>
-{%- endmacro %}
+        {% if item.children -%}
+        <ol>
+            {% for child in item.children -%}
+                {{ tree(child, level + 1, maxdepth, item) }}
+            {%- endfor %}
+        </ol>
+        {%- endif %}
+    {%- endif -%}
+
+    </li>
+{%- endif -%}
+{%- endmacro -%}
 
 
 <ul>
-    {% for item in nav %}
+    {% for item in nav -%}
         {{ tree(item) }}
-    {% endfor %}
+    {%- endfor %}
 </ul>

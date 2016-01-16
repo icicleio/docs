@@ -4,7 +4,7 @@ Awaitables are objects that act as placeholders for the future value of an async
 
 Callback functions are the primary way of accessing the resolution value of awaitables. Unlike other APIs that use callbacks, **awaitables provide an execution context to callback functions, allowing callbacks to return values and throw exceptions**.
 
-All awaitable objects implement a common interface: `Icicle\Awaitable\Awaitable`. The three primary awaitable implementations are `Icicle\Awaitable\Delayed`, `Icicle\Awaitable\Promise`, and `Icicle\Coroutine\Coroutine`, all extending a base class `Icicle\Awaitable\Future`. `Icicle\Awaitable\Delayed` can be publicly resolved, while `Icicle\Awaitable\Promise` can only be resolved by a function passed to the constructor. `Icicle\Coroutine\Coroutine` is a special class created using generators and are discussed in the [next section](coroutines.md). There are also several other classes in Icicle also implement `Icicle\Awaitable\Awaitable`, but instances of these classes are primarily returned by promise methods or functions and should not be manually constructed. 
+All awaitable objects implement a common interface: `Icicle\Awaitable\Awaitable`. The three primary awaitable implementations are `Icicle\Awaitable\Delayed`, `Icicle\Awaitable\Promise`, and `Icicle\Coroutine\Coroutine`, all extending a base class `Icicle\Awaitable\Future`. `Icicle\Awaitable\Delayed` can be publicly resolved, while `Icicle\Awaitable\Promise` can only be resolved by a function passed to the constructor. `Icicle\Coroutine\Coroutine` is a special class created using generators and are discussed in the [next section](coroutines.md). There are also several other classes in Icicle also implement `Icicle\Awaitable\Awaitable`, but instances of these classes are primarily returned by promise methods or functions and should not be manually constructed.
 
 The `Icicle\Awaitable\Awaitable::then(callable $onFulfilled = null, callable $onRejected = null)` method is the primary way to register callbacks that receive either the value used to fulfill the awaitable or the exception used to reject the awaitable. Another awaitable is returned by `then()`, which is resolved with the return value of a callback or rejected if a callback throws an exception.
 
@@ -45,7 +45,7 @@ $awaitable2->done(
 Loop\run();
 ```
 
-The example above uses the [DNS package](../api/dns.md) to resolve the IP address for a domain, then connect to the resolved IP address. The `resolve()` method of `$resolver` and the `connect()` method of `$connector` both return awaitables. `$awaitable1` created by `resolve()` will either be fulfilled or rejected:
+The example above uses the [DNS package](../api/Dns/index.md) to resolve the IP address for a domain, then connect to the resolved IP address. The `resolve()` method of `$resolver` and the `connect()` method of `$connector` both return awaitables. `$awaitable1` created by `resolve()` will either be fulfilled or rejected:
 
 - If `$awaitable1` is fulfilled, the callback function registered in the call to `$awaitable1->then()` is executed, using the fulfillment value of `$awaitable1` as the argument to the function. The callback function then returns the awaitable from `connect()`. The resolution of `$awaitable2` will then be determined by the resolution of this returned awaitable (`$awaitable2` will adopt the state of the awaitable returned by `connect()`).
 - If `$awaitable1` is rejected, `$awaitable2` is rejected since no `$onRejected` callback was registered in the call to `$awaitable1->then()`

@@ -24,14 +24,7 @@ pages:
     - Making DNS Queries: 'manual/dns-queries.md'
     - Concurrency: 'manual/concurrency.md'
     - Foreign Asynchronous Code: 'manual/foreign-async-code.md'
-- API:
-    - Icicle\Loop: 'api/loop.md'
-    - Icicle\Awaitable: 'api/awaitable.md'
-    - Icicle\Coroutine: 'api/coroutine.md'
-    - Icicle\Concurrent: 'api/concurrent.md'
-    - Icicle\Dns: 'api/dns.md'
-    - Icicle\Stream: 'api/stream.md'
-    - Icicle\Socket: 'api/socket.md'
+- API: %API_DOCS
 
 extra:
     version: v1.x

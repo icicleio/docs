@@ -1,25 +1,27 @@
 <ul class="breadcrumbs" role="navigation" aria-label="breadcrumbs navigation">
     <li><a href="{{ homepage_url }}">Docs</a> <span class="fa fa-chevron-right"></span></li>
 
-    {% if current_page %}
-        {% for doc in current_page.ancestors %}
-            {% if doc.link %}
+    {% if current_page -%}
+        {% for doc in current_page.ancestors -%}
+            {% if doc.link -%}
                 <li><a href="{{ doc.link|e }}">{{ doc.title }}</a> <span class="fa fa-chevron-right"></span></li>
-            {% else %}
+            {%- else -%}
                 <li>{{ doc.title }} <span class="fa fa-chevron-right"></span></li>
-            {% endif %}
+            {%- endif %}
         {% endfor %}
-    {% endif %}
+    {%- endif %}
 
-    {% if current_page %}<li><a href="{{ current_page.link|e }}">{{ current_page.title }}</a></li>{% endif %}
+    {% if current_page -%}
+        <li><a href="{{ current_page.link|e }}">{{ current_page.title }}</a></li>
+    {%- endif %}
 
-    {% if repo_url %}
+    {% if repo_url -%}
         <li class="breadcrumbs-aside">
-        {% if repo_name == 'GitHub' %}
+        {% if repo_name == 'GitHub' -%}
             <a href="{{ repo_url }}" class="fa fa-github"> Edit on GitHub</a>
-        {% elif repo_name == 'Bitbucket' %}
+        {%- elif repo_name == 'Bitbucket' -%}
             <a href="{{ repo_url }}" class="fa fa-bitbucket"> Edit on BitBucket</a>
-        {% endif %}
+        {%- endif %}
         </li>
-    {% endif %}
+    {%- endif %}
 </ul>
