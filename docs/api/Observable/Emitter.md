@@ -7,15 +7,17 @@ The standard observable implementation.
 ## __construct()
 
     new Emitter(
-        callable(): \Generator $emitter,
+        callable(
+            callable(mixed $value): \Generator $emit
+        ): \Generator $emitter,
         callable $onDisposed = null
     )
 
-Creates a new emitter from a generator function. Each value yielded by the function is emitted by the emitter.
+Creates a new emitter from a generator function. The function is passed a coroutine function that can be used to emit values.
 
 ### Parameters
 `$emitter`
-:   A generator function or coroutine that yields values to be emitted.
+:   A coroutine function that emits values.
 
 `$onDisposed`
 :   A callback function to invoke when the emitter is disposed of.
