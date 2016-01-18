@@ -1,18 +1,26 @@
 A parcel object for sharing data across execution contexts.
 
+**Implements**
+:   [`Sync\Synchronizable`](Sync.Synchronizable.md)
+
 A parcel is an object that stores a value in a safe way that can be shared between different threads or processes. Different handles to the same parcel will access the same data, and a parcel handle itself is serializable and can be transported to other execution contexts.
 
 Wrapping and unwrapping values in the parcel are not atomic. To prevent race conditions and guarantee safety, you should use the provided synchronization methods to acquire a lock for exclusive access to the parcel first before accessing the contained value.
 
 When a parcel is cloned, a new parcel is created and the original parcel's value is duplicated and copied to the new parcel.
 
-### unwrap()
+
+## unwrap()
 
     Parcel::unwrap(): mixed
 
 Unwraps the parcel and returns the value inside the parcel.
 
-### synchronized()
+### Return value
+The value inside the parcel.
+
+
+## synchronized()
 
     Parcel::synchronized(callable(mixed $value): mixed $function): \Generator
 

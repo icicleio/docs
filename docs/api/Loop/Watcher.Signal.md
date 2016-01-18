@@ -9,23 +9,24 @@ $signal = Loop\signal(SIGQUIT, function ($signo) {
 });
 ```
 
-See the [Loop function documentation](#signal) above for more information on `Icicle\Loop\signal()`.
+See the [Loop function documentation](index.md#signal) for more information on `Icicle\Loop\signal()`.
 
-### enable()
+
+## enable()
 
     Signal::enable(): void
 
 Enables the signal listener if it was previously disabled.
 
 
-### disable()
+## disable()
 
     Signal::disable(): void
 
 Disables the signal listener. It will not be called if a signal arrives at the process until re-enabled.
 
 
-### isEnabled()
+## isEnabled()
 
     Signal::isEnabled(): bool
 
@@ -36,7 +37,7 @@ Determines if the signal listener is enabled (listening for signals).
 :   A boolean indicating if the event is enabled.
 
 
-### getSignal()
+## getSignal()
 
     Signal::getSignal(): int
 
@@ -47,14 +48,14 @@ Gets the signal number that will trigger the callback when received.
 :   A process signal number. Corresponds to the signal constants such as `SIGQUIT`, `SIGCHLD`, etc.
 
 
-### unreference()
+## unreference()
 
     Signal::unreference(): void
 
 Removes the reference to the watcher from the event loop. That is, if this watcher is the only pending watcher in the loop, the loop will exit (return from `Icicle\Loop\Loop::run()`). Note when a signal watcher is created, it is unreferenced by default. This method only need be called if `reference()` was previously called on the signal watcher.
 
 
-### reference()
+## reference()
 
     Signal::reference(): void
 

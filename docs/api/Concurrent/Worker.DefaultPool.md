@@ -1,8 +1,12 @@
-The default [Worker\Pool](#workerpool) implementation.
+The default worker pool implementation.
 
-### Constructor
+**Implements**
+:   [`Worker\Pool`](Worker.Pool.md)
 
-    DefaultPool::__construct(
+
+## __construct()
+
+    new DefaultPool(
         int $minSize = null,
         int $maxSize = null,
         WorkerFactory $factory = null
@@ -17,5 +21,5 @@ Creates a new worker pool.
 `int|null $maxSize`
 :   The maximum number of workers the pool should spawn. Defaults to `Pool::DEFAULT_MAX_SIZE`.
 
-`\Icicle\Concurrent\Worker\WorkerFactory|null $factory`
+`Icicle\Concurrent\Worker\WorkerFactory|null $factory`
 :   A worker factory to be used to create new workers.

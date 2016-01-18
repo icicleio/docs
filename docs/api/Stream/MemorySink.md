@@ -1,4 +1,13 @@
+An in-memory, writable, seekable sink.
+
+**Implements**
+:   [`Icicle\Stream\DuplexStream`](DuplexStream.md)
+:   [`Icicle\Stream\SeekableStream`](SeekableStream.md)
+
 `Icicle\Stream\MemorySink` acts as a buffered sink with a seekable read/write pointer. All data written to the sink remains in the sink. The read/write pointer may be moved anywhere within the buffered sink using `seek()`. The current position of the pointer may be determined with `tell()`. Since all data remains in the sink, the entire length of the sink is available with `getLength()`.
+
+
+### Example
 
 ```php
 use Icicle\Coroutine;

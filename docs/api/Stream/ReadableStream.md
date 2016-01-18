@@ -1,4 +1,10 @@
-### read()
+Interface for readable streams.
+
+**Extends**
+:   [`Icicle\Stream\Stream`](Stream.md)
+
+
+## read()
 
     ReadableStream::read(
         int $length = 0,
@@ -11,7 +17,7 @@ Coroutine that is fulfilled with data read from the stream when data becomes ava
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `int $length = 0`
 :   Max number of bytes to read. Fewer bytes may be returned. Use `0` to read as much data as possible.
 
@@ -21,11 +27,11 @@ Coroutine that is fulfilled with data read from the stream when data becomes ava
 `float $timeout = 0`
 :   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException` if no data is received. Use `0` for no timeout.
 
-#### Resolution value
+### Resolution value
 `string`
 :   Data read from the stream.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Stream\Exception\UnreadableException`
 :   If the stream has become unreadable. Use `isReadable()` to determine if a string is still readable.
 
@@ -35,10 +41,11 @@ Coroutine that is fulfilled with data read from the stream when data becomes ava
 `Icicle\Exception\InvalidArgumentError`
 :   If the length is invalid.
 
-### isReadable()
+
+## isReadable()
 
     ReadableStream::isReadable(): bool
 
-#### Return value
+### Return value
 `bool`
 :   `true` if the stream is readable, `false` if not.

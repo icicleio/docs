@@ -1,4 +1,10 @@
-### seek()
+A stream whose data is seekable.
+
+**Extends**
+:   [`Icicle\Stream\Stream`](Stream.md)
+
+
+## seek()
 
     SeekableStream::seek(
         int $offset,
@@ -8,7 +14,7 @@
 
 Moves the pointer to a new position in the stream. The `$whence` parameter is identical the parameter of the same name on the built-in `fseek()` function.
 
-#### Parameters
+### Parameters
 `int $offset`
 :   Number of bytes to seek. Usage depends on value of `$whence`.
 
@@ -18,11 +24,11 @@ Moves the pointer to a new position in the stream. The `$whence` parameter is id
 `float $timeout`
 :   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException` and the stream is closed if the seek could not be performed. Use `0` for no timeout.
 
-#### Resolution value
+### Resolution value
 `int`
 :   New pointer position.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Stream\Exception\UnseekableException`
 :   If the stream has become unseekable. Use `isSeekable()` to determine if a stream is still seekable.
 
@@ -32,20 +38,22 @@ Moves the pointer to a new position in the stream. The `$whence` parameter is id
 `Icicle\Stream\Exception\ClosedException`
 :   If the stream is closed while the seek is still pending.
 
-### tell()
+
+## tell()
 
     SeekableStream::tell(): int
 
 Returns the current pointer position. Value returned may not reflect the future pointer position if a read, write, or seek operation is pending.
 
-#### Return value
+### Return value
 `int`
 :   Current pointer position (may not reflect pending seek or write operations.
 
-### getLength()
+
+## getLength()
 
     SeekableStream::getLength(): int
 
-#### Return value
+### Return value
 `int`
 :   Returns the total length of the stream if known, otherwise -1. Value returned may not reflect a pending write operation.

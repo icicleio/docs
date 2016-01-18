@@ -9,63 +9,64 @@ $timer = Loop\timer(1.3, function () {
 });
 ```
 
-See the [Loop function documentation](#timer) above for more information on `Icicle\Loop\timer()` and `Icicle\Loop\periodic()`.
+See the [Loop function documentation](index.md#timer) for more information on `Icicle\Loop\timer()` and `Icicle\Loop\periodic()`.
 
-### start()
+
+## start()
 
     Timer::start(): void
 
 Restarts the timer if it was previously stopped. Note that timers are automatically started when created.
 
 
-### stop()
+## stop()
 
     Timer::stop(): void
 
 Stops the timer.
 
 
-### isPending()
+## isPending()
 
     Timer::isPending(): bool
 
 Determines if the timer is pending and will be executed in the future.
 
-#### Return value
+### Return value
 `bool`
 :   A boolean indicating if the event is pending.
 
 
-### getInterval()
+## getInterval()
 
     Timer::getInterval(): float
 
 Gets the number of seconds set for the timer interval.
 
-#### Return value
+### Return value
 `float`
 :   The number of seconds for the timer interval.
 
 
-### isPeriodic()
+## isPeriodic()
 
     Timer::isPeriodic(): bool
 
 Determines if the timer is periodic.
 
-#### Return value
+### Return value
 `bool`
 :   A boolean indicating if the timer is periodic.
 
 
-### unreference()
+## unreference()
 
     Timer::unreference(): void
 
 Removes the reference to the watcher from the event loop. That is, if this watcher is the only pending watcher in the loop, the loop will exit (return from `Icicle\Loop\Loop::run()`).
 
 
-### reference()
+## reference()
 
     Timer::reference(): void
 

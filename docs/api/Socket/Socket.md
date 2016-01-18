@@ -1,14 +1,15 @@
-`Icicle\Socket\NetworkSocket` implements `Icicle\Socket\Socket` and is used as the fulfillment value of the coroutine returned by `Icicle\Socket\Server\Server::accept()` ([see documentation above](#accept)). (Note that `Icicle\Socket\Server\BasicServer` can be easily extended and modified to fulfill accept requests with different objects implementing `Icicle\Socket\Socket`.)
+Interface for open network socket connections.
 
-The class extends `Icicle\Stream\Pipe\DuplexPipe`, so it inherits all the readable and writable stream methods as well as adding those below.
+**Extends**
+:   [`Icicle\Stream\DuplexStream`](../Stream/DuplexStream.md)
+:   [`Icicle\Stream\Resource`](../Stream/Resource.md)
 
-### BasicSocket Constructor
+Provides methods for standard operations available on sockets. All socket connection types in Icicle implement this socket interface, including both TCP and UDP socket types. A standard, full featured implementation is provided as [`NetworkSocket`](NetworkSocket.md).
 
-    $socket = new BasicSocket(resource $socket, bool $autoClose = true)
+This interface extends [`DuplexStream`](../Stream/DuplexStream.md), so it inherits all the readable and writable stream methods as well as adding those specified below.
 
-Creates a socket object from the given stream socket resource.
 
-### enableCrypto()
+## enableCrypto()
 
     Socket::enableCrypto(int $method, float $timeout = 0): \Generator
 
@@ -17,14 +18,14 @@ Enables encryption on the socket. For Socket objects created from `Icicle\Socket
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `int $method`
 :   One of (or combination of) the server crypto flags, e.g. `STREAM_CRYPTO_METHOD_ANY_SERVER` for incoming (remote) clients, `STREAM_CRYPTO_METHOD_ANY_CLIENT` for outgoing (local) clients.
 
 `float $timeout = 0`
 :   Seconds to wait between reads/writes to enable crypto before failing. Use `0` for no timeout.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Exception\Socket\FailureException`
 :   If enabling crypto fails.
 
@@ -34,33 +35,35 @@ Enables encryption on the socket. For Socket objects created from `Icicle\Socket
 `Icicle\Exception\Socket\UnwritableException`
 :   If the socket is unwritable.
 
-### getLocalAddress()
+
+## getLocalAddress()
 
     Socket::getLocalAddress(): string
 
-#### Return value
+### Return value
 `string`
 :   Returns the local IP address as a string.
 
-### getLocalPort()
+
+## getLocalPort()
 
     Socket::getLocalPort(): int
 
-#### Return value
+### Return value
 `int`
 :   Returns the local port.
 
-### getRemoteAddress()
+
+## getRemoteAddress()
 
     Socket::getRemoteAddress(): string
 
-#### Return value
+### Return value
 `string`
 :   Returns the remote IP address as a string.
 
----
 
-### getRemotePort()
+## getRemotePort()
 
 ```php
 Socket::getRemotePort(): int

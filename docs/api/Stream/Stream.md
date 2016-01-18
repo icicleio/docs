@@ -1,14 +1,16 @@
 All stream interfaces extend this basic interface.
 
-### isOpen()
+
+## isOpen()
 
     Stream::isOpen(): bool
 
-#### Return value
+### Return value
 `bool`
 :   `true` if the stream is still open, `false` if not.
 
-### close()
+
+## close()
 
     Stream::close(): void
 

@@ -7,7 +7,8 @@ Streams represent a common awaitable-based API that may be implemented by classe
 - `Icicle\Stream\DuplexStream`: Interface to be used by streams that are readable and writable. Extends both `Icicle\Stream\ReadableStream` and `Icicle\Stream\WritableStream`.
 - `Icicle\Stream\SeekableStream`: Interface to be used by seekable streams (readable and/or writable).
 
-### pipe()
+
+## pipe()
 
     Icicle\Stream\pipe(
         Icicle\Stream\ReadableStream $source
@@ -23,7 +24,7 @@ Returns a generator that should be used within a coroutine or used to create a n
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `Icicle\Stream\ReadableStream $source`
 :   A readable stream to pipe data from.
 
@@ -42,11 +43,11 @@ Returns a generator that should be used within a coroutine or used to create a n
 `float $timeout = 0`
 :   Number of seconds between successful read or write operations until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException` and the destination stream is closed if the data cannot be written to the stream. Use `0` for no timeout.
 
-#### Resolution value
+### Resolution value
 `int`
 :   Number of bytes read from the source stream.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Stream\Exception\UnreadableException`
 :   If the source stream has become unreadable.
 
@@ -59,7 +60,8 @@ Returns a generator that should be used within a coroutine or used to create a n
 `Icicle\Exception\InvalidArgumentError`
 :   If the length is invalid.
 
-### readTo()
+
+## readTo()
 
     Icicle\Stream\readTo(
         Icicle\Stream\ReadableStream $stream
@@ -72,7 +74,7 @@ Coroutine that reads data from the given readable stream until the given number 
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `Icicle\Stream\ReadableStream $stream`
 :   A readable stream to read from.
 
@@ -82,11 +84,11 @@ Coroutine that reads data from the given readable stream until the given number 
 `float $timeout = 0`
 :   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException`. Use `0` for no timeout.
 
-#### Resolution value
+### Resolution value
 `string`
 :   Data read from the stream.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Stream\Exception\UnreadableException`
 :   If the stream has become unreadable. Use `isReadable()` to determine if a string is still readable.
 
@@ -96,7 +98,8 @@ Coroutine that reads data from the given readable stream until the given number 
 `Icicle\Exception\InvalidArgumentError`
 :   If the length is invalid.
 
-### readUntil()
+
+## readUntil()
 
     Icicle\Stream\readUntil(
         Icicle\Stream\ReadableStream $stream
@@ -110,7 +113,7 @@ Coroutine that reads data from the given readable stream until the given string 
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `Icicle\Stream\ReadableStream $stream`
 :   A readable stream to read from.
 
@@ -123,11 +126,11 @@ Coroutine that reads data from the given readable stream until the given string 
 `float $timeout = 0`
 :   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException`. Use `0` for no timeout.
 
-#### Resolution value
+### Resolution value
 `string`
 :   Data read from the stream.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Stream\Exception\UnreadableException`
 :   If the stream has become unreadable. Use `isReadable()` to determine if a string is still readable.
 
@@ -137,7 +140,8 @@ Coroutine that reads data from the given readable stream until the given string 
 `Icicle\Exception\InvalidArgumentError`
 :   If the length is invalid.
 
-### readAll()
+
+## readAll()
 
     Icicle\Stream\readAll(
         Icicle\Stream\ReadableStream $stream
@@ -150,7 +154,7 @@ Coroutine that reads data from the given readable stream until stream is no long
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `Icicle\Stream\ReadableStream $stream`
 :   A readable stream to read from.
 
@@ -160,11 +164,11 @@ Coroutine that reads data from the given readable stream until stream is no long
 `float $timeout = 0`
 :   Number of seconds until the returned awaitable is rejected with a `TimeoutException` and the stream is closed if the data cannot be written to the stream. Use `0` for no timeout.
 
-#### Resolution value
+### Resolution value
 `string`
 :   Data read from the stream.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Stream\Exception\UnreadableException`
 :   If the stream has become unreadable. Use `isReadable()` to determine if a string is still readable.
 
@@ -174,34 +178,38 @@ Coroutine that reads data from the given readable stream until stream is no long
 `Icicle\Exception\InvalidArgumentError`
 :   If the length is invalid.
 
-### pair()
+
+## pair()
 
     Icicle\Stream\pair(): resource[]
 
-#### Return value
+### Return value
 `[resource, resource]`
 :   Returns an array containing a pair of connected stream socket resources.
 
-### stdin()
+
+## stdin()
 
     Icicle\Stream\stdin(): Icicle\Stream\ReadableStream
 
-#### Return value
+### Return value
 `Icicle\Stream\ReadableStream`
-:   Returns a global readable stream instance for STDIN.
+:   Returns a global readable stream instance for `STDIN`.
 
-### stdout()
+
+## stdout()
 
     Icicle\Stream\stdout(): Icicle\Stream\WritableStream
 
-#### Return value
+### Return value
 `Icicle\Stream\WritableStream`
-:   Returns a global writable stream instance for STDOUT.
+:   Returns a global writable stream instance for `STDOUT`.
 
-### stderr()
+
+## stderr()
 
     Icicle\Stream\stderr(): Icicle\Stream\WritableStream
 
-#### Return value
+### Return value
 `Icicle\Stream\WritableStream`
-:   Returns a global writable stream instance for STDERR.
+:   Returns a global writable stream instance for `STDERR`.

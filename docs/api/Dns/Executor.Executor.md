@@ -1,6 +1,7 @@
 Executors are the foundation of the DNS component, performing any DNS query and returning the full results of that query. Resolvers and connectors depend on executors to perform the DNS query required for their operation.
 
-### execute()
+
+## execute()
 
     Executor::execute(
         string $domain,
@@ -15,7 +16,7 @@ An executor will retry a query a number of times if it doesn't receive a respons
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `string $name`
 :   Domain name.
 
@@ -30,11 +31,11 @@ An executor will retry a query a number of times if it doesn't receive a respons
     `timeout` | `float` | Timeout until query fails. Default is 2 seconds.
     `retries` | `int` | Number of times to attempt the query before failing. Default is 5 times.
 
-#### Resolution value
+### Resolution value
 `LibDNS\Messages\Message`
 :   Response message.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Dns\Exception\FailureException`
 :   If sending the request or parsing the response fails.
 

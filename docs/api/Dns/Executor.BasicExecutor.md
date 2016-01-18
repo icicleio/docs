@@ -1,8 +1,12 @@
-The default executor implementation that implements [`Icicle\Dns\Executor\Executor`](Executor.Executor.md).
+The default executor implementation
 
-### __construct()
+**Implements**
+:   [`Icicle\Dns\Executor\Executor`](Executor.Executor.md)
 
-    BasicExecutor::__construct(
+
+## __construct()
+
+    new BasicExecutor(
         string $address,
         int $port = Executor::DEFAULT_PORT,
         Icicle\Socket\Connector\Connector $connector = null
@@ -10,7 +14,7 @@ The default executor implementation that implements [`Icicle\Dns\Executor\Execut
 
 Constructs a new DNS executor.
 
-#### Parameters
+### Parameters
 `string $address`
 :   The IP address of the DNS resolver to use.
 
@@ -21,23 +25,23 @@ Constructs a new DNS executor.
 :   A socket connector instance to use to connect to the DNS server socket. If left as `null`, the [default socket connector](../Socket/index.md#connector) is used.
 
 
-### getAddress()
+## getAddress()
 
     Executor::getAddress(): string
 
 Gets the IP address of the DNS server used by this executor.
 
-#### Return value
+### Return value
 `string`
 :   The server IP address.
 
 
-### getPort()
+## getPort()
 
     Executor::getPort(): int
 
 Gets the port of the DNS server used by this executor.
 
-#### Return value
+### Return value
 `int`
 :   The server port.

@@ -1,4 +1,8 @@
-A container object for sharing a value across contexts. Implements [`Icicle\Concurrent\Sync\Parcel`](Sync.Parcel.md).
+A container object for sharing a value across contexts.
+
+**Implements**
+:   [`Sync\Parcel`](Sync.Parcel.md)
+:   [`Serializable`](http://php.net/Serializable)
 
 A shared object is a container that stores an object inside shared memory. The object can be accessed and mutated by any thread or process. The shared object handle itself is serializable and can be sent to any thread or procss to give access to the value that is shared in the container.
 
@@ -11,7 +15,29 @@ Requires the [shmop](http://php.net/manual/en/book.shmop.php) extension to be en
 !!! note
     Accessing a shared object is not atomic. Access to a shared object should be protected with a mutex to preserve data integrity.
 
-### isFreed()
+
+## __construct()
+
+    new SharedMemoryParcel(
+        mixed $value,
+        int $size = 16384,
+        int $permissions = 0600
+    )
+
+Creates a new local object container.
+
+### Parameters
+`$value`
+:   The value to store in the container.
+
+`$size`
+:   The number of bytes to allocate for the object. If not specified defaults to 16384 bytes.
+
+`$permissions`
+:   The access permissions to set for the object. If not specified defaults to `0600`.
+
+
+## isFreed()
 
     Parcel::isFreed(): bool
 
@@ -19,7 +45,8 @@ Checks if the object has been freed.
 
 Note that this does not check if the object has been destroyed; it only checks if this handle has freed its reference to the object.
 
-### free()
+
+## free()
 
     Parcel::free()
 

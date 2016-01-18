@@ -1,8 +1,12 @@
-The default resolver implementation that implements [`Icicle\Dns\Resolver\Resolver`](#resolverresolver).
+The default resolver implementation.
 
-### __construct()
+**Implements**
+:   [`Icicle\Dns\Resolver\Resolver`](Resolver.Resolver.md)
 
-    BasicResolver::__construct(
+
+## __construct()
+
+    new BasicResolver(
         Icicle\Dns\Executor\Executor|null $executor = null
     )
 

@@ -1,6 +1,9 @@
-Implements [`Icicle\Dns\Executor\Executor`](#executorexecutor). Combines multiple executors to send queries to several name servers so queries can be resolved even if some name servers stop responding. Subsequent queries are initially sent to the last server that successfully responded to a query.
+Combines multiple executors to send queries to several name servers so queries can be resolved even if some name servers stop responding. Subsequent queries are initially sent to the last server that successfully responded to a query.
 
-#### Example:
+**Implements**
+:   [`Icicle\Dns\Executor\Executor`](Executor.Executor.md)
+
+### Example
 
 ```php
 use Icicle\Coroutine\Coroutine;
@@ -31,12 +34,13 @@ $coroutine->done(
 Loop\run();
 ```
 
-### add()
+
+## add()
 
     MultiExecutor::add(Executor $executor)
 
 Adds an executor to the multi-executor.
 
-#### Parameters
+### Parameters
 `Icicle\Dns\Executor\Executor $executor`
 :   An executor instance to add to the multi-executor.

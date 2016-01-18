@@ -1,20 +1,26 @@
 A non-blocking counting semaphore.
 
+**Extends**
+:   [`Countable`](http://php.net/Countable)
+
 Objects that implement this interface guarantee that all operations are atomic. Implementations do not have to guarantee that acquiring a lock is first-come, first serve.
 
-### count()
+
+## count()
 
     Semaphore::count(): int
 
 Gets the number of currently available locks.
 
-### getSize()
+
+## getSize()
 
     Semaphore::getSize(): int
 
 Gets the total number of locks on the semaphore (not the number of available locks).
 
-### acquire()
+
+## acquire()
 
     Semaphore::acquire(): \Generator
 
@@ -25,6 +31,6 @@ If there are one or more locks available, this function resolves immediately wit
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Resolution value
+### Resolution value
 `Icicle\Concurrent\Sync\Lock`
 :   Lock object which can be used to release the acquired.

@@ -1,1 +1,5 @@
-Execution context that includes a channel for exchanging data. Extends both [`Channel`](Channel.md) and [`Context`](Context.md).
+Execution context that includes a channel for exchanging data.
+
+**Extends**
+:   [`Context`](Context.md)
+:   [`Sync\Channel`](Sync.Channel.md)

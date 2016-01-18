@@ -1,10 +1,11 @@
 Interface for factories used to create new workers.
 
-### create()
+
+## create()
 
     WorkerFactory::create(): Worker
 
 Creates a new worker instance.
 
-#### Return value
+### Return value
 The newly created worker.

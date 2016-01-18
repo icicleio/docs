@@ -1,4 +1,9 @@
-`Icicle\Stream\MemoryStream` objects act as a buffer that implements `Icicle\Stream\DuplexStream`, allowing consumers to be notified when data is available in the buffer. This class by itself is not particularly useful, but it can be extended to add functionality upon reading or writing, as well as acting as an example of how stream classes can be implemented.
+An in-memory stream.
+
+**Implements**
+:   [`Icicle\Stream\DuplexStream`](DuplexStream.md)
+
+`Icicle\Stream\MemoryStream` objects act as a stream buffer, allowing consumers to be notified when data is available in the buffer. This class by itself is not particularly useful, but it can be extended to add functionality upon reading or writing, as well as acting as an example of how stream classes can be implemented.
 
 Anything written to an instance of `Icicle\Stream\MemoryStream` is immediately readable.
 

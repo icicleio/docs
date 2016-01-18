@@ -17,6 +17,20 @@ Sends a value across the channel to the receiver.
 `int`
 :   The number of bytes written to the stream to send the value.
 
+### Throws
+`Icicle\Concurrent\Exception\StatusError`
+:   Thrown if the context has not been started.
+
+`Icicle\Concurrent\Exception\SynchronizationError`
+:   If the context has not been started or the context unexpectedly ends.
+
+`Icicle\Concurrent\Exception\ChannelException`
+:   If sending on the channel fails.
+
+`Icicle\Exception\InvalidArgumentError`
+:   If an `Sync\Internal\ExitStatus` object is given.
+
+
 ## receive()
 
     Channel::receive(): \Generator
@@ -29,3 +43,16 @@ Receives the next pending value in the channel from the sender. Resolves with th
 ### Resolution value
 `mixed`
 :   The data received.
+
+### Throws
+`Icicle\Concurrent\Exception\StatusError`
+:   Thrown if the context has not been started.
+
+`Icicle\Concurrent\Exception\SynchronizationError`
+:   If the context has not been started or the context unexpectedly ends.
+
+`Icicle\Concurrent\Exception\ChannelException`
+:   If sending on the channel fails.
+
+`Icicle\Exception\InvalidArgumentError`
+:   If an `Sync\Internal\ExitStatus` object is given.

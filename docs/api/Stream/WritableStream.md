@@ -1,4 +1,10 @@
-### write()
+Interface for writable streams.
+
+**Extends**
+:   [`Icicle\Stream\Stream`](Stream.md)
+
+
+## write()
 
     WritableStream::write(
         string $data,
@@ -10,18 +16,18 @@ Writes the given data to the stream. Returns an awaitable that is fulfilled with
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `string $data`
 :   The data to write to the stream.
 
 `float $timeout = 0`
 :   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException` and the stream is closed if the data cannot be written to the stream. Use `0` for no timeout.
 
-#### Resolution value
+### Resolution value
 `int`
 :   Number of bytes written to the stream.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Stream\Exception\UnwritableException`
 :   If the stream has become unwritable. Use `isWritable()` to determine if a stream is still writable.
 
@@ -31,7 +37,8 @@ Writes the given data to the stream. Returns an awaitable that is fulfilled with
 `Icicle\Stream\Exception\ClosedException`
 :   If the stream is closed while the write is still pending.
 
-### end()
+
+## end()
 
     WritableStream::end(
         string $data = '',
@@ -43,18 +50,18 @@ Closes the stream once the data has been successfully written to the stream. Imm
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `string $data = ''`
 :   The data to write to the stream.
 
 `float $timeout = 0`
 :   Number of seconds until the coroutine is rejected with a `Icicle\Awaitable\Exception\TimeoutException` and the stream is closed if the data cannot be written to the stream. Use `0` for no timeout.
 
-#### Resolution value
+### Resolution value
 `int`
 :   Number of bytes written to the stream.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Stream\Exception\UnwritableException`
 :   If the stream has become unwritable. Use `isWritable()` to determine if a stream is still writable.
 
@@ -64,10 +71,11 @@ Closes the stream once the data has been successfully written to the stream. Imm
 `Icicle\Stream\Exception\ClosedException`
 :   If the stream is closed while the write is still pending.
 
-### isWritable()
+
+## isWritable()
 
     WritableStream::isWritable(): bool
 
-#### Return value
+### Return value
 `bool`
 :   `true` if the stream is writable, `false` if not.

@@ -1,8 +1,23 @@
-An execution context that uses forked processes. Implements [`Icicle\Concurrent\Context`](#context).
+An execution context that uses forked processes.
+
+**Implements**
+:   [`Process`](Process.md)
+:   [`Strand`](Strand.md)
 
 As forked processes are created with the [`pcntl_fork()`](http://php.net/pcntl_fork) function, the [PCNTL extension](http://php.net/manual/en/book.pcntl.php) must be enabled to spawn forks. Not compatible with Windows.
 
-### Fork::spawn()
+
+## enabled()
+
+    static Fork::enabled(): bool
+
+Checks if forking is enabled.
+
+### Return value
+True if forking is enabled, otherwise false.
+
+
+## spawn()
 
     static Fork::spawn(
         callable(...$args): mixed $function,
@@ -11,20 +26,50 @@ As forked processes are created with the [`pcntl_fork()`](http://php.net/pcntl_f
 
 Spawns a new forked process and immediately starts it. All arguments following the function to invoke in the fork will be copied and passed as parameters to the function to invoke.
 
-#### Parameters
+### Parameters
 `callable(...$args): mixed $function`
 :   The function to invoke inside the forked process.
 
 `mixed ...$args`
 :   Arguments to pass to `$function`.
 
-### getPid()
+### Return value
+The fork context that was spawned.
+
+### Throws
+`Icicle\Exception\UnsupportedError`
+:   Thrown if the `pcntl` extension is not loaded.
+
+
+## __construct()
+
+    new Fork(
+        callable(...$args): mixed $function,
+        ...$args
+    )
+
+Creates a new fork context. The forked process is not actually spawned until you call [`start()`](Context.md#start).
+
+### Parameters
+`callable(...$args): mixed $function`
+:   The function to invoke inside the forked process.
+
+`mixed ...$args`
+:   Arguments to pass to `$function`.
+
+### Throws
+`Icicle\Exception\UnsupportedError`
+:   Thrown if the `pcntl` extension is not loaded.
+
+
+## getPid()
 
     Fork::getPid(): int
 
 Gets the forked process's process ID.
 
-### getPriority()
+
+## getPriority()
 
     Fork::getPriority(): float
 
@@ -34,13 +79,14 @@ The priority is a float between 0 and 1 that indicates the relative priority for
 
 See also: [getpriority(2)](http://linux.die.net/man/2/getpriority)
 
-### setPriority()
+
+## setPriority()
 
     Fork::setPriority(float $priority)
 
 Sets the fork's scheduling priority as a percentage.
 
-#### Parameters
+### Parameters
 `int $priority`
 :   A value between 0 and 1 indicating the relative priority to set.
 

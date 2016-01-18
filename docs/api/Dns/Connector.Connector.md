@@ -2,7 +2,8 @@ The connector component connects to a server by first resolving the hostname pro
 
 `Icicle\Dns\Connector\Connector` defines a single method, `connect()` that should resolve a host name and connect to one of the resolved servers, resolving the coroutine with the connected client.
 
-### connect()
+
+## connect()
 
     Connector::connect(
         string $domain,
@@ -15,7 +16,7 @@ The connector component connects to a server by first resolving the hostname pro
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `string $domain`
 :   The domain name to connect to.
 
@@ -33,16 +34,15 @@ The connector component connects to a server by first resolving the hostname pro
 
     Additionally, all the [other options available](../Socket/Connector.Connector.md#connect) to `Icicle\Socket\Connector\Connector::connect()` may also be used.
 
-#### Resolution value
+### Resolution value
 `Icicle\Socket\Socket`
 :   Connected client socket object.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Socket\Exception\FailureException`
 :   If resolving the IP or connecting fails.
 
-
-#### Example
+### Example
 
 ```php
 use Icicle\Dns\Connector\DefaultConnector;

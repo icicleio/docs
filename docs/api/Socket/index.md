@@ -55,7 +55,7 @@ Loop\run();
 ```
 
 
-### connect()
+## connect()
 
     Icicle\Socket\connect(
         string $ip,
@@ -63,12 +63,13 @@ Loop\run();
         array $options = []
     ): \Generator
 
-Connects asynchronously to the given host on the given port. Uses the global connector interface that can be set using `Icicle\Socket\connector()`. See [connect()](#connect) above for more information.
+Connects asynchronously to the given host on the given port. Uses the global connector interface that can be set using `Icicle\Socket\connector()`. See [`Connector::connect()`](Connector.Connector.md#connect) for more information.
 
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-### connector()
+
+## connector()
 
     Icicle\Socket\connector(
         Icicle\Socket\Connector\Connector|null $connector = null
@@ -76,62 +77,66 @@ Connects asynchronously to the given host on the given port. Uses the global con
 
 Gets the global connector instance. If a connector instance is provided, that instance is set as the global connector instance.
 
-#### Parameters
+### Parameters
 `$connector`
 :   A connector instance to use as the global socket connector.
 
-#### parseName()
+
+## parseName()
 
     Icicle\Socket\parseName(string $name): array
 
 Parses a name of the format `"ip:port"`, returning an array containing the IP address and port.
 
-#### Parameters
+### Parameters
 `string $name`
 :   The name to parse.
 
-#### Return value
+### Return value
 `[string, int|null]`
 :   An array containing the IP address or unix socket path and port number or `null` if a unix socket.
 
-### Socket\parseAddress()
+
+## parseAddress()
 
     Icicle\Socket\parseAddress(string $address): string
 
 Formats given address into a string. Converts integer to IPv4 address, wraps IPv6 address in brackets.
 
-#### Parameters
+### Parameters
 `string $address`
 :   The address string to parse.
 
-#### Return value
+### Return value
 `string`
 :   Formatted IP address.
 
-### Socket\makeName()
+
+## makeName()
 
     Icicle\Socket\makeName(string $address, int|null $port = null): string
 
 Creates string of format `"$address[:$port]"`.
 
-#### Parameters
+### Parameters
 `string $address`
 :   Address or path.
 
 `int|null $port = null`
 :   Port number or `null` for unix socket.
 
-#### Return value
+### Return value
 `string`
 :   Formatted address and port.
 
-### Socket\makeUri()
+
+## makeUri()
 
     Icicle\Socket\makeUri(string $protocol, string $address, int $port = null)
 
 Creates string of format `"$protocol://$address[:$port]"`.
 
-##### Parameters
+#### Parameters
 `string $protocol`
 :   URI protocol.
 
@@ -141,23 +146,24 @@ Creates string of format `"$protocol://$address[:$port]"`.
 `int|null $port = null`
 :   Port number or `null` for unix socket.
 
-#### Return value
+### Return value
 `string`
 :   Formatted URI.
 
-### Socket\getName()
+
+## getName()
 
     Icicle\Socket\getName(resource $socket, bool $peer = true): array
 
 Parses the IP address and port of a network socket. Calls stream_socket_get_name() and then parses the returned string. Returns the IP address and port pair.
 
-#### Parameters
+### Parameters
 `resoruce $socket`
 :   Stream socket resource.
 
 `bool $peer`
 :   `true` for remote IP and port, `false` for local IP and port.
 
-#### Return value
+### Return value
 `[string, int]`
 :   Array containing the IP address and port number (returns `0` for the port number for unix sockets`).

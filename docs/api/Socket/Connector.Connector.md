@@ -3,7 +3,8 @@ The `Icicle\Socket\Connector\DefaultConnector` class (implements `Icicle\Socket\
 !!! warning
     The *host should be given as an IP address*, as DNS lookups performed by PHP are synchronous (blocking). If you wish to use domain names instead of IPs, see [`Icicle\Dns\Connector\Connector`](../Dns/Connector.Connector.md).
 
-### connect()
+
+## connect()
 
     Connector::connect(
         string $host,
@@ -16,7 +17,7 @@ Connects asynchronously to the given IP or unix socket path on the given port nu
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `string $host`
 :   IP address or unix socket path. (Using a domain name will cause a blocking DNS resolution. Use the DNS component to perform non-blocking DNS resolution.)
 
@@ -36,11 +37,11 @@ Connects asynchronously to the given IP or unix socket path on the given port nu
     `verify_depth` | `int` | Max levels of certificate authorities the verifier will transverse. Defaults to 10.
     `cafile` | `string` | Path to bundle of root certificates to verify against.
 
-#### Resolution value
+### Resolution value
 `Icicle\Socket\Socket`
 :   Fulfilled with once the connection is established.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Socket\Exception\FailureException`
 :   If the connection attempt fails (such as an invalid host).
 

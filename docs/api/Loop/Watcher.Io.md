@@ -19,74 +19,75 @@ $poll = Loop\await($socket, function ($socket, $expired) {
 });
 ```
 
-See the [Loop function documentation](#poll) above for more information on `Icicle\Loop\poll()` and `Icicle\Loop\await()`.
+See the [Loop function documentation](index.md#poll) for more information on `Icicle\Loop\poll()` and `Icicle\Loop\await()`.
 
-### listen()
+
+## listen()
 
     Io::listen(float $timeout = 0): void
 
 Listens for data to become available or the ability to write to the socket. If `$timeout` is not `0`, the poll callback will be called after `$timeout` seconds with `$expired` set to `true`.
 
-#### Parameters
+### Parameters
 `float $timeout = 0`
 :   Number of seconds until the callback is invoked with `$expired` set to `true` if no data is received or the socket does not become writable. Use `0` for no timeout.
 
 
-### cancel()
+## cancel()
 
     Io::cancel(): void
 
 Stops listening for data to become available or ability to write.
 
 
-### isPending()
+## isPending()
 
     Io::isPending(): bool
 
 Determines if the event is listening for data.
 
-#### Return value
+### Return value
 `bool`
 :   A boolean indicating if the event is pending.
 
 
-### free()
+## free()
 
     Io::free(): void
 
 Frees the resources allocated to the poll from the event loop. This function should always be called when the event is no longer needed. Once an event has been freed, it cannot be used again and another must be recreated for the same socket resource.
 
 
-### isFreed()
+## isFreed()
 
     Io::isFreed(): bool
 
 Determines if the watcher has been freed from the event loop.
 
-#### Return value
+### Return value
 `bool`
 :   A boolean indicating if the event has been freed.
 
 
-### isPersistent()
+## isPersistent()
 
     Io::isPersistent(): bool
 
 Determines if the watcher is persistent (calling `listen()` will continue polling until `cancel()` is called).
 
-#### Return value
+### Return value
 `bool`
 :   A boolean indicating if the event has been freed.
 
 
-### unreference()
+## unreference()
 
     Io::unreference(): void
 
 Removes the reference to the watcher from the event loop. That is, if this watcher is the only pending watcher in the loop, the loop will exit (return from `Icicle\Loop\Loop::run()`).
 
 
-### reference()
+## reference()
 
     Io::reference(): void
 

@@ -1,5 +1,9 @@
 An object for asynchronously spawning and managing an external process.
 
+**Implements**
+:   [`Process`](Process.md)
+
+
 ### Process::__construct()
 
     Process::__construct(string $command, string $cwd = '', array $env = [], array $options = [])

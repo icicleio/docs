@@ -11,34 +11,35 @@ $immediate = Loop\immediate(function () {
 });
 ```
 
-See the [Loop function documentation](#immediate) above for more information on `Icicle\Loop\immediate()`.
+See the [Loop function documentation](index.md#immediate) for more information on `Icicle\Loop\immediate()`.
 
-### execute()
+
+## execute()
 
     Immediate::execute(): void
 
 Executes the immediate again if it has already been executed. If the immediate is still pending, this is a no-op.
 
 
-### isPending()
+## isPending()
 
     Immediate::isPending(): bool
 
 Determines if the immediate is pending and will be executed in the future.
 
-#### Return value
+### Return value
 `bool`
 :   A boolean indicating if the event is pending.
 
 
-### unreference()
+## unreference()
 
     Immediate::unreference(): void
 
 Removes the reference to the watcher from the event loop. That is, if this watcher is the only pending watcher in the loop, the loop will exit (return from `Icicle\Loop\Loop::run()`).
 
 
-### reference()
+## reference()
 
     Immediate::reference(): void
 

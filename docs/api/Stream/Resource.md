@@ -1,22 +1,25 @@
 All stream resource (pipe) classes in this package (and some other packages suck as [socket](https://github.com/icicleio/socket)) implement `Icicle\Stream\Resource`.
 
-### getResource()
+
+## getResource()
 
     Resource::getResource(): resource
 
-#### Return value
+### Return value
 `resource`
 :   Returns the underlying PHP stream resource.
 
-### isOpen()
+
+## isOpen()
 
     Resource::isOpen(): bool
 
-#### Return value
+### Return value
 `bool`
 :   `true` if the resource is still open, `false` if not.
 
-### close()
+
+## close()
 
     Resource::close(): void
 

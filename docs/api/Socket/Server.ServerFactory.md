@@ -1,6 +1,7 @@
-`Icicle\Socket\Server\DefaultServerFactory` (implements `Icicle\Socket\Server\ServerFactory`) can be used to create server instances from a IP or unix socket path, port number (`null` for unix socket), and list of options.
+Interface for factories used to create server instances from a IP or unix socket path, port number (`null` for unix socket), and list of options.
 
-### create()
+
+## create()
 
 ```php
 ServerFactory::create(
@@ -12,7 +13,7 @@ ServerFactory::create(
 
 Creates a server bound and listening on the given ip or unix socket path and port number (`null` for unix socket).
 
-#### Parameters
+### Parameters
 `string $host`
 :   IP address or unix socket path.
 

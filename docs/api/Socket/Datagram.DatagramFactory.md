@@ -1,6 +1,7 @@
-`Icicle\Socket\Datagram\DatagramFactory` (implements `Icicle\Socket\Datagram\DatagramFactory`) can be used to create datagram instances from a hostname or unix socket path, port number (`null` for unix socket), and list of options.
+Interface for factories that can be used to create datagram instances from a hostname or unix socket path, port number (`null` for unix socket), and list of options.
 
-### create()
+
+## create()
 
     DatagramFactory::create(
         string $host,
@@ -10,7 +11,7 @@
 
 Creates a datagram bound and listening on the given IP and port number. No options are defined in this implementation.
 
-#### Parameters
+### Parameters
 `string $host`
 :   IP address of receiver.
 

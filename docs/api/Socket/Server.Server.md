@@ -1,12 +1,7 @@
-The `Icicle\Socket\Server\BasicServer` class implements `Icicle\Socket\Server\Server`, a coroutine-based interface for creating a TCP server and accepting connections.
+A coroutine-based interface for creating a TCP server and accepting connections.
 
-### Server Constructor
 
-    $server = new BasicServer(resource $socket, bool $autoClose = true)
-
-Creates a server from a stream socket server resource generated from `stream_socket_server()`. Generally it is better to use `Icicle\Socket\Server\ServerFactory` to create a `Icicle\Socket\Server\BasicServer` instance.
-
-### accept()
+## accept()
 
     Server::accept(bool $autoClose = true): \Generator
 
@@ -15,15 +10,15 @@ A coroutine that is resolved with a `Icicle\Socket\Socket` object when a connect
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `bool $autoClose = true`
 :   Use `true` to have the return `Socket` object close automatically on destruct, `false` to avoid automatic closure. Only in rare circumstances should this parameter be `false`.
 
-#### Resolution value
+### Resolution value
 `Icicle\Socket\Socket`
 :   Accepted client socket.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Socket\Exception\BusyException`
 :   If the server already had an accept pending.
 
@@ -33,13 +28,15 @@ A coroutine that is resolved with a `Icicle\Socket\Socket` object when a connect
 `Icicle\Socket\Exception\ClosedException`
 :   If the server is closed during pending accept.
 
-### getAddress()
+
+## getAddress()
 
     Server::getAddress(): string
 
 Returns the local IP address as a string.
 
-### getPort()
+
+## getPort()
 
     Server::getPort(): int
 

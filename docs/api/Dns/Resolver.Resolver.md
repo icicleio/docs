@@ -2,7 +2,8 @@ A resolver finds the IP addresses for a given domain. A resolver is essentially 
 
 The default implementation is `Icicle\Dns\Resolver\BasicResolver`, which is constructed by passing an `Icicle\Dns\Executor\Executor` instance to the constructor that is used to execute queries to resolve domains. If no executor is given, the global executor instance is used.
 
-### resolve()
+
+## resolve()
 
     Resolver::resolve(
         string $domain,
@@ -14,7 +15,7 @@ Resolves a given domain and yields an array of IP addresses that match the given
 !!! note
     [**Coroutine**](../../manual/coroutines.md): Calls to this function must be preceded with `yield` within another coroutine or wrapped with `new Coroutine()` to create an awaitable.
 
-#### Parameters
+### Parameters
 `string $domain`
 :   The domain name to resolve.
 
@@ -29,11 +30,11 @@ Resolves a given domain and yields an array of IP addresses that match the given
 
 Like executors, a resolver will retry a query `retries` times if the name server does not respond within `timeout` seconds.
 
-#### Resolution value
+### Resolution value
 `string[]`
 :   Array of resolved IP addresses. May be empty if the query is successful but no IP addresses could be found.
 
-#### Rejection reasons
+### Rejection reasons
 `Icicle\Dns\Exception\FailureException`
 :  If sending the request or parsing the response fails.
 
@@ -43,7 +44,7 @@ Like executors, a resolver will retry a query `retries` times if the name server
 !!! note
     Even if there is only one or no matches at all for the given domain name, the return value will still resolve with an array if the DNS query itself was successful.
 
-#### Example
+### Example
 
 ```php
 use Icicle\Coroutine\Coroutine;

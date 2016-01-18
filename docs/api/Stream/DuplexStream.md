@@ -1,1 +1,5 @@
-A duplex stream is both readable and writable. `Icicle\Stream\DuplexStream` extends both `Icicle\Stream\ReadableStream` and `Icicle\Stream\WritableStream`, and therefore inherits all the methods above.
+A duplex stream is a stream that is both readable and writable.
+
+**Extends**
+:   [`Icicle\Stream\ReadableStream`](ReadableStream.md)
+:   [`Icicle\Stream\WritableStream`](WritableStream.md)
