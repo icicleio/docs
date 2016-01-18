@@ -237,6 +237,10 @@ dl > dd > :first-child {
     margin-top: 3rem;
 }
 
+h3 {
+   font-size: 1.125rem;
+}
+
 h5 {
     font-size: 1em;
     margin: 1rem 0;
@@ -244,8 +248,7 @@ h5 {
 
 /* Make header permalinks hidden by default and visible on hover. */
 h1:hover > .headerlink,
-h2:hover > .headerlink,
-h3:hover > .headerlink {
+h2:hover > .headerlink {
     visibility: visible;
     opacity: 1;
 }
